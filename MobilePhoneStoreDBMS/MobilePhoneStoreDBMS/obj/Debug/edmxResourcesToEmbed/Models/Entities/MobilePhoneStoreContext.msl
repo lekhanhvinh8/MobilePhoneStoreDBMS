@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MobilePhoneStoreDBMSModelStoreContainer" CdmEntityContainer="MobilePhoneStoreDBMSEntities">
+    <EntitySetMapping Name="Carts">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Cart">
+        <MappingFragment StoreEntitySet="Carts">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Category">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Comment">
+        <MappingFragment StoreEntitySet="Comments">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="CommentTime" ColumnName="CommentTime" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Customers">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Customer">
+        <MappingFragment StoreEntitySet="Customers">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Order">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="OrderTime" ColumnName="OrderTime" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Producers">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Producer">
+        <MappingFragment StoreEntitySet="Producers">
+          <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Product">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductSpecifications">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.ProductSpecification">
+        <MappingFragment StoreEntitySet="ProductSpecifications">
+          <ScalarProperty Name="SpecificationID" ColumnName="SpecificationID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rates">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Rate">
+        <MappingFragment StoreEntitySet="Rates">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="starts" ColumnName="starts" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SpecificationValues">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.SpecificationValue">
+        <MappingFragment StoreEntitySet="SpecificationValues">
+          <ScalarProperty Name="SpecificationID" ColumnName="SpecificationID" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Specifications_of_all_product">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Specifications_of_all_product">
+        <MappingFragment StoreEntitySet="Specifications_of_all_product">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="specification" ColumnName="specification" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="HasSpecification" TypeName="MobilePhoneStoreDBMSModel.HasSpecification" StoreEntitySet="HasSpecification">
+      <EndProperty Name="SpecificationValues">
+        <ScalarProperty Name="SpecificationID" ColumnName="SpecificationID" />
+        <ScalarProperty Name="Value" ColumnName="Value" />
+      </EndProperty>
+      <EndProperty Name="Products">
+        <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <FunctionImportMapping FunctionName="MobilePhoneStoreDBMSModel.Store.GetSpecifications" FunctionImportName="GetSpecifications">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.GetSpecifications_Result">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="specification" ColumnName="specification" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="AddNewSpecificationToAProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewSpecificationToAProduct" />
+  </EntityContainerMapping>
+</Mapping>
