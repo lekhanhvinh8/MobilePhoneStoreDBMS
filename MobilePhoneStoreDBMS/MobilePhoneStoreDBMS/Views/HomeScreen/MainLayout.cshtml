@@ -1,0 +1,122 @@
+﻿<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Mobilestore Website Template | Home :: W3layouts</title>
+	<link href="~/Assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
+	<meta name="keywords" content="Mobilestore iphone web template, Android web template, Smartphone web template, free webdesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
+	<link href='//fonts.googleapis.com/css?family=Londrina+Solid|Coda+Caption:800|Open+Sans' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="~/Assets/css/responsiveslides.css">
+	<script src="~/Assets/js/jquery.min.js"></script>
+	<script src="~/Assets/js/responsiveslides.min.js"></script>
+	<script>
+		    // You can also use "$(window).load(function() {"
+			    $(function () {
+
+			      // Slideshow 1
+			      $("#slider1").responsiveSlides({
+			        maxwidth: 1600,
+			        speed: 600
+			      });
+			});
+	</script>
+</head>
+<body>
+	<div class="wrap">
+		<!----start-Header---->
+		<div class="header">
+			<div class="search-bar">
+				<form>
+					<input type="text"><input type="submit" value="Search" />
+				</form>
+			</div>
+			<div class="clear"> </div>
+			<div class="header-top-nav">
+				<ul>
+					<li><a href="#">Register</a></li>
+					<li><a href="#">Login</a></li>
+					<li><a href="#">Delivery</a></li>
+					<li><a href="#">Checkout</a></li>
+					<li><a href="#">My account</a></li>
+					<li><a href="#"><span>shopping cart&nbsp;&nbsp;: </span></a><label> &nbsp;noitems</label></li>
+				</ul>
+			</div>
+			<div class="clear"> </div>
+		</div>
+	</div>
+	<div class="clear"> </div>
+	<div class="top-header">
+		<div class="wrap">
+			<!----start-logo---->
+			<div class="logo">
+				<a href="index.html"><img src="~/Assets/images/logo.png" title="logo" /></a>
+			</div>
+			<!----end-logo---->
+			<!----start-top-nav---->
+			<div class="top-nav">
+				<ul>
+					<li><a href="@Html.Action("Index", "Home")">Trang chủ</a></li>
+					<li><a href="#">Cửa hàng</a></li>
+					<li><a href="#">Thông tin</a></li>
+					<li><a href="#">Liên lạc</a></li>
+				</ul>
+			</div>
+			<div class="clear"> </div>
+		</div>
+	</div>
+	<!----End-top-nav---->
+	<!----End-Header---->
+	<!---->
+
+	@RenderBody()
+	<div class="footer">
+		<div class="wrap">
+			<div class="section group">
+				<div class="col_1_of_4 span_1_of_4">
+					<h3>Thông tin của chúng tôi</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+				</div>
+				<div class="col_1_of_4 span_1_of_4">
+					<h3>Latest-News</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+				</div>
+				<div class="col_1_of_4 span_1_of_4">
+					<h3>Store Location</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					<h3>Order-online</h3>
+					<p>080-1234-56789</p>
+					<p>080-1234-56780</p>
+				</div>
+				<div class="col_1_of_4 span_1_of_4 footer-lastgrid">
+					<h3>News-Letter</h3>
+					<form>
+						<input type="text"><input type="submit" value="go" />
+					</form>
+					<h3>Follow Us:</h3>
+					<ul>
+						<li><a href="#"><img src="~/Assets/images/twitter.png" title="twitter" />Twitter</a></li>
+						<li><a href="#"><img src="~/Assets/images/facebook.png" title="Facebook" />Facebook</a></li>
+						<li><a href="#"><img src="~/Assets/images/rss.png" title="Rss" />Rss</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="clear"> </div>
+		<div class="wrap">
+			<div class="copy-right">
+				<p>&copy; 2013 Mobile Store. All Rights Reserved | Design by  <a href="http://w3layouts.com/">W3Layouts</a></p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+

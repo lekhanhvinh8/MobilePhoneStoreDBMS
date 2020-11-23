@@ -184,6 +184,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomeScreenController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -246,6 +247,50 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Assets\css\flexslider.css" />
+    <Content Include="Content\Assets\css\responsiveslides.css" />
+    <Content Include="Content\Assets\css\style.css" />
+    <Content Include="Content\Assets\css\style1.css" />
+    <Content Include="Content\Assets\images\012.png" />
+    <Content Include="Content\Assets\images\1.png" />
+    <Content Include="Content\Assets\images\2.png" />
+    <Content Include="Content\Assets\images\3.jpg" />
+    <Content Include="Content\Assets\images\admin.png" />
+    <Content Include="Content\Assets\images\admin1.png" />
+    <Content Include="Content\Assets\images\arrow.png" />
+    <Content Include="Content\Assets\images\arrow1.png" />
+    <Content Include="Content\Assets\images\btn-cart.png" />
+    <Content Include="Content\Assets\images\btn-details.png" />
+    <Content Include="Content\Assets\images\cal.png" />
+    <Content Include="Content\Assets\images\cal1.png" />
+    <Content Include="Content\Assets\images\facebook.png" />
+    <Content Include="Content\Assets\images\grid-img1.jpg" />
+    <Content Include="Content\Assets\images\grid-img2.jpg" />
+    <Content Include="Content\Assets\images\grid-img3.jpg" />
+    <Content Include="Content\Assets\images\link-compare.png" />
+    <Content Include="Content\Assets\images\link-wishlist.png" />
+    <Content Include="Content\Assets\images\logo.png" />
+    <Content Include="Content\Assets\images\m1.jpg" />
+    <Content Include="Content\Assets\images\m10.jpg" />
+    <Content Include="Content\Assets\images\m11.jpg" />
+    <Content Include="Content\Assets\images\m2.jpg" />
+    <Content Include="Content\Assets\images\m4.jpg" />
+    <Content Include="Content\Assets\images\m6.jpg" />
+    <Content Include="Content\Assets\images\m7.jpg" />
+    <Content Include="Content\Assets\images\noi_bat_1.png" />
+    <Content Include="Content\Assets\images\noi_bat_2.jpg" />
+    <Content Include="Content\Assets\images\noi_bat_3.jpg" />
+    <Content Include="Content\Assets\images\post-in.png" />
+    <Content Include="Content\Assets\images\quotes_alt.png" />
+    <Content Include="Content\Assets\images\remove.png" />
+    <Content Include="Content\Assets\images\rss.png" />
+    <Content Include="Content\Assets\images\sepHor.png" />
+    <Content Include="Content\Assets\images\twitter.png" />
+    <Content Include="Content\Assets\js\imagezoom.js" />
+    <Content Include="Content\Assets\js\jquery.flexslider.js" />
+    <Content Include="Content\Assets\js\jquery.livequery.js" />
+    <Content Include="Content\Assets\js\jquery.min.js" />
+    <Content Include="Content\Assets\js\responsiveslides.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -318,6 +363,8 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\HomeScreen\Index.cshtml" />
+    <Content Include="Views\HomeScreen\MainLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
