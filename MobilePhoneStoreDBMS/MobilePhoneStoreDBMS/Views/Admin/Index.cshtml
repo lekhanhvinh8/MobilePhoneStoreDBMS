@@ -1,0 +1,357 @@
+﻿@model MobilePhoneStoreDBMS.Models.Entities.MobilePhoneStoreDBMSEntities
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css" />
+    <link href="https://cdn.jsdelivr.net/npm/jquery-smarttab@3/dist/css/smart_tab_all.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Admin.css" />
+
+</head>
+<body>
+    <div>
+        <button id="test">Test</button>
+        <div id="smarttab">
+            <ul class="nav">
+                <li>
+                    <a class="nav-link" href="#tab-1">
+                        Producer Management
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#tab-CategoryManagement">
+                        Category Management
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#tab-3">
+                        Product Specification Management
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#tab-4">
+                        Tab 4
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane" role="tabpanel">
+                    Tab content
+                </div>
+                <div id="tab-CategoryManagement" class="tab-pane" role="tabpanel">
+                    <div>
+                        <button id="addNewCateg" class="btn btn-primary">New Category</button>
+                    </div>
+                    <div>
+                        <table id="categories" class="table	table-bordered	table-hover ">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="dialogCategory" class="form-group table-bordered" style="display:none;">
+                        <form id="formCategory" role="form">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input id="categorys-name" name="name" type="text" placeholder="Enter name">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="tab-3" class="tab-pane" role="tabpanel">
+                    Tab content
+                </div>
+                <div id="tab-4" class="tab-pane" role="tabpanel">
+                    Tab content
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-smarttab@3/dist/js/jquery.smartTab.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.scroller.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            //smartTab
+            var smartTab = $("#smarttab").smartTab();
+            smartTab.smartTab("goToTab", 0);
+
+            //dataTable
+            var table;
+
+            //when leaving a tab --> destroy a data table inside it
+            smartTab.on("leaveTab", function (e, anchorObject, tabIndex) {
+                if (tabIndex === 1) {
+                    table.destroy();
+                }
+            });
+
+            //when switch to a new tab --> create a data table inside it
+            smartTab.on("tabContent", function (e, anchorObject, tabIndex) {
+                if (tabIndex === 1) {
+                    table = $("#categories").DataTable({
+                        ajax: {
+                            url: "/api/Categories",
+                            dataSrc: "",
+                        },
+                        columns: [
+                            {
+                                title: "Category's ID",
+                                data: "categoryID",
+                                render: function (data) {
+                                    return data;
+                                }
+                            },
+                            {
+                                title: "Category's Name",
+                                data: "name",
+                                render: function (data, type, category) {
+                                    return "<button class='btn-link jsModify' data-categoryID=" + category.categoryID + ">" + data + "</button>";
+                                }
+                            },
+                            {
+                                title: "",
+                                data: "categoryID",
+                                render: function (data) {
+                                    return "<button class='jsDelete' data-categoryID= " + data + ">Delete</button>";
+                                }
+                            },
+                        ],
+
+                        //paging: false,
+                        scrollY: 280,
+                        scrollX: false,
+                        scroller: true,
+                        deferRender: true,
+                    });
+                }
+            });
+
+            //click a single row --> change back-ground color
+            $("#categories tbody").on("click", "tr", function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+
+            //open category dialog for adding a new category
+            $("#addNewCateg").on("click", function () {
+                
+                CreateNewCategoryDialogBootBox("Adding a new category", table, "add", null);
+                //$(".dialogCategory-bootbox-ok-button").attr("mode", "add");
+            });
+
+            //open category dialog for modify an exist category
+            $("#categories").on("click", ".jsModify", function () {
+                var button = $(this);
+
+                CreateNewCategoryDialogBootBox("modify category " + button.attr("data-categoryID") + ". " + button.text(), table, "modify", button.attr("data-categoryID"));
+                //$(".dialogCategory-bootbox-ok-button").attr("mode", "modify");
+            });
+
+            //click a button Ok in category dialog --> handle   :it's not gonna response
+            $(".dialogCategory-bootbox-ok-button").on("click", function () {
+                alert("click");
+
+            });
+
+            //delete a specific row in dataTable
+            $("#categories").on("click", ".jsDelete", function () {
+                var button1 = $(this);
+                bootbox.confirm("Are you sure you want to delete category " + button1.attr("data-categoryID"), function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/Categories/" + button1.attr("data-categoryID"),
+                            method: "Delete",
+                            success: function () {
+                                table.row(button1.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+
+            //test aria
+            $("#test").on("click", function () {
+                
+            });
+        });
+
+        function CreateNewCategoryDialogBootBox(title, table, mode, categoryID) {
+            var dialogCategory = bootbox.dialog({
+                message: $("#dialogCategory").html(),
+                title: title,
+                buttons: [{
+                    label: "Save",
+                    className: "btn btn-primary pull-left dialogCategory-bootbox-ok-button",
+                    callback: function () {
+                        var form = dialogCategory.find("#formCategory");
+                        var items = form.serializeJSON();
+                        /*
+                        //display data
+                        console.log(items);
+                        alert(JSON.stringify(items));
+                        */
+                        //--head my custom code
+                        if (mode === "add") {
+                            $.ajax({
+                                url: "/api/Categories",
+                                method: "Post",
+                                data: {
+                                    name: items.name,
+                                },
+                                success: function (response) {
+                                    var trDOM = table.row.add({
+                                        categoryID: response.categoryID,
+                                        name: response.name,
+                                    }).draw(false).node();
+
+                                    /*
+                                    //add class and remove class from an element (row)
+                                    $(trDOM).addClass("added");
+ 
+                                    var rowIndexes = table.rows(".added").indexes();
+                                    var row = table.row(rowIndexes[0]);
+ 
+                                    var $rowToScroll = $(trDOM);
+                                    $('html, body').animate({ scrollTop: $rowToScroll.offset().top }, 2000);
+ 
+                                    row.scrollTo();
+ 
+                                    //remove the line below
+                                    $(trDOM).removeClass("added");
+                                    */
+
+
+                                    //add id attribute and remove it from an element(row)
+                                    $(trDOM).attr("id", "added");
+                                    $(trDOM).addClass("selected");
+                                    var row = table.row("#added");
+                                    row.scrollTo();
+
+                                    //scroll the screen
+                                    var $rowToScroll = $(trDOM);
+                                    $('html, body').animate({ scrollTop: $rowToScroll.offset().top }, 2000);
+
+                                    $(trDOM).removeAttr("id");
+                                },
+                            });
+                        }
+                        else if (mode === "modify") {
+                            /*
+                            var titleOfDialog = $("#dialogCategory").dialog("option", "title");
+                            var categoryID = parseInt(titleOfDialog.substr(titleOfDialog.indexOf(':') + 1));
+                            */
+                            $.ajax({
+                                url: "/api/Categories",
+                                method: "Put",
+                                data: {
+                                    categoryID: categoryID,
+                                    name: items.name,
+                                },
+                                success: function (response) {
+                                    var indexes = table.rows().eq(0).filter(function (rowIdx) {
+                                        return table.cell(rowIdx, 0).data() === response.categoryID;
+                                    });
+
+                                    var newData = table.row(indexes[0]).data();
+                                    newData.name = items.name;
+                                    table.row(indexes[0]).data(newData).draw();
+                                },
+                            });
+                        }
+
+                        //--tail my custom code
+
+                        dialogCategory.modal('hide');
+
+                        return false;
+                    }
+                }, {
+                    label: "Close",
+                    className: "btn btn-default pull-left",
+                    callback: function () {
+                        console.log("just do something on close");
+                    }
+                }],
+                show: false,
+                onEscape: function () {
+                    dialogCategory.modal("hide");
+                }
+            });
+
+            dialogCategory.modal("show");
+
+            //functions
+            jQuery.fn.serializeJSON = function () {
+                var json = {};
+
+                jQuery.map(jQuery(this).serializeArray(), function (n) {
+                    var _ = n.name.indexOf('[');
+
+                    if (_ > -1) {
+                        var o = json,
+                            _name;
+
+                        _name = n.name.replace(/\]/gi, '').split('[');
+
+                        for (var i = 0, len = _name.length; i < len; i++) {
+                            if (i == len - 1) {
+                                if (o[_name[i]]) {
+                                    if (typeof o[_name[i]] == 'string') {
+                                        o[_name[i]] = [o[_name[i]]];
+                                    }
+
+                                    o[_name[i]].push(n.value);
+                                } else {
+                                    o[_name[i]] = n.value || '';
+                                }
+                            } else {
+                                o = o[_name[i]] = o[_name[i]] || {};
+                            }
+                        }
+                    } else if (json[n.name] !== undefined) {
+                        if (!json[n.name].push) {
+                            json[n.name] = [json[n.name]];
+                        }
+
+                        json[n.name].push(n.value || '');
+                    } else {
+                        json[n.name] = n.value || '';
+                    }
+                });
+
+                return json;
+            };
+            
+        };
+
+        
+    </script>
+
+</body>
+</html>
+
+
+

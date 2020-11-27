@@ -1,0 +1,26 @@
+﻿
+.ui-dialog .ui-dialog-content {
+    padding: 2em;
+}
+
+#dialog {
+    box-shadow: 1rem .5rem 1rem rgba(0, 0, 0, .15);
+    padding: 20px;
+}
+
+.ui-dialog-titlebar {
+    background-color: powderblue;
+    border: solid;
+}
+
+.ui-button {
+    display: none;
+}
+
+.selected {
+    background-color: silver;
+}
+
+#added {
+    background: blue;
+}
