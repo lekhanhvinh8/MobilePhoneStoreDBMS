@@ -1,4 +1,5 @@
-﻿using MobilePhoneStoreDBMS.Models.Entities;
+﻿using MobilePhoneStoreDBMS.Models.Dtos;
+using MobilePhoneStoreDBMS.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,31 +17,40 @@ namespace MobilePhoneStoreDBMS.Controllers.Api
             this._context = new MobilePhoneStoreDBMSEntities(); 
         }
 
-        public List<Category> GetCategories()
+        public List<CategoryDto> GetCategories()
         {
-            return this._context.Categories.ToList();
+            var categories = this._context.Categories.ToList();
+            var categoriesDto = new List<CategoryDto>();
+
+            foreach (var category in categories)
+            {
+                var categoryDto = new CategoryDto(category);
+                categoriesDto.Add(categoryDto);
+            }
+            return categoriesDto;
         }
 
-        public Category GetCategory(int iD)
+        public CategoryDto GetCategory(int iD)
         {
             var category = this._context.Categories.Find(iD);
 
             if (category == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-            return category;
+
+            return new CategoryDto(category);
         }
 
         [HttpPost]
-        public Category CreateCategory(Category category)
+        public CategoryDto CreateCategory(Category category)
         {
             this._context.Categories.Add(category);
             this._context.SaveChanges();
 
-            return category;
+            return new CategoryDto(category);
         }
 
         [HttpPut]
-        public Category UpdateCategory(Category category)
+        public CategoryDto UpdateCategory(Category category)
         {
             var categoryInDb = this._context.Categories.Find(category.CategoryID);
 
@@ -53,9 +63,10 @@ namespace MobilePhoneStoreDBMS.Controllers.Api
 
             this._context.SaveChanges();
 
-            return categoryInDb;
+            return new CategoryDto(categoryInDb);
         }
 
+        [HttpDelete]
         public void DeleteCategory(int id)
         {
             var categoryInDb = this._context.Categories.Find(id);
