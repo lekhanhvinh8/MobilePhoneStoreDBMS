@@ -35,12 +35,50 @@ namespace MobilePhoneStoreDBMS.Controllers.Api
 
             return new ProductSpecificationDto(specification);
         }
-        public ProductSpecification CreateSpecification(ProductSpecification specification)
+        [HttpPost]
+        public ProductSpecificationDto CreateSpecification(ProductSpecificationDto specificationDto)
         {
+            var specification = specificationDto.ToSpecification();
+
             this._context.ProductSpecifications.Add(specification);
             this._context.SaveChanges();
 
-            return specification;
+            return new ProductSpecificationDto(specification);
+        }
+
+        [HttpPut]
+        public ProductSpecificationDto UpdateSpecification(ProductSpecificationDto specificationDto)
+        {
+            var specification = this._context.ProductSpecifications.Find(specificationDto.SpecificationID);
+
+            if (specification == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            specification.Name = specificationDto.Name;
+            specification.Description = specificationDto.Description;
+
+            this._context.SaveChanges();
+
+            return new ProductSpecificationDto(specification);
+        }
+
+        [HttpDelete]
+        public ProductSpecificationDto DeleteSpecification(int iD)
+        {
+            var specification = this._context.ProductSpecifications.Find(iD);
+
+            if (specification == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            foreach (var specificationValue in specification.SpecificationValues.ToList())
+            {
+                this._context.SpecificationValues.Remove(specificationValue);
+            }
+            this._context.ProductSpecifications.Remove(specification);
+
+            this._context.SaveChanges();
+
+            return new ProductSpecificationDto(specification);
         }
     }
 }

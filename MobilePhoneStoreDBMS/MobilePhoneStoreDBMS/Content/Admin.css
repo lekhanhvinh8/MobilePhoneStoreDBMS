@@ -1,6 +1,8 @@
 ﻿
 .ui-dialog .ui-dialog-content {
     padding: 2em;
+    background-color: white;
+    border: solid;
 }
 
 #dialog {

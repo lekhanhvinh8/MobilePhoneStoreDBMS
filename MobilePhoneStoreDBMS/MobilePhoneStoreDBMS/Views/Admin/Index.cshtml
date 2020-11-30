@@ -16,11 +16,10 @@
 </head>
 <body>
     <div>
-        <button id="test">Test</button>
         <div id="smarttab">
             <ul class="nav">
                 <li>
-                    <a class="nav-link" href="#tab-1">
+                    <a class="nav-link" href="#tab-ProducerManagement">
                         Producer Management
                     </a>
                 </li>
@@ -30,19 +29,33 @@
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="#tab-3">
+                    <a class="nav-link" href="#tab-ProductSpecificationManagement">
                         Product Specification Management
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" href="#tab-4">
-                        Tab 4
                     </a>
                 </li>
             </ul>
             <div class="tab-content">
-                <div id="tab-1" class="tab-pane" role="tabpanel">
-                    Tab content
+                <div id="tab-ProducerManagement" class="tab-pane" role="tabpanel">
+                    <div>
+                        <button id="addNewProducer" class="btn btn-primary">New Producer</button>
+                    </div>
+                    <div>
+                        <table id="producers" class="table	table-bordered	table-hover ">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="dialogProducer" class="form-group table-bordered" style="display:none;">
+                        <form id="formProducer" role="form">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input id="producer-name" class="form-control" name="name" type="text" placeholder="Enter name">
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div id="tab-CategoryManagement" class="tab-pane" role="tabpanel">
                     <div>
@@ -61,22 +74,61 @@
                         <form id="formCategory" role="form">
                             <div class="form-group">
                                 <label for="name">Name:</label>
-                                <input id="categorys-name" name="name" type="text" placeholder="Enter name">
+                                <input id="categorys-name" class="form-control" name="name" type="text" placeholder="Enter name">
                             </div>
                         </form>
                     </div>
                 </div>
-                <div id="tab-3" class="tab-pane" role="tabpanel">
-                    Tab content
-                </div>
-                <div id="tab-4" class="tab-pane" role="tabpanel">
-                    Tab content
+                <div id="tab-ProductSpecificationManagement" class="tab-pane" role="tabpanel">
+                    <div>
+                        <button id="add-new-specification" class="btn btn-primary">New Specification</button>
+                    </div>
+                    <div>
+                        <table id="specifications" class="table	table-bordered	table-hover ">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="dialog-specification"  style="display:none;">
+                        <form id="form-specification" role="form">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input id="specification-name" class="form-control" name="name" type="text" placeholder="Enter name">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <input id="specification-decription" class="form-control" name="description" type="text" placeholder="Enter name">
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="values-of-specification" style="display:none;">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Value</td>
+                                    <td>Delete</td>
+                                </tr>
+                            </thead>
+                            <tbody id="values-of-specification-body">
+
+                            </tbody>
+                        </table>
+
+                        <div class="form-group">
+                            <input type="text" class="value-to-add" placeholder="Enter value"/>
+                            <button class="add-new-value btn btn-primary data-specificationID">Add</button>
+                        </div>
+
+                        <button class="btn btn-default back">Back</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    
 
     <script src="~/Scripts/jquery-3.4.1.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
@@ -89,61 +141,180 @@
 
     <script>
         $(document).ready(function () {
+            //dataTable
+            var table;
+            var columns = [
+                {
+                    title: "Producer's ID",
+                    data: "producerID",
+                    render: function (data) {
+                        return data;
+                    }
+                },
+                {
+                    title: "Producer's Name",
+                    data: "name",
+                    render: function (data, type, producer) {
+                        return "<button class='btn-link jsModify' data-producerID=" + producer.producerID + ">" + data + "</button>";
+                    }
+                },
+                {
+                    title: "",
+                    data: "producerID",
+                    render: function (data) {
+                        return "<button class='jsDelete' data-producerID= " + data + ">Delete</button>";
+                    }
+                },
+            ];
+            table = CreateNewDataTable("#producers", "/api/Producers", columns);
+
             //smartTab
             var smartTab = $("#smarttab").smartTab();
             smartTab.smartTab("goToTab", 0);
 
-            //dataTable
-            var table;
-
             //when leaving a tab --> destroy a data table inside it
             smartTab.on("leaveTab", function (e, anchorObject, tabIndex) {
-                if (tabIndex === 1) {
+                if (tabIndex === 1 || tabIndex === 0 || tabIndex === 2)
                     table.destroy();
-                }
             });
 
             //when switch to a new tab --> create a data table inside it
             smartTab.on("tabContent", function (e, anchorObject, tabIndex) {
-                if (tabIndex === 1) {
-                    table = $("#categories").DataTable({
-                        ajax: {
-                            url: "/api/Categories",
-                            dataSrc: "",
+                if (tabIndex === 0) {
+                    var columns = [
+                        {
+                            title: "Producer's ID",
+                            data: "producerID",
+                            render: function (data) {
+                                return data;
+                            }
                         },
-                        columns: [
-                            {
-                                title: "Category's ID",
-                                data: "categoryID",
-                                render: function (data) {
-                                    return data;
-                                }
-                            },
-                            {
-                                title: "Category's Name",
-                                data: "name",
-                                render: function (data, type, category) {
-                                    return "<button class='btn-link jsModify' data-categoryID=" + category.categoryID + ">" + data + "</button>";
-                                }
-                            },
-                            {
-                                title: "",
-                                data: "categoryID",
-                                render: function (data) {
-                                    return "<button class='jsDelete' data-categoryID= " + data + ">Delete</button>";
-                                }
-                            },
-                        ],
+                        {
+                            title: "Producer's Name",
+                            data: "name",
+                            render: function (data, type, producer) {
+                                return "<button class='btn-link jsModify' data-producerID=" + producer.producerID + ">" + data + "</button>";
+                            }
+                        },
+                        {
+                            title: "",
+                            data: "producerID",
+                            render: function (data) {
+                                return "<button class='jsDelete' data-producerID= " + data + ">Delete</button>";
+                            }
+                        },
+                    ];
+                    table = CreateNewDataTable("#producers", "/api/Producers", columns);
+                }
 
-                        //paging: false,
-                        scrollY: 280,
-                        scrollX: false,
-                        scroller: true,
-                        deferRender: true,
-                    });
+                if (tabIndex == 1) {
+                    var columns = [
+                        {
+                            title: "Category's ID",
+                            data: "categoryID",
+                            render: function (data) {
+                                return data;
+                            }
+                        },
+                        {
+                            title: "Category's Name",
+                            data: "name",
+                            render: function (data, type, category) {
+                                return "<button class='btn-link jsModify' data-categoryID=" + category.categoryID + ">" + data + "</button>";
+                            }
+                        },
+                        {
+                            title: "",
+                            data: "categoryID",
+                            render: function (data) {
+                                return "<button class='jsDelete' data-categoryID= " + data + ">Delete</button>";
+                            }
+                        },
+                    ];
+                    table = CreateNewDataTable("#categories", "/api/Categories", columns);
+                }
+
+                if (tabIndex === 2) {
+                    var columns = [
+                        {
+                            title: "Specification's Id",
+                            data: "specificationID",
+                            render: function (data) {
+                                return data;
+                            }
+                        },
+                        {
+                            title: "Specification's Name",
+                            data: "name",
+                            render: function (data, type, specification) {
+                                return "<button class='btn-link jsModify' data-specificationID=" + specification.specificationID + ">" + data + "</button>";
+                            }
+                        },
+                        {
+                            title: "Description",
+                            data: "description",
+                            render: function (data, type, specification) {
+                                return data;
+                            }
+                        },
+                        {
+                            title: "",
+                            data: "specificationID",
+                            render: function (data) {
+                                return "<button class='jsDelete' data-specificationID= " + data + ">Delete</button>";
+                            }
+                        },
+                        {
+                            title: "",
+                            data: "specificationID",
+                            render: function (data) {
+                                return "<button class='btn-link jsValues' data-specificationID=" + data + ">Values</button>";
+                            }
+                        }
+                    ];
+                    table = CreateNewDataTable("#specifications", "/api/Specifications", columns);
                 }
             });
 
+            ////////////////Producer management event handlers////
+            $("#producers tbody").on("click", "tr", function () {
+                if ($(this).hasClass("selected")) {
+                    $(this).removeClass("selected");
+                }
+                else {
+                    table.$("tr.selected").removeClass("selected");
+                    $(this).addClass("selected");
+                }
+            });
+            //open producer dialog to create a new producer
+            $("#addNewProducer").on("click", function () {
+                CreateNewProducerDialogBootBox("Adding a new producer", table, "add", null);
+            });
+            //open producer dialog to modify a exist producer
+            $("#producers").on("click", ".jsModify", function () {
+                var button = $(this);
+                var title = "modify producer: " + button.attr("data-producerID") + ". " + button.text();
+                CreateNewProducerDialogBootBox(title, table, "modify", button.attr("data-producerID"));
+                //$(".dialogCategory-bootbox-ok-button").attr("mode", "modify");
+            });
+
+            //delete a specific row in dataTable
+            $("#producers").on("click", ".jsDelete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete producer " + button.attr("data-producerID"), function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/Producers/" + button.attr("data-producerID"),
+                            method: "Delete",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+
+            ///////////////Category management event handlers//////
             //click a single row --> change back-ground color
             $("#categories tbody").on("click", "tr", function () {
                 if ($(this).hasClass('selected')) {
@@ -170,12 +341,6 @@
                 //$(".dialogCategory-bootbox-ok-button").attr("mode", "modify");
             });
 
-            //click a button Ok in category dialog --> handle   :it's not gonna response
-            $(".dialogCategory-bootbox-ok-button").on("click", function () {
-                alert("click");
-
-            });
-
             //delete a specific row in dataTable
             $("#categories").on("click", ".jsDelete", function () {
                 var button1 = $(this);
@@ -192,13 +357,260 @@
                 });
             });
 
-            //test aria
-            $("#test").on("click", function () {
+            ///////////////Product specifications management event handlers//////
+            $("#specifications tbody").on("click", "tr", function () {
+                if ($(this).hasClass("selected")) {
+                    $(this).removeClass("selected");
+                }
+                else {
+                    table.$("tr.selected").removeClass("selected");
+                    $(this).addClass("selected");
+                }
+            });
+            //open producer dialog to create a new producer
+            $("#add-new-specification").on("click", function () {
+                CreateNewSpecificationDialogBootBox("Adding a new specification", table, "add", null);
+            });
+            //open producer dialog to modify a exist producer
+            $("#specifications").on("click", ".jsModify", function () {
+                var button = $(this);
+                var title = "modify specification: " + button.attr("data-specificationID") + ". " + button.text();
+                CreateNewSpecificationDialogBootBox(title, table, "modify", button.attr("data-specificationID"));
+            });
+
+            //delete a specific row in dataTable
+            $("#specifications").on("click", ".jsDelete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete specification " + button.attr("data-specificationID"), function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/Specifications/" + button.attr("data-specificationID"),
+                            method: "Delete",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+
+            $("#specifications").on("click", ".jsValues", function () {
+                var button = $(this);
+                $.ajax({
+                    url: "/api/Specifications/" + button.attr("data-specificationID"),
+                    method: "Get",
+                    success: function (data) {
+                        $(".add-new-value").attr("data-specificationID", data.specificationID);
+
+                        $("#values-of-specification-body").empty();
+
+                        for (var i = 0; i < data.values.length; i++) {
+                            $("#values-of-specification-body").append("<tr><td>" + data.values[i].value + "</td>"
+                                + "<td>" + "<button class='btn-link jsDeleteValue'" + "data-value='" + data.values[i].value + "' data-specificationID='" + data.specificationID + "'>Delete"
+                                + "</button></td></tr>");
+                        }
+
+                        $("#values-of-specification").dialog();
+                    },
+                });
+
+            });
+
+            $("#values-of-specification").on("click", ".back", function () {
+                $("#values-of-specification .value-to-add").val("");
+                $("#values-of-specification").dialog("destroy");
+            });
+
+            $("#values-of-specification").on("click", ".jsDeleteValue", function () {
+                button = $(this);
+                $.ajax({
+                    url: "/api/SpecificationValues",
+                    method: "Delete",
+                    data: {
+                        specificationID: button.attr("data-specificationID"),
+                        value: button.attr("data-value"),
+                    },
+                    success: function () {
+                        button.parents("tr").remove();
+                    },
+                });
+            });
+
+            $("#values-of-specification").on("click", ".add-new-value", function () {
+                var button = $(this);
+                $.ajax({
+                    url: "/api/SpecificationValues?specificationID=" + button.attr("data-specificationID") + "&value=" + $(".value-to-add").val(),
+                    method: "Get",
+                    success: function (data) {
+                        if (data == null) {
+                            $.ajax({
+                                url: "/api/SpecificationValues",
+                                method: "Post",
+                                data: {
+                                    specificationID: button.attr("data-specificationID"),
+                                    value: $(".value-to-add").val(),
+                                },
+                                success: function (data) {
+                                    $("#values-of-specification-body").append("<tr><td>" + data.value + "</td>"
+                                        + "<td>" + "<button class='btn-link jsDeleteValue'" + "data-value='" + data.value + "' data-specificationID='" + data.specificationID + "'>Delete"
+                                        + "</button></td></tr>");
+                                },
+                            });
+                        }
+                        else {
+                            alert("This specification alrealy has this value");
+                        }
+                    },
+                });
+
                 
             });
+
+            //test aria
+            
         });
 
+        /////
+        function CreateNewDataTable(idOfTable, urlToApi, columns) {
+            var table = $(idOfTable).DataTable({
+                ajax: {
+                    url: urlToApi,
+                    dataSrc: "",
+                },
+                columns: columns,
+                //paging: false,
+                scrollY: 280,
+                scrollX: false,
+                scroller: true,
+                deferRender: true,
+            });
+
+            return table;
+        }
+
+       
+        jQuery.fn.serializeJSON = function () {
+            var json = {};
+
+            jQuery.map(jQuery(this).serializeArray(), function (n) {
+                var _ = n.name.indexOf('[');
+
+                if (_ > -1) {
+                    var o = json,
+                        _name;
+
+                    _name = n.name.replace(/\]/gi, '').split('[');
+
+                    for (var i = 0, len = _name.length; i < len; i++) {
+                        if (i == len - 1) {
+                            if (o[_name[i]]) {
+                                if (typeof o[_name[i]] == 'string') {
+                                    o[_name[i]] = [o[_name[i]]];
+                                }
+
+                                o[_name[i]].push(n.value);
+                            } else {
+                                o[_name[i]] = n.value || '';
+                            }
+                        } else {
+                            o = o[_name[i]] = o[_name[i]] || {};
+                        }
+                    }
+                } else if (json[n.name] !== undefined) {
+                    if (!json[n.name].push) {
+                        json[n.name] = [json[n.name]];
+                    }
+
+                    json[n.name].push(n.value || '');
+                } else {
+                    json[n.name] = n.value || '';
+                }
+            });
+
+            return json;
+        };
+
+
+        ////
+        function CreateNewProducerDialogBootBox(title, table, mode, producerID) {
+            //to render a bootbox dialog create new or modify exist producer within a specific DataTable
+            
+            var dialogProducer = bootbox.dialog({
+                message: $("#dialogProducer").html(),
+                title: title,
+                buttons: [
+                    {
+                        label: "Save",
+                        className: "btn btn-primary pull-left",
+                        callback: function () {
+                            var form = dialogProducer.find("#formProducer");
+                            var items = form.serializeJSON();
+                            if (mode === "add") {
+                                $.ajax({
+                                    url: "/api/Producers",
+                                    method: "Post",
+                                    data: {
+                                        name: items.name,
+                                    },
+                                    success: function (response) {
+                                        var trDOM = table.row.add({
+                                            producerID: response.producerID,
+                                            name: response.name,
+                                        }).draw(false).node();
+
+                                        $(trDOM).addClass("selected");
+
+                                        $(trDOM).attr("id", "added");
+                                        var row = table.row("#added");
+                                        row.scrollTo();
+
+                                        //scroll the screen
+                                        var $rowToScroll = $(trDOM);
+                                        $('html, body').animate({ scrollTop: $rowToScroll.offset().top }, 2000);
+
+                                        $(trDOM).removeAttr("id");
+                                    },
+                                });
+                            }
+                            else if (mode === "modify") {
+                                $.ajax({
+                                    url: "/api/Producers",
+                                    method: "Put",
+                                    data: {
+                                        producerID: producerID,
+                                        name: items.name,
+                                    },
+                                    success: function (response) {
+                                        var indexes = table.rows().eq(0).filter(function (rowIdx) {
+                                            return table.cell(rowIdx, 0).data() === response.producerID;
+                                        });
+
+                                        var newData = table.row(indexes[0]).data();
+                                        newData.name = items.name;
+                                        table.row(indexes[0]).data(newData).draw();
+                                    },
+                                });
+                            }
+                        },
+                    },
+                    {
+                        label: "Close",
+                        className: "btn btn-default pull-left",
+                        callback: function () {
+                        }
+                    },
+                ],
+                show: false,
+                onEscape: function () {
+                    dialogProducer.modal("hide");
+                },
+            });
+
+            dialogProducer.modal("show");
+        }
+
         function CreateNewCategoryDialogBootBox(title, table, mode, categoryID) {
+            //to render a bootbox dialog modify a specific DataTable (redraw)
             var dialogCategory = bootbox.dialog({
                 message: $("#dialogCategory").html(),
                 title: title,
@@ -292,7 +704,7 @@
                     label: "Close",
                     className: "btn btn-default pull-left",
                     callback: function () {
-                        console.log("just do something on close");
+                        
                     }
                 }],
                 show: false,
@@ -302,52 +714,116 @@
             });
 
             dialogCategory.modal("show");
-
-            //functions
-            jQuery.fn.serializeJSON = function () {
-                var json = {};
-
-                jQuery.map(jQuery(this).serializeArray(), function (n) {
-                    var _ = n.name.indexOf('[');
-
-                    if (_ > -1) {
-                        var o = json,
-                            _name;
-
-                        _name = n.name.replace(/\]/gi, '').split('[');
-
-                        for (var i = 0, len = _name.length; i < len; i++) {
-                            if (i == len - 1) {
-                                if (o[_name[i]]) {
-                                    if (typeof o[_name[i]] == 'string') {
-                                        o[_name[i]] = [o[_name[i]]];
-                                    }
-
-                                    o[_name[i]].push(n.value);
-                                } else {
-                                    o[_name[i]] = n.value || '';
-                                }
-                            } else {
-                                o = o[_name[i]] = o[_name[i]] || {};
-                            }
-                        }
-                    } else if (json[n.name] !== undefined) {
-                        if (!json[n.name].push) {
-                            json[n.name] = [json[n.name]];
-                        }
-
-                        json[n.name].push(n.value || '');
-                    } else {
-                        json[n.name] = n.value || '';
-                    }
-                });
-
-                return json;
-            };
-            
         };
 
-        
+        function CreateNewSpecificationDialogBootBox(title, table, mode, specificationID) {
+            //to render a bootbox dialog create new or modify exist specification within a specific DataTable
+
+            var dialogProducer = bootbox.dialog({
+                message: $("#dialog-specification").html(),
+                title: title,
+                buttons: [
+                    {
+                        label: "Save",
+                        className: "btn btn-primary pull-left",
+                        callback: function () {
+                            var form = dialogProducer.find("#form-specification");
+                            var items = form.serializeJSON();
+                            if (mode === "add") {
+                                $.ajax({
+                                    url: "/api/Specifications",
+                                    method: "Post",
+                                    data: {
+                                        name: items.name,
+                                        description: items.description,
+                                    },
+                                    success: function (response) {
+                                        var trDOM = table.row.add({
+                                            specificationID: response.specificationID,
+                                            name: response.name,
+                                            description: response.description,
+                                        }).draw(false).node();
+
+                                        $(trDOM).addClass("selected");
+
+                                        $(trDOM).attr("id", "added");
+                                        var row = table.row("#added");
+                                        row.scrollTo();
+
+                                        //scroll the screen
+                                        var $rowToScroll = $(trDOM);
+                                        $('html, body').animate({ scrollTop: $rowToScroll.offset().top }, 2000);
+
+                                        $(trDOM).removeAttr("id");
+                                    },
+                                });
+                            }
+                            else if (mode === "modify") {
+                                $.ajax({
+                                    url: "/api/Specifications",
+                                    method: "Put",
+                                    data: {
+                                        specificationID: specificationID,
+                                        name: items.name,
+                                        description: items.description,
+                                    },
+                                    success: function (response) {
+                                        var indexes = table.rows().eq(0).filter(function (rowIdx) {
+                                            return table.cell(rowIdx, 0).data() === response.specificationID;
+                                        });
+
+                                        var newData = table.row(indexes[0]).data();
+                                        newData.name = items.name;
+                                        newData.description = items.description;
+                                        table.row(indexes[0]).data(newData).draw();
+                                    },
+                                });
+                            }
+                        },
+                    },
+                    {
+                        label: "Close",
+                        className: "btn btn-default pull-left",
+                        callback: function () {
+                        }
+                    },
+                ],
+                show: false,
+                onEscape: function () {
+                    dialogProducer.modal("hide");
+                },
+            });
+
+            dialogProducer.modal("show");
+        }
+
+        function CreateValuesDialog() {
+            bootbox.dialog({
+                message: $("#values-of-specification").html(),
+                title: "no title",
+
+                buttons: [
+                    {
+                        label: "Add",
+                        className: "btn btn-primary pull-left",
+                        callback: function () {
+                            $.ajax({
+                                success: function () {
+                                    CreateValuesDialog();
+                                },
+                            });
+                        },
+                    },
+                    {
+                        label: "Back",
+                        className: "btn btn-primary pull-left",
+                        callback: function () {
+
+                        }
+                    }
+                ],
+            });
+        };
     </script>
 
 </body>
