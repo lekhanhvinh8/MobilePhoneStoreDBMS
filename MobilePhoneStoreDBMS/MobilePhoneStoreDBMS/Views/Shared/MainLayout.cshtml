@@ -8,22 +8,31 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <html>
 <head>
 	<title>Mobilestore Website Template | Home :: W3layouts</title>
-	<link href="~/Assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<meta name="keywords" content="Mobilestore iphone web template, Android web template, Smartphone web template, free webdesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	<link href="~/Assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<link href='//fonts.googleapis.com/css?family=Londrina+Solid|Coda+Caption:800|Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="~/Assets/css/responsiveslides.css">
+	<link rel="stylesheet" href="~/Assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="~/Assets/css/bootstrap-submenu.min.css">
+	<script src="~/Assets/js/bootstrap-submenu.min.js"></script>
+	<script src="~/Assets/js/jquery.min.js"></script>
+	<script src="~/Assets/js/bootstrap.min.js"></script>
 	<script src="~/Assets/js/jquery.min.js"></script>
 	<script src="~/Assets/js/responsiveslides.min.js"></script>
 	<script>
-		    // You can also use "$(window).load(function() {"
-			    $(function () {
+		// You can also use "$(window).load(function() {"
+		$(function () {
 
-			      // Slideshow 1
-			      $("#slider1").responsiveSlides({
-			        maxwidth: 1600,
-			        speed: 600
-			      });
+			// Slideshow 1
+			$("#slider1").responsiveSlides({
+				maxwidth: 1600,
+				speed: 600
 			});
+		});
+
+		$('.dropdown-submenu > a').submenupicker();
 	</script>
 </head>
 <body>
@@ -52,16 +61,19 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<div class="clear"> </div>
 	<div class="top-header">
 		<div class="wrap">
+			@RenderPage("/Views/HomeScreen/ListOfCategory.cshtml")
+			<!--Dropdown list-->
+			
 			<!----start-logo---->
 			<div class="logo">
-				<a href="index.html"><img src="~/Assets/images/logo.png" title="logo" /></a>
+				<a href="@Url.Action("Index", "HomeScreen")"><img src="~/Assets/images/logo.png" title="logo" /></a>
 			</div>
 			<!----end-logo---->
 			<!----start-top-nav---->
 			<div class="top-nav">
 				<ul>
-					<li><a href="@Html.Action("Index", "Home")">Trang chủ</a></li>
-					<li><a href="#">Cửa hàng</a></li>
+					<li><a href="@Url.Action("Index", "HomeScreen")">Trang chủ</a></li>
+					<li><a href="@Url.Action("Store", "HomeScreen")">Cửa hàng</a></li>
 					<li><a href="#">Thông tin</a></li>
 					<li><a href="#">Liên lạc</a></li>
 				</ul>
@@ -71,9 +83,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	</div>
 	<!----End-top-nav---->
 	<!----End-Header---->
-	<!---->
 
 	@RenderBody()
+
 	<div class="footer">
 		<div class="wrap">
 			<div class="section group">
@@ -116,6 +128,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>
 		</div>
 	</div>
+
+	@Scripts.Render("~/bundles/bootstrap")
 </body>
 </html>
 

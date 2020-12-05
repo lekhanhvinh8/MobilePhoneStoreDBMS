@@ -289,6 +289,10 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
       </CollectionType>
     </ReturnType>
   </Function>
+  <Function Name="Sp_Product_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Product_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
     <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />

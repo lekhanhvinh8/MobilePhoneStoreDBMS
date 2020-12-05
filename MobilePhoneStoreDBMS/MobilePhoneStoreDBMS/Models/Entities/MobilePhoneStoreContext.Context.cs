@@ -65,5 +65,19 @@ namespace MobilePhoneStoreDBMS.Models.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddNewSpecificationToAProduct", productIDParameter, specificationIDParameter, valueParameter);
         }
+    
+        public virtual ObjectResult<Sp_Product_Details_Result> Sp_Product_Details(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Product_Details_Result>("Sp_Product_Details", idParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Product_List_Result> Sp_Product_List()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Product_List_Result>("Sp_Product_List");
+        }
     }
 }

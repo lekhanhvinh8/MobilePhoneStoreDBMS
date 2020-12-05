@@ -126,5 +126,35 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="AddNewSpecificationToAProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewSpecificationToAProduct" />
+    <FunctionImportMapping FunctionImportName="Sp_Product_Details" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_Details">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_Details_Result">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Sp_Product_List" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_List">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_List_Result">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

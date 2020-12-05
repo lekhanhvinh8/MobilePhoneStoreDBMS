@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Carts">
           <Key>
             <PropertyRef Name="ProductID" />
@@ -294,6 +294,10 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="Sp_Product_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_Product_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
           <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
@@ -366,8 +370,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <End Role="SpecificationValues" EntitySet="SpecificationValues" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MobilePhoneStoreDBMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -699,14 +702,40 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <FunctionImport Name="GetSpecifications" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.GetSpecifications_Result)">
-            <Parameter Name="productID" Mode="In" Type="Int32" />
+          <Parameter Name="productID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddNewSpecificationToAProduct">
             <Parameter Name="ProductID" Mode="In" Type="Int32" />
             <Parameter Name="SpecificationID" Mode="In" Type="Int32" />
             <Parameter Name="Value" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="Sp_Product_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_Details_Result)">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_Product_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Result)" />
         </EntityContainer>
+        <ComplexType Name="Sp_Product_Details_Result">
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="Int32" Name="Price" Nullable="true" />
+          <Property Type="String" Name="Image" Nullable="true" />
+          <Property Type="Int32" Name="ProducerID" Nullable="true" />
+          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Sp_Product_List_Result">
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="Int32" Name="Price" Nullable="true" />
+          <Property Type="String" Name="Image" Nullable="true" />
+          <Property Type="Int32" Name="ProducerID" Nullable="true" />
+          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -838,6 +867,36 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AddNewSpecificationToAProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewSpecificationToAProduct" />
+          <FunctionImportMapping FunctionImportName="Sp_Product_Details" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_Details">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_Details_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_Product_List" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_List">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_List_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

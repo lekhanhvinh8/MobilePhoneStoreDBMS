@@ -1,8 +1,59 @@
-﻿
+﻿@model IEnumerable<MobilePhoneStoreDBMS.Models.Entities.Product>
 @{
 	ViewBag.Title = "Index";
-	Layout = "~/Views/HomeScreen/MainLayout.cshtml";
+	Layout = "~/Views/Shared/MainLayout.cshtml";
 }
 
-<h2>Index asdfgj</h2>
+<div class="wrap">
+	<div class="image-slider">
+		<!-- Slideshow 1 -->
+		<ul class="rslides" id="slider1">
+			<li><img src="~/Assets/images/1.png"></li>
+			<li><img src="~/Assets/images/2.png"></li>
+			<li><img src="~/Assets/images/3.jpg"></li>
+		</ul>
+	</div>
+	<!--End-image-slider---->
+	<div class="content">
+		<div class="content-grids">
+			<div class="h4">
+				<h4>Sản phẩm nổi bật</h4>
+				<div class="section group">
+					<div class="grid_1_of_3 images_1_of_3">
+						<a href="#"><img src="~/Assets/images/noi_bat_1.png"></a>
+						<h3>Iphone 11 Pro Max</h3>
+					</div>
+					<div class="grid_1_of_3 images_1_of_3 second">
+						<a href="#"><img src="~/Assets/images/noi_bat_2.jpg"></a>
+						<h3>Samsung Galaxy 20 Ultra</h3>
+					</div>
+					<div class="grid_1_of_3 images_1_of_3 theree">
+						<a href="#"><img src="~/Assets/images/noi_bat_3.jpg"></a>
+						<h3>Xiaomi Mi 10T Pro 5G</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-grids" style="width: 1380px;">
+			<div class="section group">				
+				@foreach (var items in Model)
+				{
+				<div class="grid_1_of_4 images_1_of_4 products-info">
+					<a href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })">
+						<img src="@items.Image" />
+						@items.Name
+					</a>
+					<h3 class="shopp-price">@items.Price &nbsp;đ</h3>
+					<ul>
+						<li><a class="cart" href="#"> </a></li>
+						<li><a class="i" href="#"> </a></li>
+						<li><a class="Compar" href="#"> </a></li>
+						<li><a class="Wishlist" href="#"> </a></li>
+					</ul>
+				</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
 

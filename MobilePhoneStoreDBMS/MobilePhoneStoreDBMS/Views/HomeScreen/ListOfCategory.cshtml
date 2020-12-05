@@ -1,0 +1,15 @@
+﻿@{ 
+	List<MobilePhoneStoreDBMS.Models.Entities.Category> categories = new MobilePhoneStoreDBMS.Models.ViewModel().allCategories();
+
+}
+<div class="dropdown">
+	<button class="drop_btn">
+		<img src="~/Assets/images/menu-bar.png" style="width: 30px;" />
+	</button>
+	<div class="dropdown-content">
+		@foreach (var items in categories)
+		{
+		<a href="@Url.Action("Category", "HomeScreen", new { id = items.CategoryID })">@items.Name</a>
+		}
+	</div>
+</div>

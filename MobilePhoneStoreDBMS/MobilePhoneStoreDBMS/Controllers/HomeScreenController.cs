@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MobilePhoneStoreDBMS.Models;
+using MobilePhoneStoreDBMS.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,9 +11,52 @@ namespace MobilePhoneStoreDBMS.Controllers
     public class HomeScreenController : Controller
     {
         // GET: HomeScreen
+        private MobilePhoneStoreDBMSEntities _context;
+
+        public HomeScreenController()
+        {
+            _context = new MobilePhoneStoreDBMSEntities();
+        }
+        //GET: HomeScreen/
         public ActionResult Index()
         {
-            return View();
+            List<Product> allProducts = _context.Database.SqlQuery<Product>("Sp_Product_List").ToList();
+            return View(allProducts);
+        }
+
+        public ActionResult Store()
+        {
+            ViewModel viewModel = new ViewModel();
+
+            viewModel.allProducts = _context.Database.SqlQuery<Product>("Sp_Product_List").ToList();
+            viewModel.allProducers = _context.Database.SqlQuery<Producer>("Sp_Producer_List").ToList();
+           
+            return View(viewModel);
+        }
+
+        public ActionResult Details(int id)
+        {
+            Product ProductDetail = _context.Database.SqlQuery<Product>("Sp_Product_Details @id = {0}", id).Single();
+            return View(ProductDetail);
+        }
+
+        public ActionResult Producer(int id)
+        {
+            ViewModel model = new ViewModel();
+            model.producer = _context.Database.SqlQuery<Producer>("Sp_Producer_Details @id = {0}", id).Single();
+            model.allProductsOfProducer = _context.Database.SqlQuery<Product>("Sp_Product_List_Of_Producer @producerID = {0}", id).ToList();
+
+            return View(model);
+        }
+
+        public ActionResult Category(int id)
+        {
+            ViewModel model = new ViewModel();
+            model.category = _context.Database.SqlQuery<Category>("Sp_Catagory_Details @id = {0}", id).Single();
+            model.allProductsOfCategory = _context.Database.SqlQuery<Product>("Sp_Product_List_Of_Category @categoryID = {0}", id).ToList();
+            model.allProducers = _context.Database.SqlQuery<Producer>("Sp_Producer_List").ToList();
+
+            return View(model);
         }
     }
 }

@@ -335,5 +335,31 @@
       <Parameter Name="SpecificationID" Mode="In" Type="Int32" />
       <Parameter Name="Value" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="Sp_Product_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_Details_Result)">
+      <Parameter Name="id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Product_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Result)" />
   </EntityContainer>
+  <ComplexType Name="Sp_Product_Details_Result">
+    <Property Type="Int32" Name="ProductID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Quantity" Nullable="true" />
+    <Property Type="String" Name="Description" Nullable="true" />
+    <Property Type="Boolean" Name="Status" Nullable="true" />
+    <Property Type="Int32" Name="Price" Nullable="true" />
+    <Property Type="String" Name="Image" Nullable="true" />
+    <Property Type="Int32" Name="ProducerID" Nullable="true" />
+    <Property Type="Int32" Name="CategoryID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="Sp_Product_List_Result">
+    <Property Type="Int32" Name="ProductID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Quantity" Nullable="true" />
+    <Property Type="String" Name="Description" Nullable="true" />
+    <Property Type="Boolean" Name="Status" Nullable="true" />
+    <Property Type="Int32" Name="Price" Nullable="true" />
+    <Property Type="String" Name="Image" Nullable="true" />
+    <Property Type="Int32" Name="ProducerID" Nullable="true" />
+    <Property Type="Int32" Name="CategoryID" Nullable="true" />
+  </ComplexType>
 </Schema>
