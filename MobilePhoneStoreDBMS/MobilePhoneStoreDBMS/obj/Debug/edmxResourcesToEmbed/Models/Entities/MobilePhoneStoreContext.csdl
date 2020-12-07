@@ -339,6 +339,7 @@
       <Parameter Name="id" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="Sp_Product_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Result)" />
+    <EntitySet Name="sysdiagrams" EntityType="MobilePhoneStoreDBMSModel.sysdiagram" />
   </EntityContainer>
   <ComplexType Name="Sp_Product_Details_Result">
     <Property Type="Int32" Name="ProductID" Nullable="false" />
@@ -362,4 +363,14 @@
     <Property Type="Int32" Name="ProducerID" Nullable="true" />
     <Property Type="Int32" Name="CategoryID" Nullable="true" />
   </ComplexType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
 </Schema>

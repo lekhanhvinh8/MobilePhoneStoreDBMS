@@ -221,8 +221,8 @@ D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\Mobil
 D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\bin\Microsoft.Owin.Security.OAuth.xml
 D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\obj\Debug\MobilePhoneStoreDBMS.csprojAssemblyReference.cache
 D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\obj\Debug\MobilePhoneStoreDBMS.csproj.CoreCompileInputs.cache
 D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\obj\Debug\MobilePhoneStoreDBMS.csproj.CopyComplete
 D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\obj\Debug\MobilePhoneStoreDBMS.dll
 D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\obj\Debug\MobilePhoneStoreDBMS.pdb
+D:\HK1_2020-2021\Database Management System\Đồ án\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\MobilePhoneStoreDBMS\obj\Debug\MobilePhoneStoreDBMS.csprojAssemblyReference.cache

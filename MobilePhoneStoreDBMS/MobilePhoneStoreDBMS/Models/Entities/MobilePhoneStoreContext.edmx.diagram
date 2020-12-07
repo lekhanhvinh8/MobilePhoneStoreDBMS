@@ -7,7 +7,7 @@
       <Diagram DiagramId="81ceb1174a20416bae01816256921449" Name="Diagram1">
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Cart" Width="1.5" PointX="7.5" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Category" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Comment" Width="1.5" PointX="7.5" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Comment" Width="1.5" PointX="7.75" PointY="3" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Customer" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Order" Width="1.5" PointX="7.5" PointY="9" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Producer" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
@@ -15,7 +15,7 @@
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.ProductSpecification" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Rate" Width="1.5" PointX="10.5" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.SpecificationValue" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Specifications_of_all_product" Width="1.5" PointX="9.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Specifications_of_all_product" Width="1.5" PointX="9.75" PointY="1.875" IsExpanded="true" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.CartsCustomerIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.CartsProductIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.ProductsCategoryIDFK" ManuallyRouted="false" />
@@ -28,6 +28,7 @@
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.RatesProductIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.SpecificationValuesSpecificationIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.HasSpecification" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.sysdiagram" Width="1.5" PointX="10.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

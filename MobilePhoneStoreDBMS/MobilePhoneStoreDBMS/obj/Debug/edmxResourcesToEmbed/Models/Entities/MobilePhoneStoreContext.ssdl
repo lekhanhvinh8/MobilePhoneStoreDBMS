@@ -104,6 +104,16 @@
     <Property Name="SpecificationID" Type="int" Nullable="false" />
     <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_product' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Specifications_of_all_product">
@@ -305,6 +315,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rates" EntityType="Self.Rates" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValues" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [Specifications_of_all_product].[name] AS [name], 

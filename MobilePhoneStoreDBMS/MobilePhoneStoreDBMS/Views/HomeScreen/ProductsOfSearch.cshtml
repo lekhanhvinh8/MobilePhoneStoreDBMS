@@ -1,22 +1,21 @@
 ﻿@model MobilePhoneStoreDBMS.Models.ViewModel
 @{
-	ViewBag.Title = "Category";
+	ViewBag.Title = "ProductsOfSearch";
 	Layout = "~/Views/Shared/MainLayout.cshtml";
 }
 
 <div class="wrap">
 	<div class="content" style="width: 950px; float: left;">
 		<div class="content-grids">
-			<h2 class="for_h2">Loại sản phẩm: @Model.category.Name</h2>
-			<h2 class="for_h2" style="padding-left: 10px;">Sản phẩm hiện bán tại cửa hàng</h2>
-			@foreach (var items in Model.allProductsOfCategory)
+			<h2 class="for_h2" style="padding-left: 10px;">Kết quả tìm kiếm '@ViewBag.search'</h2>
+			@foreach (var items in Model.productsOfSearch)
 			{
 				<div class="grid_1_of_4 images_1_of_4 products-info">
 					<a href="@Url.Action("Details" , "HomeScreen", new { id = items.ProductID })">
 						<img src="@items.Image" />
 						@items.Name
 					</a>
-					<h3>@items.Price &nbsp; VNĐ</h3>
+					<h3>@items.Price &nbsp;đ</h3>
 					<ul>
 						<li><a class="cart" href="#"> </a></li>
 						<li><a class="i" href="#"> </a></li>

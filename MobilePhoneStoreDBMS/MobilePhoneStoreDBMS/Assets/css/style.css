@@ -1564,3 +1564,11 @@ a#show_cart {
 	float: left;
 	padding-right: 1rem;
 }
+.menu_body2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	color: rgb(155, 155, 155);
+	line-height: 1.8em;
+	margin-bottom: 10px;
+	padding: 10px;
+}

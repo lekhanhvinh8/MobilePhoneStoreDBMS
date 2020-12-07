@@ -15,6 +15,7 @@ namespace MobilePhoneStoreDBMS.Models
         }
         public Producer producer { get; set; }
         public Category category { get; set; }
+        public Product product { get; set; }
         public List<Product> allProducts { get; set; }
         public List<Product> allProductsOfProducer { get; set; }
         public List<Product> allProductsOfCategory { get; set; }
@@ -23,5 +24,6 @@ namespace MobilePhoneStoreDBMS.Models
             var res = _context.Database.SqlQuery<Category>("select * from view_Category_List").ToList();
             return res;
         }
+        public List<Product> productsOfSearch { get; set; }
     }
 }
