@@ -1,0 +1,49 @@
+﻿@{ 
+    Layout = null;
+}
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"/>
+    </head>
+
+    <body>
+        <form id="form1">
+            <div class="form-group">
+                <input class="btn" type="button" id="btnShow-api-src" value="Show api of product 1" />
+                <input class="btn" type="button" id="btnShow-convert-byte" value="Show byte convertion" />
+            </div>
+            <div id="imgContainer">
+            </div>
+        </form>
+
+        <div id="abc">
+            <img src="" id="image-to-display"/>
+        </div>
+
+        <script src="~/Scripts/bootbox.min.js"></script>
+        <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#btnShow-api-src").on("click", function () {
+                    $("#image-to-display").attr('src', "/api/AvatarOfProduct/GetAvatarOfProduct?productID=13");
+                });
+
+                $("#btnShow-convert-byte").on("click", function () {
+                    $.ajax({
+                        url: "/api/AvatarOfProduct/GetAvatarOfProductAsByte?productID=1",
+                        success: function (response) {
+                            $("#image-to-display").attr('src', "data:image/jpg;base64," + response);
+                        },
+                    });
+                });
+
+                function base64encode(binary) {
+                    return btoa(unescape(encodeURIComponent(binary)));
+                }
+            });
+
+        </script>
+
+    </body>
+
+</html>

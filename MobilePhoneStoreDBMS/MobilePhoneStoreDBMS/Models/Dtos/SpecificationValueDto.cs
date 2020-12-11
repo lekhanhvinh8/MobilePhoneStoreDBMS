@@ -19,7 +19,7 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
         public int SpecificationID { get; set; }
         public string Value { get; set; }
 
-        public SpecificationValue ToSpecificationValue()
+        public SpecificationValue CreateModel()
         {
             var specificationValue = new SpecificationValue();
             specificationValue.SpecificationID = this.SpecificationID;

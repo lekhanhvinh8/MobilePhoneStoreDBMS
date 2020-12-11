@@ -6,27 +6,27 @@ use MobilePhoneStoreDBMS;
 go
 create table Products(
 	ProductID int not null identity(1,1),
-	Name nvarchar(50),
-	Quantity int,
+	Name nvarchar(50) not null,
+	Quantity int not null,
 	Description nvarchar(max),
-	Status bit,
-	Price int,
+	Status bit not null,
+	Price int not null,
 	Image nvarchar(max),
 );
 go
 create table Producers(
 	ProducerID int identity(1,1) not null,
-	Name nvarchar(50),
+	Name nvarchar(50) not null unique,
 );
 go
 create table Categories(
 	CategoryID int identity(1,1) not null,
-	Name nvarchar(50),
+	Name nvarchar(50) not null unique,
 );
 go
 create table ProductSpecifications(
 	SpecificationID int identity(1,1) not null,
-	Name nvarchar(50),
+	Name nvarchar(50) not null,
 	Description nvarchar(max),
 );
 go
@@ -37,19 +37,26 @@ create table Customers(
 	Email nvarchar(50),
 	Password nvarchar(30)
 );
+go
+create table AvatarOfProduct(
+	productID int not null,
+	imageFile image not null,
+);
 --create primary key and foreign relationships between initial tables
 go
-alter table Products add ProducerID int;
-alter table Products add CategoryID int;
+alter table Products add ProducerID int not null;
+alter table Products add CategoryID int not null;
 go
 alter table Producers add constraint ProducersPK primary key(ProducerID);
 alter table Categories add constraint CategoriesPK primary key(CategoryID);
 alter table Products add constraint ProductsPK primary key(ProductID);
 alter table Customers add constraint CustomerPK primary key(CustomerID);
 alter table ProductSpecifications add constraint ProductSpecificationsPK primary key(SpecificationID);
+alter table AvatarOfProduct add constraint AvatarOfProductPK primary key(ProductID);
 go
 alter table Products add constraint ProductsProdcerIDFK foreign key(ProducerID) references Producers(ProducerID);
 alter table Products add constraint ProductsCategoryIDFK foreign key(CategoryID) references Categories(CategoryID);
+alter table AvatarOfProduct add constraint AvatarOfProductProductIDFK foreign key(ProductID) references Products(ProductID);
 --create weak entity tables
 go
 create table Comments(
@@ -127,6 +134,14 @@ select p.Name as name, ps.Name as specification, s.Value as Value
 from Products p inner join HasSpecification h on p.ProductID = h.ProductID
 					inner join SpecificationValues s on h.SpecificationID = s.SpecificationID and h.Value = s.Value
 					inner join ProductSpecifications ps on s.SpecificationID = ps.SpecificationID;
+					
+					
+---
+go
+create view view_Category_List
+as
+select * from Categories
+---
 --add triggers
 go
 create trigger Orders_After_Insert_DeleteCart on Carts after delete as
@@ -144,6 +159,46 @@ begin
 	Insert into HasSpecification Values (@ProductID, @SpecificationID, @Value);
 end;
 
+---
+go
+create proc Sp_Catagory_Details(@id int)
+as
+select * from Categories where CategoryID = @id
+
+go
+create proc Sp_Producer_List
+as
+select * from Producers
+order by Name
+
+go
+create proc Sp_Product_List
+as
+select * from Products where Status = 1
+order by Name
+
+go
+create proc Sp_Product_List_Of_Category(@categoryID int)
+as
+select * from Products where Status = 1 and CategoryID = @categoryID
+order by Name
+
+go
+create proc Sp_Product_List_Of_Producer(@producerID int)
+as
+select * from Products where Status = 1 and ProducerID = @producerID
+order by Name
+
+go
+create proc Sp_Producer_Details(@id int)
+as
+select * from Producers where ProducerID = @id
+
+go
+create proc Sp_Product_Details(@id int)
+as
+select * from Products where Status = 1 and ProductID = @id
+---
 
 --add Functions
 go
@@ -188,9 +243,9 @@ insert into SpecificationValues(SpecificationID, Value) values (3,'1 Sims');
 insert into SpecificationValues(SpecificationID, Value) values (4,'Android');
 insert into SpecificationValues(SpecificationID, Value) values (4,'IOS');
 
-insert into Products(Name,Price,Description) values ('j3 Pro',4,'ProVip');
-insert into Products(Name,Price,Description) values ('j7 Pro',7,'Max Pro');
-insert into Products(Name,Price,Description) values ('iphone 7',10,'IOSPro');
+insert into Products(Name,Price,Description,ProducerID,CategoryID) values ('j3 Pro',4,'ProVip',1,2);
+insert into Products(Name,Price,Description,ProducerID,CategoryID) values ('j7 Pro',7,'Max Pro',2,1);
+insert into Products(Name,Price,Description,ProducerID,CategoryID) values ('iphone 7',10,'IOSPro',3,3);
 
 insert into HasSpecification(ProductID, SpecificationID, Value) values(1,1,'4GB');
 insert into HasSpecification(ProductID, SpecificationID, Value) values(1,2,'32GB');
@@ -204,9 +259,6 @@ insert into Customers(Name, PhoneNumber) values('Nghia','01234');
 
 insert into Carts(CustomerID, ProductID, amount) values(1,1,5);
 insert into Carts(CustomerID, ProductID, amount) values(2,1,1);
-
-
-
 
 
 

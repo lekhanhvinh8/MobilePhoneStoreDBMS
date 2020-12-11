@@ -1,0 +1,12 @@
+﻿@{
+	var specification = new MobilePhoneStoreDBMS.Models.Entities.MobilePhoneStoreDBMSEntities().GetSpecifications(ViewBag.ProID);
+}
+
+<div class="menu_body2">
+	@foreach (var item in specification)
+	{
+		<ul>
+			<li> @item.specification  @item.Value</li>
+		</ul>
+	}
+</div>

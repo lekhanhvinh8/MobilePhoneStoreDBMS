@@ -42,7 +42,7 @@ namespace MobilePhoneStoreDBMS.Controllers.Api
         [HttpPost]
         public SpecificationValueDto CreateSpecificationValue(SpecificationValueDto specificationValueDto)
         {
-            var specificationValue = specificationValueDto.ToSpecificationValue();
+            var specificationValue = specificationValueDto.CreateModel();
 
             this._context.SpecificationValues.Add(specificationValue);
             this._context.SaveChanges();

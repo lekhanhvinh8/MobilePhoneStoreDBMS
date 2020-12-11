@@ -60,13 +60,13 @@
     <EntitySetMapping Name="Products">
       <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Product">
         <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="Image" ColumnName="Image" />
           <ScalarProperty Name="ProductID" ColumnName="ProductID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
           <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
           <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
         </MappingFragment>
@@ -156,5 +156,13 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="AvatarOfProducts">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.AvatarOfProduct">
+        <MappingFragment StoreEntitySet="AvatarOfProduct">
+          <ScalarProperty Name="imageFile" ColumnName="imageFile" />
+          <ScalarProperty Name="productID" ColumnName="productID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

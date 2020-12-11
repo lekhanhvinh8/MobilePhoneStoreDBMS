@@ -82,7 +82,6 @@
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Status" Type="Boolean" />
     <Property Name="Price" Type="Int32" />
-    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="ProducerID" Type="Int32" />
     <Property Name="CategoryID" Type="Int32" />
     <NavigationProperty Name="Carts" Relationship="Self.CartsProductIDFK" FromRole="Products" ToRole="Carts" />
@@ -92,6 +91,8 @@
     <NavigationProperty Name="Producer" Relationship="Self.ProductsProdcerIDFK" FromRole="Products" ToRole="Producers" />
     <NavigationProperty Name="Rates" Relationship="Self.RatesProductIDFK" FromRole="Products" ToRole="Rates" />
     <NavigationProperty Name="SpecificationValues" Relationship="Self.HasSpecification" FromRole="Products" ToRole="SpecificationValues" />
+    <NavigationProperty Name="AvatarOfProduct" Relationship="MobilePhoneStoreDBMSModel.AvatarOfProductProductIDFK" FromRole="Product" ToRole="AvatarOfProduct" />
+    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ProductSpecification">
     <Key>
@@ -339,6 +340,11 @@
       <Parameter Name="id" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="Sp_Product_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Result)" />
+    <EntitySet Name="AvatarOfProducts" EntityType="MobilePhoneStoreDBMSModel.AvatarOfProduct" />
+    <AssociationSet Name="AvatarOfProductProductIDFK" Association="MobilePhoneStoreDBMSModel.AvatarOfProductProductIDFK">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="AvatarOfProduct" EntitySet="AvatarOfProducts" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="Sp_Product_Details_Result">
     <Property Type="Int32" Name="ProductID" Nullable="false" />
@@ -362,4 +368,24 @@
     <Property Type="Int32" Name="ProducerID" Nullable="true" />
     <Property Type="Int32" Name="CategoryID" Nullable="true" />
   </ComplexType>
+  <EntityType Name="AvatarOfProduct">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="Int32" Nullable="false" />
+    <Property Name="imageFile" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="Product" Relationship="MobilePhoneStoreDBMSModel.AvatarOfProductProductIDFK" FromRole="AvatarOfProduct" ToRole="Product" />
+  </EntityType>
+  <Association Name="AvatarOfProductProductIDFK">
+    <End Type="MobilePhoneStoreDBMSModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="MobilePhoneStoreDBMSModel.AvatarOfProduct" Role="AvatarOfProduct" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="AvatarOfProduct">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

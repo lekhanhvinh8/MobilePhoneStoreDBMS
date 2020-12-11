@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AvatarOfProduct">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="int" Nullable="false" />
+    <Property Name="imageFile" Type="image" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Carts">
+    <Key>
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="amount" Type="int" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Comments">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="CommentTime" />
+    </Key>
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="CommentTime" Type="datetime" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="HasSpecification">
+    <Key>
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="SpecificationID" />
+      <PropertyRef Name="Value" />
+    </Key>
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="SpecificationID" Type="int" Nullable="false" />
+    <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="OrderTime" />
+    </Key>
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="OrderTime" Type="datetime" Nullable="false" />
+    <Property Name="amount" Type="int" />
+  </EntityType>
+  <EntityType Name="Producers">
+    <Key>
+      <PropertyRef Name="ProducerID" />
+    </Key>
+    <Property Name="ProducerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+    <Property Name="Price" Type="int" Nullable="false" />
+    <Property Name="Image" Type="nvarchar(max)" />
+    <Property Name="ProducerID" Type="int" Nullable="false" />
+    <Property Name="CategoryID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductSpecifications">
+    <Key>
+      <PropertyRef Name="SpecificationID" />
+    </Key>
+    <Property Name="SpecificationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Rates">
+    <Key>
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="starts" Type="int" />
+  </EntityType>
+  <EntityType Name="SpecificationValues">
+    <Key>
+      <PropertyRef Name="SpecificationID" />
+      <PropertyRef Name="Value" />
+    </Key>
+    <Property Name="SpecificationID" Type="int" Nullable="false" />
+    <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_product' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Specifications_of_all_product">
+    <Key>
+      <PropertyRef Name="name" />
+      <PropertyRef Name="specification" />
+      <PropertyRef Name="Value" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="specification" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_Category_List">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="AvatarOfProductProductIDFK">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="AvatarOfProduct" Type="Self.AvatarOfProduct" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="AvatarOfProduct">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CartsCustomerIDFK">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Carts">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CartsProductIDFK">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="Carts">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CommentsCustomerIDFk">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Comments">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CommentsProductIDFk">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="Comments">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="HasSpecidicationSpecificationIDAndValueFK">
+    <End Role="SpecificationValues" Type="Self.SpecificationValues" Multiplicity="1" />
+    <End Role="HasSpecification" Type="Self.HasSpecification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SpecificationValues">
+        <PropertyRef Name="SpecificationID" />
+        <PropertyRef Name="Value" />
+      </Principal>
+      <Dependent Role="HasSpecification">
+        <PropertyRef Name="SpecificationID" />
+        <PropertyRef Name="Value" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="HasSpecificationProductIDFK">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="HasSpecification" Type="Self.HasSpecification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="HasSpecification">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrdersCustomerIDFK">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrdersProductIDFK">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductsCategoryIDFK">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="CategoryID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductsProdcerIDFK">
+    <End Role="Producers" Type="Self.Producers" Multiplicity="1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producers">
+        <PropertyRef Name="ProducerID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="ProducerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RatesCustomerIDFK">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="Rates" Type="Self.Rates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="Rates">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RatesProductIDFK">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="Rates" Type="Self.Rates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="Rates">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SpecificationValuesSpecificationIDFK">
+    <End Role="ProductSpecifications" Type="Self.ProductSpecifications" Multiplicity="1" />
+    <End Role="SpecificationValues" Type="Self.SpecificationValues" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductSpecifications">
+        <PropertyRef Name="SpecificationID" />
+      </Principal>
+      <Dependent Role="SpecificationValues">
+        <PropertyRef Name="SpecificationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="AddNewSpecificationToAProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProductID" Type="int" Mode="In" />
+    <Parameter Name="SpecificationID" Type="int" Mode="In" />
+    <Parameter Name="Value" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="GetSpecifications" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="productID" Type="int" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="specification" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="Sp_Catagory_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Producer_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Producer_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Sp_Product_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Product_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Sp_Product_List_Of_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="categoryID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Product_List_Of_Producer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="producerID" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
+    <EntitySet Name="AvatarOfProduct" EntityType="Self.AvatarOfProduct" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HasSpecification" EntityType="Self.HasSpecification" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Producers" EntityType="Self.Producers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rates" EntityType="Self.Rates" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValues" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Specifications_of_all_product].[name] AS [name], 
+    [Specifications_of_all_product].[specification] AS [specification], 
+    [Specifications_of_all_product].[Value] AS [Value]
+    FROM [dbo].[Specifications_of_all_product] AS [Specifications_of_all_product]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_Category_List" EntityType="Self.view_Category_List" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [view_Category_List].[CategoryID] AS [CategoryID], 
+    [view_Category_List].[Name] AS [Name]
+    FROM [dbo].[view_Category_List] AS [view_Category_List]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="AvatarOfProductProductIDFK" Association="Self.AvatarOfProductProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="AvatarOfProduct" EntitySet="AvatarOfProduct" />
+    </AssociationSet>
+    <AssociationSet Name="CartsCustomerIDFK" Association="Self.CartsCustomerIDFK">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Carts" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="CartsProductIDFK" Association="Self.CartsProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Carts" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="CommentsCustomerIDFk" Association="Self.CommentsCustomerIDFk">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Comments" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="CommentsProductIDFk" Association="Self.CommentsProductIDFk">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Comments" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="HasSpecidicationSpecificationIDAndValueFK" Association="Self.HasSpecidicationSpecificationIDAndValueFK">
+      <End Role="SpecificationValues" EntitySet="SpecificationValues" />
+      <End Role="HasSpecification" EntitySet="HasSpecification" />
+    </AssociationSet>
+    <AssociationSet Name="HasSpecificationProductIDFK" Association="Self.HasSpecificationProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="HasSpecification" EntitySet="HasSpecification" />
+    </AssociationSet>
+    <AssociationSet Name="OrdersCustomerIDFK" Association="Self.OrdersCustomerIDFK">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="OrdersProductIDFK" Association="Self.OrdersProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="ProductsCategoryIDFK" Association="Self.ProductsCategoryIDFK">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="ProductsProdcerIDFK" Association="Self.ProductsProdcerIDFK">
+      <End Role="Producers" EntitySet="Producers" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="RatesCustomerIDFK" Association="Self.RatesCustomerIDFK">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Rates" EntitySet="Rates" />
+    </AssociationSet>
+    <AssociationSet Name="RatesProductIDFK" Association="Self.RatesProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Rates" EntitySet="Rates" />
+    </AssociationSet>
+    <AssociationSet Name="SpecificationValuesSpecificationIDFK" Association="Self.SpecificationValuesSpecificationIDFK">
+      <End Role="ProductSpecifications" EntitySet="ProductSpecifications" />
+      <End Role="SpecificationValues" EntitySet="SpecificationValues" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

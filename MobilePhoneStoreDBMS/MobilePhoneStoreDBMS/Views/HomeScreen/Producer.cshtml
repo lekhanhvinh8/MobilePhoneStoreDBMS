@@ -4,11 +4,10 @@
 	Layout = "~/Views/Shared/MainLayout.cshtml";
 }
 
-<h2>Producer</h2>
 <div class="wrap">
 	<div class="content" style="width: 950px; float: left;">
 		<div class="content-grids">
-			<h2 class="">Sản phẩm hiện bán tại cửa hàng</h2>
+			<h2 class="for_h2" style="padding-left: 10px;">Sản phẩm hiện bán tại cửa hàng</h2>
 			@foreach (var items in Model.allProductsOfProducer)
 			{
 				<div class="grid_1_of_4 images_1_of_4 products-info">

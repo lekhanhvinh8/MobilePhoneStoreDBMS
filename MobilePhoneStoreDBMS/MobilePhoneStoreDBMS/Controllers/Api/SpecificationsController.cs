@@ -26,9 +26,9 @@ namespace MobilePhoneStoreDBMS.Controllers.Api
             }
             return specifications;
         }
-        public ProductSpecificationDto GetSpecification(int iD)
+        public ProductSpecificationDto GetSpecification(int id)
         {
-            var specification = this._context.ProductSpecifications.Find(iD);
+            var specification = this._context.ProductSpecifications.Find(id);
 
             if (specification == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);

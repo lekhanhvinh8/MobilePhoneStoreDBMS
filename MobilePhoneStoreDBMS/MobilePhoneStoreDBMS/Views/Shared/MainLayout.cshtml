@@ -39,9 +39,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<div class="wrap">
 		<!----start-Header---->
 		<div class="header">
+			<!--Search-->
+			@*@RenderPage("/Views/HomeScreen/Search.cshtml")*@
 			<div class="search-bar">
-				<form>
-					<input type="text"><input type="submit" value="Search" />
+				<form action="/HomeScreen/ProductsOfSearch">
+					<input type="text" value="@ViewBag.search" name="search"><input type="submit" value="Tìm kiếm" />
 				</form>
 			</div>
 			<div class="clear"> </div>

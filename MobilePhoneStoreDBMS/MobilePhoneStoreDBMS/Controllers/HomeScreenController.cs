@@ -37,6 +37,7 @@ namespace MobilePhoneStoreDBMS.Controllers
         public ActionResult Details(int id)
         {
             Product ProductDetail = _context.Database.SqlQuery<Product>("Sp_Product_Details @id = {0}", id).Single();
+            ViewBag.ProId = id;
             return View(ProductDetail);
         }
 
@@ -57,6 +58,32 @@ namespace MobilePhoneStoreDBMS.Controllers
             model.allProducers = _context.Database.SqlQuery<Producer>("Sp_Producer_List").ToList();
 
             return View(model);
+        }
+
+
+        public ActionResult ProductsOfSearch(string search = "")
+        {
+            ViewBag.search = search;
+            if (search == "" || search == null)
+            {
+                ViewModel model = new ViewModel();
+                model.productsOfSearch = (from i in _context.Products
+                                          where i.Name.Contains(search)
+                                          where i.Status == true
+                                          select i).OrderBy(p => p.Name).ToList();
+                model.allProducers = _context.Database.SqlQuery<Producer>("Sp_Producer_List").ToList();
+                return View(model);
+            }
+            else
+            {
+                ViewModel model = new ViewModel();
+                model.productsOfSearch = (from i in _context.Products
+                                          where i.Name.Contains(search)
+                                          where i.Status == true
+                                          select i).OrderBy(p => p.Name).ToList();
+                model.allProducers = _context.Database.SqlQuery<Producer>("Sp_Producer_List").ToList();
+                return View(model);
+            }
         }
     }
 }

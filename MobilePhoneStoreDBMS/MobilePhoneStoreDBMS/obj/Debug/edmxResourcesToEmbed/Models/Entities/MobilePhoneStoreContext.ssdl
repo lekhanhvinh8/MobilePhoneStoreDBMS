@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AvatarOfProduct">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="int" Nullable="false" />
+    <Property Name="imageFile" Type="image" Nullable="false" />
+  </EntityType>
   <EntityType Name="Carts">
     <Key>
       <PropertyRef Name="ProductID" />
@@ -104,6 +111,16 @@
     <Property Name="SpecificationID" Type="int" Nullable="false" />
     <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_product' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Specifications_of_all_product">
@@ -114,6 +131,18 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
     <Property Name="specification" Type="nvarchar" MaxLength="50" />
     <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <Association Name="AvatarOfProductProductIDFK">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="AvatarOfProduct" Type="Self.AvatarOfProduct" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="AvatarOfProduct">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="CartsCustomerIDFK">
     <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
     <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
@@ -294,6 +323,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
   </Function>
   <Function Name="Sp_Product_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
+    <EntitySet Name="AvatarOfProduct" EntityType="Self.AvatarOfProduct" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
@@ -305,6 +335,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rates" EntityType="Self.Rates" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValues" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [Specifications_of_all_product].[name] AS [name], 
@@ -312,6 +343,10 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
     [Specifications_of_all_product].[Value] AS [Value]
     FROM [dbo].[Specifications_of_all_product] AS [Specifications_of_all_product]</DefiningQuery>
     </EntitySet>
+    <AssociationSet Name="AvatarOfProductProductIDFK" Association="Self.AvatarOfProductProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="AvatarOfProduct" EntitySet="AvatarOfProduct" />
+    </AssociationSet>
     <AssociationSet Name="CartsCustomerIDFK" Association="Self.CartsCustomerIDFK">
       <End Role="Customers" EntitySet="Customers" />
       <End Role="Carts" EntitySet="Carts" />

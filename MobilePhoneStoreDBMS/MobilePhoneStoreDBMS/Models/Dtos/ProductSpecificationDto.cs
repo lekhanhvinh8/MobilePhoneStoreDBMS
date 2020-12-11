@@ -40,7 +40,7 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
             var values = new List<SpecificationValue>();
             foreach (var value in this.Values)
             {
-                values.Add(value.ToSpecificationValue());
+                values.Add(value.CreateModel());
             }
             specificaion.SpecificationValues = values;
 

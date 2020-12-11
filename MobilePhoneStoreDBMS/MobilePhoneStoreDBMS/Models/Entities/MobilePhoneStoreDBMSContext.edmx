@@ -4,7 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AvatarOfProduct">
+          <Key>
+            <PropertyRef Name="productID" />
+          </Key>
+          <Property Name="productID" Type="int" Nullable="false" />
+          <Property Name="imageFile" Type="image" Nullable="false" />
+        </EntityType>
         <EntityType Name="Carts">
           <Key>
             <PropertyRef Name="ProductID" />
@@ -19,7 +26,7 @@
             <PropertyRef Name="CategoryID" />
           </Key>
           <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Comments">
           <Key>
@@ -68,28 +75,28 @@
             <PropertyRef Name="ProducerID" />
           </Key>
           <Property Name="ProducerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
             <PropertyRef Name="ProductID" />
           </Key>
           <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Quantity" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="Status" Type="bit" />
-          <Property Name="Price" Type="int" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="Price" Type="int" Nullable="false" />
           <Property Name="Image" Type="nvarchar(max)" />
-          <Property Name="ProducerID" Type="int" />
-          <Property Name="CategoryID" Type="int" />
+          <Property Name="ProducerID" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ProductSpecifications">
           <Key>
             <PropertyRef Name="SpecificationID" />
           </Key>
           <Property Name="SpecificationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Rates">
@@ -113,12 +120,36 @@
 warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_product' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Specifications_of_all_product">
           <Key>
+            <PropertyRef Name="name" />
+            <PropertyRef Name="specification" />
             <PropertyRef Name="Value" />
           </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="50" />
-          <Property Name="specification" Type="nvarchar" MaxLength="50" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="specification" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="view_Category_List">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="AvatarOfProductProductIDFK">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="AvatarOfProduct" Type="Self.AvatarOfProduct" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="AvatarOfProduct">
+              <PropertyRef Name="productID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="CartsCustomerIDFK">
           <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
           <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
@@ -218,7 +249,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           </ReferentialConstraint>
         </Association>
         <Association Name="ProductsCategoryIDFK">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -230,7 +261,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           </ReferentialConstraint>
         </Association>
         <Association Name="ProductsProdcerIDFK">
-          <End Role="Producers" Type="Self.Producers" Multiplicity="0..1" />
+          <End Role="Producers" Type="Self.Producers" Multiplicity="1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Producers">
@@ -287,18 +318,32 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           <ReturnType>
             <CollectionType>
               <RowType>
-                <Property Name="name" Type="nvarchar" MaxLength="50" />
-                <Property Name="specification" Type="nvarchar" MaxLength="50" />
+                <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+                <Property Name="specification" Type="nvarchar" MaxLength="50" Nullable="false" />
                 <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
               </RowType>
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="Sp_Catagory_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_Producer_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_Producer_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="Sp_Product_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
         <Function Name="Sp_Product_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Sp_Product_List_Of_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="categoryID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_Product_List_Of_Producer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="producerID" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
+          <EntitySet Name="AvatarOfProduct" EntityType="Self.AvatarOfProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
@@ -317,6 +362,16 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
     [Specifications_of_all_product].[Value] AS [Value]
     FROM [dbo].[Specifications_of_all_product] AS [Specifications_of_all_product]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="view_Category_List" EntityType="Self.view_Category_List" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [view_Category_List].[CategoryID] AS [CategoryID], 
+    [view_Category_List].[Name] AS [Name]
+    FROM [dbo].[view_Category_List] AS [view_Category_List]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="AvatarOfProductProductIDFK" Association="Self.AvatarOfProductProductIDFK">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="AvatarOfProduct" EntitySet="AvatarOfProduct" />
+          </AssociationSet>
           <AssociationSet Name="CartsCustomerIDFK" Association="Self.CartsCustomerIDFK">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Carts" EntitySet="Carts" />
@@ -370,15 +425,24 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <End Role="SpecificationValues" EntitySet="SpecificationValues" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MobilePhoneStoreDBMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <ComplexType Name="GetSpecifications_Result">
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
         </ComplexType>
+        <EntityType Name="AvatarOfProduct">
+          <Key>
+            <PropertyRef Name="productID" />
+          </Key>
+          <Property Name="productID" Type="Int32" Nullable="false" />
+          <Property Name="imageFile" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.AvatarOfProductProductIDFK" FromRole="AvatarOfProduct" ToRole="Products" />
+        </EntityType>
         <EntityType Name="Cart">
           <Key>
             <PropertyRef Name="ProductID" />
@@ -395,7 +459,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <PropertyRef Name="CategoryID" />
           </Key>
           <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="Self.ProductsCategoryIDFK" FromRole="Categories" ToRole="Products" />
         </EntityType>
         <EntityType Name="Comment">
@@ -443,7 +507,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <PropertyRef Name="ProducerID" />
           </Key>
           <Property Name="ProducerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="Self.ProductsProdcerIDFK" FromRole="Producers" ToRole="Products" />
         </EntityType>
         <EntityType Name="Product">
@@ -451,14 +515,15 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <PropertyRef Name="ProductID" />
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Boolean" />
-          <Property Name="Price" Type="Int32" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProducerID" Type="Int32" />
-          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="ProducerID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AvatarOfProduct" Relationship="Self.AvatarOfProductProductIDFK" FromRole="Products" ToRole="AvatarOfProduct" />
           <NavigationProperty Name="Carts" Relationship="Self.CartsProductIDFK" FromRole="Products" ToRole="Carts" />
           <NavigationProperty Name="Category" Relationship="Self.ProductsCategoryIDFK" FromRole="Products" ToRole="Categories" />
           <NavigationProperty Name="Comments" Relationship="Self.CommentsProductIDFk" FromRole="Products" ToRole="Comments" />
@@ -472,7 +537,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <PropertyRef Name="SpecificationID" />
           </Key>
           <Property Name="SpecificationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SpecificationValues" Relationship="Self.SpecificationValuesSpecificationIDFK" FromRole="ProductSpecifications" ToRole="SpecificationValues" />
         </EntityType>
@@ -499,12 +564,34 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
         </EntityType>
         <EntityType Name="Specifications_of_all_product">
           <Key>
+            <PropertyRef Name="name" />
+            <PropertyRef Name="specification" />
             <PropertyRef Name="Value" />
           </Key>
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
+        <EntityType Name="view_Category_List">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="AvatarOfProductProductIDFK">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="AvatarOfProduct" Type="Self.AvatarOfProduct" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="AvatarOfProduct">
+              <PropertyRef Name="productID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="CartsCustomerIDFK">
           <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
           <End Role="Carts" Type="Self.Cart" Multiplicity="*" />
@@ -530,7 +617,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           </ReferentialConstraint>
         </Association>
         <Association Name="ProductsCategoryIDFK">
-          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
           <End Role="Products" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -602,7 +689,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           </ReferentialConstraint>
         </Association>
         <Association Name="ProductsProdcerIDFK">
-          <End Role="Producers" Type="Self.Producer" Multiplicity="0..1" />
+          <End Role="Producers" Type="Self.Producer" Multiplicity="1" />
           <End Role="Products" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Producers">
@@ -642,6 +729,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           <End Role="Products" Type="Self.Product" Multiplicity="*" />
         </Association>
         <EntityContainer Name="MobilePhoneStoreDBMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AvatarOfProducts" EntityType="Self.AvatarOfProduct" />
           <EntitySet Name="Carts" EntityType="Self.Cart" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Comments" EntityType="Self.Comment" />
@@ -653,6 +741,11 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           <EntitySet Name="Rates" EntityType="Self.Rate" />
           <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValue" />
           <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" />
+          <EntitySet Name="view_Category_List" EntityType="Self.view_Category_List" />
+          <AssociationSet Name="AvatarOfProductProductIDFK" Association="Self.AvatarOfProductProductIDFK">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="AvatarOfProduct" EntitySet="AvatarOfProducts" />
+          </AssociationSet>
           <AssociationSet Name="CartsCustomerIDFK" Association="Self.CartsCustomerIDFK">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Carts" EntitySet="Carts" />
@@ -702,39 +795,86 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <FunctionImport Name="GetSpecifications" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.GetSpecifications_Result)">
-          <Parameter Name="productID" Mode="In" Type="Int32" />
+            <Parameter Name="productID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddNewSpecificationToAProduct">
             <Parameter Name="ProductID" Mode="In" Type="Int32" />
             <Parameter Name="SpecificationID" Mode="In" Type="Int32" />
             <Parameter Name="Value" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="Sp_Catagory_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Catagory_Details_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_Producer_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Producer_Details_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_Producer_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Producer_List_Result)" />
           <FunctionImport Name="Sp_Product_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_Details_Result)">
-          <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sp_Product_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Result)" />
+          <FunctionImport Name="Sp_Product_List_Of_Category" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Category_Result)">
+            <Parameter Name="categoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_Product_List_Of_Producer" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result)">
+            <Parameter Name="producerID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="Sp_Catagory_Details_Result">
+          <Property Type="Int32" Name="CategoryID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Sp_Producer_Details_Result">
+          <Property Type="Int32" Name="ProducerID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Sp_Producer_List_Result">
+          <Property Type="Int32" Name="ProducerID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+        </ComplexType>
         <ComplexType Name="Sp_Product_Details_Result">
           <Property Type="Int32" Name="ProductID" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
           <Property Type="String" Name="Description" Nullable="true" />
-          <Property Type="Boolean" Name="Status" Nullable="true" />
-          <Property Type="Int32" Name="Price" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="Price" Nullable="false" />
           <Property Type="String" Name="Image" Nullable="true" />
-          <Property Type="Int32" Name="ProducerID" Nullable="true" />
-          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+          <Property Type="Int32" Name="ProducerID" Nullable="false" />
+          <Property Type="Int32" Name="CategoryID" Nullable="false" />
         </ComplexType>
         <ComplexType Name="Sp_Product_List_Result">
           <Property Type="Int32" Name="ProductID" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
           <Property Type="String" Name="Description" Nullable="true" />
-          <Property Type="Boolean" Name="Status" Nullable="true" />
-          <Property Type="Int32" Name="Price" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="Price" Nullable="false" />
           <Property Type="String" Name="Image" Nullable="true" />
-          <Property Type="Int32" Name="ProducerID" Nullable="true" />
-          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+          <Property Type="Int32" Name="ProducerID" Nullable="false" />
+          <Property Type="Int32" Name="CategoryID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Sp_Product_List_Of_Category_Result">
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="Price" Nullable="false" />
+          <Property Type="String" Name="Image" Nullable="true" />
+          <Property Type="Int32" Name="ProducerID" Nullable="false" />
+          <Property Type="Int32" Name="CategoryID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Sp_Product_List_Of_Producer_Result">
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="Price" Nullable="false" />
+          <Property Type="String" Name="Image" Nullable="true" />
+          <Property Type="Int32" Name="ProducerID" Nullable="false" />
+          <Property Type="Int32" Name="CategoryID" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -742,6 +882,14 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MobilePhoneStoreDBMSModelStoreContainer" CdmEntityContainer="MobilePhoneStoreDBMSEntities">
+          <EntitySetMapping Name="AvatarOfProducts">
+            <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.AvatarOfProduct">
+              <MappingFragment StoreEntitySet="AvatarOfProduct">
+                <ScalarProperty Name="productID" ColumnName="productID" />
+                <ScalarProperty Name="imageFile" ColumnName="imageFile" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Carts">
             <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Cart">
               <MappingFragment StoreEntitySet="Carts">
@@ -848,6 +996,14 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="view_Category_List">
+            <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.view_Category_List">
+              <MappingFragment StoreEntitySet="view_Category_List">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="HasSpecification" TypeName="MobilePhoneStoreDBMSModel.HasSpecification" StoreEntitySet="HasSpecification">
             <EndProperty Name="SpecificationValues">
               <ScalarProperty Name="SpecificationID" ColumnName="SpecificationID" />
@@ -867,6 +1023,30 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AddNewSpecificationToAProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewSpecificationToAProduct" />
+          <FunctionImportMapping FunctionImportName="Sp_Catagory_Details" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Catagory_Details">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Catagory_Details_Result">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_Producer_Details" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Producer_Details">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Producer_Details_Result">
+                <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_Producer_List" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Producer_List">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Producer_List_Result">
+                <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="Sp_Product_Details" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_Details">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_Details_Result">
@@ -885,6 +1065,36 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_pro
           <FunctionImportMapping FunctionImportName="Sp_Product_List" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_List">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_List_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_Product_List_Of_Category" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_List_Of_Category">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Category_Result">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_Product_List_Of_Producer" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Product_List_Of_Producer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result">
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />

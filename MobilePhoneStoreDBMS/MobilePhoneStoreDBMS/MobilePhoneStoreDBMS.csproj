@@ -184,77 +184,102 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\Api\AvatarOfProductController.cs" />
     <Compile Include="Controllers\Api\CategoriesController.cs" />
     <Compile Include="Controllers\Api\ProducersController.cs" />
+    <Compile Include="Controllers\Api\ProductForSellerController.cs" />
     <Compile Include="Controllers\Api\SpecificationsController.cs" />
     <Compile Include="Controllers\Api\SpecificationValuesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomeScreenController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\SellerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Dtos\CategoryDto.cs" />
     <Compile Include="Models\Dtos\ProducerDto.cs" />
+    <Compile Include="Models\Dtos\ProductForSellerDto.cs" />
     <Compile Include="Models\Dtos\ProductSpecificationDto.cs" />
     <Compile Include="Models\Dtos\SpecificationValueDto.cs" />
+    <Compile Include="Models\Entities\AvatarOfProduct.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Cart.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Category.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Comment.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Customer.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\GetSpecifications_Result.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\MobilePhoneStoreContext.Context.cs">
+    <Compile Include="Models\Entities\MobilePhoneStoreDBMSContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MobilePhoneStoreContext.Context.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\MobilePhoneStoreContext.cs">
+    <Compile Include="Models\Entities\MobilePhoneStoreDBMSContext.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\MobilePhoneStoreContext.Designer.cs">
+    <Compile Include="Models\Entities\MobilePhoneStoreDBMSContext.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MobilePhoneStoreContext.edmx</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Order.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Producer.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Product.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\ProductSpecification.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Rate.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Specifications_of_all_product.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\SpecificationValue.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Sp_Catagory_Details_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Sp_Producer_Details_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Sp_Producer_List_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Sp_Product_Details_Result.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Sp_Product_List_Of_Category_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Sp_Product_List_Of_Producer_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Sp_Product_List_Result.cs">
-      <DependentUpon>MobilePhoneStoreContext.tt</DependentUpon>
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\view_Category_List.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -514,34 +539,36 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\select2.min.css" />
+    <Content Include="Content\Seller.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\Entities\MobilePhoneStoreContext.Context.tt">
+    <Content Include="Models\Entities\MobilePhoneStoreDBMSContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>MobilePhoneStoreContext.edmx</DependentUpon>
-      <LastGenOutput>MobilePhoneStoreContext.Context.cs</LastGenOutput>
+      <DependentUpon>MobilePhoneStoreDBMSContext.edmx</DependentUpon>
+      <LastGenOutput>MobilePhoneStoreDBMSContext.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Entities\MobilePhoneStoreContext.tt">
+    <Content Include="Models\Entities\MobilePhoneStoreDBMSContext.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>MobilePhoneStoreContext.edmx</DependentUpon>
-      <LastGenOutput>MobilePhoneStoreContext.cs</LastGenOutput>
+      <DependentUpon>MobilePhoneStoreDBMSContext.edmx</DependentUpon>
+      <LastGenOutput>MobilePhoneStoreDBMSContext.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Entities\MobilePhoneStoreContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MobilePhoneStoreContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Entities\MobilePhoneStoreContext.edmx.diagram">
-      <DependentUpon>MobilePhoneStoreContext.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
+    <EntityDeploy Include="Models\Entities\MobilePhoneStoreDBMSContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MobilePhoneStoreDBMSContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Entities\MobilePhoneStoreDBMSContext.edmx.diagram">
+      <DependentUpon>MobilePhoneStoreDBMSContext.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -630,6 +657,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\select2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -672,6 +700,11 @@
     <Content Include="Views\HomeScreen\Producer.cshtml" />
     <Content Include="Views\HomeScreen\ListOfCategory.cshtml" />
     <Content Include="Views\HomeScreen\Category.cshtml" />
+    <Content Include="Views\HomeScreen\Search.cshtml" />
+    <Content Include="Views\HomeScreen\ProductsOfSearch.cshtml" />
+    <Content Include="Views\HomeScreen\ProductSpecifications.cshtml" />
+    <Content Include="Views\Seller\Index.cshtml" />
+    <Content Include="Views\Seller\AddNewProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
