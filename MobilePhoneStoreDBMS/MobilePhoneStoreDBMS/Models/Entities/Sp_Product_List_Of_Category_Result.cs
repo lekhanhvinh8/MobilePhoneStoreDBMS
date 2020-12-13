@@ -11,7 +11,7 @@ namespace MobilePhoneStoreDBMS.Models.Entities
 {
     using System;
     
-    public partial class Sp_Product_Details_Result
+    public partial class Sp_Product_List_Of_Category_Result
     {
         public int ProductID { get; set; }
         public string Name { get; set; }

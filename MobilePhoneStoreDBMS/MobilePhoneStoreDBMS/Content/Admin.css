@@ -14,7 +14,9 @@
     background-color: powderblue;
     border: solid;
 }
-
+.ui-dialog-titlebar-close {
+    display: none;
+}
 .ui-button {
     display: none;
 }
@@ -25,4 +27,8 @@
 
 #added {
     background: blue;
+}
+
+.error {
+    color: red;
 }

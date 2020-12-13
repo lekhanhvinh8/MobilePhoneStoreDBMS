@@ -15,11 +15,16 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
         {
             this.SpecificationID = specificationValue.SpecificationID;
             this.Value = specificationValue.Value;
+
+            if (specificationValue.Products.Count() == 0)
+                this.IsHavingProduct = false;
+            else
+                this.IsHavingProduct = true;
         }
         public int SpecificationID { get; set; }
         public string Value { get; set; }
-
-        public SpecificationValue ToSpecificationValue()
+        public bool IsHavingProduct { get; set; }
+        public SpecificationValue CreateModel()
         {
             var specificationValue = new SpecificationValue();
             specificationValue.SpecificationID = this.SpecificationID;

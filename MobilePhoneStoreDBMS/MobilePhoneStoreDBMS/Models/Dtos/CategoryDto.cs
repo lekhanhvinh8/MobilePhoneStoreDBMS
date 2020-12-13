@@ -20,9 +20,16 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
                 _category = category;
                 this.CategoryID = category.CategoryID;
                 this.Name = category.Name;
+
+                if (category.Products.Count() == 0)
+                    IsHavingProduct = false;
+                else
+                    IsHavingProduct = true;
             }
         }
         public int CategoryID { get; set; }
         public string Name { get; set; }
+
+        public bool IsHavingProduct { get; set; }
     }
 }

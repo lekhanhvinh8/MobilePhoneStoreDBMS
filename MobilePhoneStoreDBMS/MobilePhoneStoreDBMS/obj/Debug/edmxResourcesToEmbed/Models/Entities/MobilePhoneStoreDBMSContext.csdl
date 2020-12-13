@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="MobilePhoneStoreDBMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <ComplexType Name="GetSpecifications_Result">
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </ComplexType>
+  <EntityType Name="AvatarOfProduct">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="Int32" Nullable="false" />
+    <Property Name="imageFile" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="Self.AvatarOfProductProductIDFK" FromRole="AvatarOfProduct" ToRole="Products" />
+  </EntityType>
   <EntityType Name="Cart">
     <Key>
       <PropertyRef Name="ProductID" />
@@ -21,7 +29,7 @@
       <PropertyRef Name="CategoryID" />
     </Key>
     <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Products" Relationship="Self.ProductsCategoryIDFK" FromRole="Categories" ToRole="Products" />
   </EntityType>
   <EntityType Name="Comment">
@@ -45,11 +53,12 @@
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Carts" Relationship="Self.CartsCustomerIDFK" FromRole="Customers" ToRole="Carts" />
     <NavigationProperty Name="Comments" Relationship="Self.CommentsCustomerIDFk" FromRole="Customers" ToRole="Comments" />
     <NavigationProperty Name="Orders" Relationship="Self.OrdersCustomerIDFK" FromRole="Customers" ToRole="Orders" />
     <NavigationProperty Name="Rates" Relationship="Self.RatesCustomerIDFK" FromRole="Customers" ToRole="Rates" />
+    <Property Name="hasAcc" Type="Int32" />
+    <NavigationProperty Name="Account" Relationship="MobilePhoneStoreDBMSModel.CustomersAccIDFK" FromRole="Customer" ToRole="Account" />
   </EntityType>
   <EntityType Name="Order">
     <Key>
@@ -69,7 +78,7 @@
       <PropertyRef Name="ProducerID" />
     </Key>
     <Property Name="ProducerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Products" Relationship="Self.ProductsProdcerIDFK" FromRole="Producers" ToRole="Products" />
   </EntityType>
   <EntityType Name="Product">
@@ -77,13 +86,15 @@
       <PropertyRef Name="ProductID" />
     </Key>
     <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Status" Type="Boolean" />
-    <Property Name="Price" Type="Int32" />
-    <Property Name="ProducerID" Type="Int32" />
-    <Property Name="CategoryID" Type="Int32" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="Price" Type="Int32" Nullable="false" />
+    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ProducerID" Type="Int32" Nullable="false" />
+    <Property Name="CategoryID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AvatarOfProduct" Relationship="Self.AvatarOfProductProductIDFK" FromRole="Products" ToRole="AvatarOfProduct" />
     <NavigationProperty Name="Carts" Relationship="Self.CartsProductIDFK" FromRole="Products" ToRole="Carts" />
     <NavigationProperty Name="Category" Relationship="Self.ProductsCategoryIDFK" FromRole="Products" ToRole="Categories" />
     <NavigationProperty Name="Comments" Relationship="Self.CommentsProductIDFk" FromRole="Products" ToRole="Comments" />
@@ -91,15 +102,13 @@
     <NavigationProperty Name="Producer" Relationship="Self.ProductsProdcerIDFK" FromRole="Products" ToRole="Producers" />
     <NavigationProperty Name="Rates" Relationship="Self.RatesProductIDFK" FromRole="Products" ToRole="Rates" />
     <NavigationProperty Name="SpecificationValues" Relationship="Self.HasSpecification" FromRole="Products" ToRole="SpecificationValues" />
-    <NavigationProperty Name="AvatarOfProduct" Relationship="MobilePhoneStoreDBMSModel.AvatarOfProductProductIDFK" FromRole="Product" ToRole="AvatarOfProduct" />
-    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ProductSpecification">
     <Key>
       <PropertyRef Name="SpecificationID" />
     </Key>
     <Property Name="SpecificationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="SpecificationValues" Relationship="Self.SpecificationValuesSpecificationIDFK" FromRole="ProductSpecifications" ToRole="SpecificationValues" />
   </EntityType>
@@ -126,12 +135,34 @@
   </EntityType>
   <EntityType Name="Specifications_of_all_product">
     <Key>
+      <PropertyRef Name="name" />
+      <PropertyRef Name="specification" />
       <PropertyRef Name="Value" />
     </Key>
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
+  <EntityType Name="view_Category_List">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="AvatarOfProductProductIDFK">
+    <End Role="Products" Type="Self.Product" Multiplicity="1" />
+    <End Role="AvatarOfProduct" Type="Self.AvatarOfProduct" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="AvatarOfProduct">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="CartsCustomerIDFK">
     <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
     <End Role="Carts" Type="Self.Cart" Multiplicity="*" />
@@ -157,7 +188,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="ProductsCategoryIDFK">
-    <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="Categories" Type="Self.Category" Multiplicity="1" />
     <End Role="Products" Type="Self.Product" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Categories">
@@ -229,7 +260,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="ProductsProdcerIDFK">
-    <End Role="Producers" Type="Self.Producer" Multiplicity="0..1" />
+    <End Role="Producers" Type="Self.Producer" Multiplicity="1" />
     <End Role="Products" Type="Self.Product" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Producers">
@@ -269,6 +300,7 @@
     <End Role="Products" Type="Self.Product" Multiplicity="*" />
   </Association>
   <EntityContainer Name="MobilePhoneStoreDBMSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AvatarOfProducts" EntityType="Self.AvatarOfProduct" />
     <EntitySet Name="Carts" EntityType="Self.Cart" />
     <EntitySet Name="Categories" EntityType="Self.Category" />
     <EntitySet Name="Comments" EntityType="Self.Comment" />
@@ -280,6 +312,11 @@
     <EntitySet Name="Rates" EntityType="Self.Rate" />
     <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValue" />
     <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" />
+    <EntitySet Name="view_Category_List" EntityType="Self.view_Category_List" />
+    <AssociationSet Name="AvatarOfProductProductIDFK" Association="Self.AvatarOfProductProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="AvatarOfProduct" EntitySet="AvatarOfProducts" />
+    </AssociationSet>
     <AssociationSet Name="CartsCustomerIDFK" Association="Self.CartsCustomerIDFK">
       <End Role="Customers" EntitySet="Customers" />
       <End Role="Carts" EntitySet="Carts" />
@@ -336,55 +373,142 @@
       <Parameter Name="SpecificationID" Mode="In" Type="Int32" />
       <Parameter Name="Value" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="Sp_Catagory_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Catagory_Details_Result)">
+      <Parameter Name="id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Producer_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Producer_Details_Result)">
+      <Parameter Name="id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Producer_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Producer_List_Result)" />
     <FunctionImport Name="Sp_Product_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_Details_Result)">
       <Parameter Name="id" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="Sp_Product_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Result)" />
-    <EntitySet Name="AvatarOfProducts" EntityType="MobilePhoneStoreDBMSModel.AvatarOfProduct" />
-    <AssociationSet Name="AvatarOfProductProductIDFK" Association="MobilePhoneStoreDBMSModel.AvatarOfProductProductIDFK">
-      <End Role="Product" EntitySet="Products" />
-      <End Role="AvatarOfProduct" EntitySet="AvatarOfProducts" />
+    <FunctionImport Name="Sp_Product_List_Of_Category" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Category_Result)">
+      <Parameter Name="categoryID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Product_List_Of_Producer" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result)">
+      <Parameter Name="producerID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="Accounts" EntityType="MobilePhoneStoreDBMSModel.Account" />
+    <EntitySet Name="Roles" EntityType="MobilePhoneStoreDBMSModel.Role" />
+    <AssociationSet Name="CustomersAccIDFK" Association="MobilePhoneStoreDBMSModel.CustomersAccIDFK">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Customer" EntitySet="Customers" />
     </AssociationSet>
+    <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <FunctionImport Name="sp_Account_Login" ReturnType="Collection(Int32)">
+      <Parameter Name="username" Mode="In" Type="String" />
+      <Parameter Name="password" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Account_Register" ReturnType="Collection(Boolean)">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+      <Parameter Name="Email" Mode="In" Type="String" />
+      <Parameter Name="username" Mode="In" Type="String" />
+      <Parameter Name="password" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
+  <ComplexType Name="Sp_Catagory_Details_Result">
+    <Property Type="Int32" Name="CategoryID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="Sp_Producer_Details_Result">
+    <Property Type="Int32" Name="ProducerID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="Sp_Producer_List_Result">
+    <Property Type="Int32" Name="ProducerID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+  </ComplexType>
   <ComplexType Name="Sp_Product_Details_Result">
     <Property Type="Int32" Name="ProductID" Nullable="false" />
-    <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
-    <Property Type="Int32" Name="Quantity" Nullable="true" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="Quantity" Nullable="false" />
     <Property Type="String" Name="Description" Nullable="true" />
-    <Property Type="Boolean" Name="Status" Nullable="true" />
-    <Property Type="Int32" Name="Price" Nullable="true" />
+    <Property Type="Boolean" Name="Status" Nullable="false" />
+    <Property Type="Int32" Name="Price" Nullable="false" />
     <Property Type="String" Name="Image" Nullable="true" />
-    <Property Type="Int32" Name="ProducerID" Nullable="true" />
-    <Property Type="Int32" Name="CategoryID" Nullable="true" />
+    <Property Type="Int32" Name="ProducerID" Nullable="false" />
+    <Property Type="Int32" Name="CategoryID" Nullable="false" />
   </ComplexType>
   <ComplexType Name="Sp_Product_List_Result">
     <Property Type="Int32" Name="ProductID" Nullable="false" />
-    <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
-    <Property Type="Int32" Name="Quantity" Nullable="true" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="Quantity" Nullable="false" />
     <Property Type="String" Name="Description" Nullable="true" />
-    <Property Type="Boolean" Name="Status" Nullable="true" />
-    <Property Type="Int32" Name="Price" Nullable="true" />
+    <Property Type="Boolean" Name="Status" Nullable="false" />
+    <Property Type="Int32" Name="Price" Nullable="false" />
     <Property Type="String" Name="Image" Nullable="true" />
-    <Property Type="Int32" Name="ProducerID" Nullable="true" />
-    <Property Type="Int32" Name="CategoryID" Nullable="true" />
+    <Property Type="Int32" Name="ProducerID" Nullable="false" />
+    <Property Type="Int32" Name="CategoryID" Nullable="false" />
   </ComplexType>
-  <EntityType Name="AvatarOfProduct">
+  <ComplexType Name="Sp_Product_List_Of_Category_Result">
+    <Property Type="Int32" Name="ProductID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="Quantity" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="true" />
+    <Property Type="Boolean" Name="Status" Nullable="false" />
+    <Property Type="Int32" Name="Price" Nullable="false" />
+    <Property Type="String" Name="Image" Nullable="true" />
+    <Property Type="Int32" Name="ProducerID" Nullable="false" />
+    <Property Type="Int32" Name="CategoryID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="Sp_Product_List_Of_Producer_Result">
+    <Property Type="Int32" Name="ProductID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="Quantity" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="true" />
+    <Property Type="Boolean" Name="Status" Nullable="false" />
+    <Property Type="Int32" Name="Price" Nullable="false" />
+    <Property Type="String" Name="Image" Nullable="true" />
+    <Property Type="Int32" Name="ProducerID" Nullable="false" />
+    <Property Type="Int32" Name="CategoryID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Account">
     <Key>
-      <PropertyRef Name="productID" />
+      <PropertyRef Name="AccID" />
     </Key>
-    <Property Name="productID" Type="Int32" Nullable="false" />
-    <Property Name="imageFile" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-    <NavigationProperty Name="Product" Relationship="MobilePhoneStoreDBMSModel.AvatarOfProductProductIDFK" FromRole="AvatarOfProduct" ToRole="Product" />
+    <Property Name="AccID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="hasRole" Type="Int32" />
+    <NavigationProperty Name="Customers" Relationship="MobilePhoneStoreDBMSModel.CustomersAccIDFK" FromRole="Account" ToRole="Customer" />
+    <NavigationProperty Name="Role" Relationship="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" FromRole="Account" ToRole="Role" />
   </EntityType>
-  <Association Name="AvatarOfProductProductIDFK">
-    <End Type="MobilePhoneStoreDBMSModel.Product" Role="Product" Multiplicity="1" />
-    <End Type="MobilePhoneStoreDBMSModel.AvatarOfProduct" Role="AvatarOfProduct" Multiplicity="0..1" />
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Descriptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Accounts" Relationship="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" FromRole="Role" ToRole="Account" />
+  </EntityType>
+  <Association Name="CustomersAccIDFK">
+    <End Type="MobilePhoneStoreDBMSModel.Account" Role="Account" Multiplicity="0..1" />
+    <End Type="MobilePhoneStoreDBMSModel.Customer" Role="Customer" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Product">
-        <PropertyRef Name="ProductID" />
+      <Principal Role="Account">
+        <PropertyRef Name="AccID" />
       </Principal>
-      <Dependent Role="AvatarOfProduct">
-        <PropertyRef Name="productID" />
+      <Dependent Role="Customer">
+        <PropertyRef Name="hasAcc" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Accounts__hasRol__2E1BDC42">
+    <End Type="MobilePhoneStoreDBMSModel.Role" Role="Role" Multiplicity="0..1" />
+    <End Type="MobilePhoneStoreDBMSModel.Account" Role="Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="hasRole" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

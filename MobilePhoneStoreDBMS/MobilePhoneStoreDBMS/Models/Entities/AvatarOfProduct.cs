@@ -10,17 +10,13 @@
 namespace MobilePhoneStoreDBMS.Models.Entities
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class Sp_Product_Details_Result
+    public partial class AvatarOfProduct
     {
-        public int ProductID { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-        public string Description { get; set; }
-        public bool Status { get; set; }
-        public int Price { get; set; }
-        public string Image { get; set; }
-        public int ProducerID { get; set; }
-        public int CategoryID { get; set; }
+        public int productID { get; set; }
+        public byte[] imageFile { get; set; }
+    
+        public virtual Product Product { get; set; }
     }
 }

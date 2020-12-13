@@ -1,12 +1,13 @@
 ﻿@model MobilePhoneStoreDBMS.Models.Entities.MobilePhoneStoreDBMSEntities
 @{
+    //Layout = "~/Views/Shared/MainLayout.cshtml";
     Layout = null;
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <title>Admin</title>
 
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css" />
@@ -15,6 +16,7 @@
 
 </head>
 <body>
+
     <div>
         <div id="smarttab">
             <ul class="nav">
@@ -92,11 +94,11 @@
                         </table>
                     </div>
 
-                    <div id="dialog-specification"  style="display:none;">
+                    <div id="dialog-specification" style="display:none;">
                         <form id="form-specification" role="form">
                             <div class="form-group">
                                 <label for="name">Name:</label>
-                                <input id="specification-name" class="form-control" name="name" type="text" placeholder="Enter name">
+                                <input id="specification-name" class="form-control" name="name" type="text" placeholder="Enter name" required="required">
                             </div>
                             <div class="form-group">
                                 <label for="description">Description:</label>
@@ -114,12 +116,11 @@
                                 </tr>
                             </thead>
                             <tbody id="values-of-specification-body">
-
                             </tbody>
                         </table>
 
                         <div class="form-group">
-                            <input type="text" class="value-to-add" placeholder="Enter value"/>
+                            <input type="text" class="value-to-add" placeholder="Enter value" />
                             <button class="add-new-value btn btn-primary data-specificationID">Add</button>
                         </div>
 
@@ -138,6 +139,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-smarttab@3/dist/js/jquery.smartTab.min.js" type="text/javascript"></script>
     <script src="~/Scripts/jquery-ui.js"></script>
     <script src="~/Scripts/DataTables/dataTables.scroller.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -301,16 +303,27 @@
             //delete a specific row in dataTable
             $("#producers").on("click", ".jsDelete", function () {
                 var button = $(this);
-                bootbox.confirm("Are you sure you want to delete producer " + button.attr("data-producerID"), function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: "/api/Producers/" + button.attr("data-producerID"),
-                            method: "Delete",
-                            success: function () {
-                                table.row(button.parents("tr")).remove().draw();
-                            }
-                        });
-                    }
+
+                $.ajax({
+                    url: "/api/Producers?id=" + button.attr("data-producerID"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this producer, because some products base on it.")
+                        } else {
+                            bootbox.confirm("Are you sure you want to delete producer " + button.attr("data-producerID"), function (result) {
+                                if (result) {
+                                    $.ajax({
+                                        url: "/api/Producers?id=" + button.attr("data-producerID"),
+                                        method: "Delete",
+                                        success: function () {
+                                            table.row(button.parents("tr")).remove().draw();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    },
                 });
             });
 
@@ -328,7 +341,7 @@
 
             //open category dialog for adding a new category
             $("#addNewCateg").on("click", function () {
-                
+
                 CreateNewCategoryDialogBootBox("Adding a new category", table, "add", null);
                 //$(".dialogCategory-bootbox-ok-button").attr("mode", "add");
             });
@@ -344,15 +357,26 @@
             //delete a specific row in dataTable
             $("#categories").on("click", ".jsDelete", function () {
                 var button1 = $(this);
-                bootbox.confirm("Are you sure you want to delete category " + button1.attr("data-categoryID"), function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: "/api/Categories/" + button1.attr("data-categoryID"),
-                            method: "Delete",
-                            success: function () {
-                                table.row(button1.parents("tr")).remove().draw();
-                            }
-                        });
+
+                $.ajax({
+                    url: "/api/Categories?id=" + button1.attr("data-categoryID"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this category, because some products base on it.");
+                        } else {
+                            bootbox.confirm("Are you sure you want to delete category " + button1.attr("data-categoryID"), function (result) {
+                                if (result) {
+                                    $.ajax({
+                                        url: "/api/Categories?id=" + button1.attr("data-categoryID"),
+                                        method: "Delete",
+                                        success: function () {
+                                            table.row(button1.parents("tr")).remove().draw();
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -381,15 +405,26 @@
             //delete a specific row in dataTable
             $("#specifications").on("click", ".jsDelete", function () {
                 var button = $(this);
-                bootbox.confirm("Are you sure you want to delete specification " + button.attr("data-specificationID"), function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: "/api/Specifications/" + button.attr("data-specificationID"),
-                            method: "Delete",
-                            success: function () {
-                                table.row(button.parents("tr")).remove().draw();
-                            }
-                        });
+
+                $.ajax({
+                    url: "/api/Specifications?id=" + button.attr("data-specificationID"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this specification, because some products base on it");
+                        } else {
+                            bootbox.confirm("Are you sure you want to delete specification " + button.attr("data-specificationID"), function (result) {
+                                if (result) {
+                                    $.ajax({
+                                        url: "/api/Specifications?id=" + button.attr("data-specificationID"),
+                                        method: "Delete",
+                                        success: function () {
+                                            table.row(button.parents("tr")).remove().draw();
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -397,7 +432,7 @@
             $("#specifications").on("click", ".jsValues", function () {
                 var button = $(this);
                 $.ajax({
-                    url: "/api/Specifications/" + button.attr("data-specificationID"),
+                    url: "/api/Specifications/?id=" + button.attr("data-specificationID"),
                     method: "Get",
                     success: function (data) {
                         $(".add-new-value").attr("data-specificationID", data.specificationID);
@@ -423,15 +458,26 @@
 
             $("#values-of-specification").on("click", ".jsDeleteValue", function () {
                 button = $(this);
+
                 $.ajax({
-                    url: "/api/SpecificationValues",
-                    method: "Delete",
-                    data: {
-                        specificationID: button.attr("data-specificationID"),
-                        value: button.attr("data-value"),
-                    },
-                    success: function () {
-                        button.parents("tr").remove();
+                    url: "/api/SpecificationValues?specificationID=" + button.attr("data-specificationID") + "&value=" + button.attr("data-value"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this value, because some products base on it.");
+                        } else {
+                            $.ajax({
+                                url: "/api/SpecificationValues",
+                                method: "Delete",
+                                data: {
+                                    specificationID: button.attr("data-specificationID"),
+                                    value: button.attr("data-value"),
+                                },
+                                success: function () {
+                                    button.parents("tr").remove();
+                                },
+                            });
+                        }
                     },
                 });
             });
@@ -442,7 +488,8 @@
                     url: "/api/SpecificationValues?specificationID=" + button.attr("data-specificationID") + "&value=" + $(".value-to-add").val(),
                     method: "Get",
                     success: function (data) {
-                        if (data == null) {
+                        var strValue = $(".value-to-add").val().toString();
+                        if (data == null && strValue.trim() != "" && strValue.length < 50) {
                             $.ajax({
                                 url: "/api/SpecificationValues",
                                 method: "Post",
@@ -456,18 +503,19 @@
                                         + "</button></td></tr>");
                                 },
                             });
-                        }
-                        else {
-                            alert("This specification alrealy has this value");
+                        } else if (strValue.trim() == "") {
+                            alert("Value is required !!!");
+                        } else if (strValue.length >= 50) {
+                            alert("Value is too long !!! (max is 50 characters)");
+                        } else {
+                            alert("This specification alrealy has this value, please try another one");
                         }
                     },
                 });
 
-                
             });
 
             //test aria
-            
         });
 
         /////
@@ -488,7 +536,7 @@
             return table;
         }
 
-       
+
         jQuery.fn.serializeJSON = function () {
             var json = {};
 
@@ -534,7 +582,7 @@
         ////
         function CreateNewProducerDialogBootBox(title, table, mode, producerID) {
             //to render a bootbox dialog create new or modify exist producer within a specific DataTable
-            
+
             var dialogProducer = bootbox.dialog({
                 message: $("#dialogProducer").html(),
                 title: title,
@@ -545,6 +593,25 @@
                         callback: function () {
                             var form = dialogProducer.find("#formProducer");
                             var items = form.serializeJSON();
+
+                            form.validate({
+                                rules: {
+                                    name: {
+                                        required: true,
+                                        checkUniqueNameOfProducer: true,
+                                        maxlength: 50,
+                                    },
+                                },
+                                messages: {
+                                    name: {
+                                        required: "Name is required !!!",
+                                    }
+                                },
+                            });
+
+                            if (form.valid() == false)
+                                return false;
+
                             if (mode === "add") {
                                 $.ajax({
                                     url: "/api/Producers",
@@ -626,6 +693,24 @@
                         alert(JSON.stringify(items));
                         */
                         //--head my custom code
+                        form.validate({
+                            rules: {
+                                name: {
+                                    required: true,
+                                    checkUniqueNameOfCategory: true,
+                                    maxlength: 50,
+                                },
+                            },
+                            messages: {
+                                name: {
+                                    required: "Name is required !!!",
+                                }
+                            },
+                        });
+
+                        if (form.valid() == false)
+                            return false;
+
                         if (mode === "add") {
                             $.ajax({
                                 url: "/api/Categories",
@@ -642,15 +727,15 @@
                                     /*
                                     //add class and remove class from an element (row)
                                     $(trDOM).addClass("added");
- 
+
                                     var rowIndexes = table.rows(".added").indexes();
                                     var row = table.row(rowIndexes[0]);
- 
+
                                     var $rowToScroll = $(trDOM);
                                     $('html, body').animate({ scrollTop: $rowToScroll.offset().top }, 2000);
- 
+
                                     row.scrollTo();
- 
+
                                     //remove the line below
                                     $(trDOM).removeClass("added");
                                     */
@@ -704,7 +789,7 @@
                     label: "Close",
                     className: "btn btn-default pull-left",
                     callback: function () {
-                        
+
                     }
                 }],
                 show: false,
@@ -719,7 +804,7 @@
         function CreateNewSpecificationDialogBootBox(title, table, mode, specificationID) {
             //to render a bootbox dialog create new or modify exist specification within a specific DataTable
 
-            var dialogProducer = bootbox.dialog({
+            var dialog = bootbox.dialog({
                 message: $("#dialog-specification").html(),
                 title: title,
                 buttons: [
@@ -727,8 +812,34 @@
                         label: "Save",
                         className: "btn btn-primary pull-left",
                         callback: function () {
-                            var form = dialogProducer.find("#form-specification");
+                            var form = dialog.find("#form-specification");
                             var items = form.serializeJSON();
+
+                            form.validate({
+                                rules: {
+                                    name: {
+                                        required: true,
+                                        checkUniqueNameOfSpecification: true,
+                                        maxlength: 50,
+                                    },
+                                },
+                                messages: {
+                                    name: {
+                                        required: "Name is required !!!",
+                                    }
+                                },
+                                submitHandler: function (form) {
+                                    alert("Submittedabc!"); // --> for .submit() method
+                                    return false;
+                                }
+                            });
+
+                            //form.valid();
+                            //form.submit();
+
+                            if (form.valid() == false)
+                                return false;
+
                             if (mode === "add") {
                                 $.ajax({
                                     url: "/api/Specifications",
@@ -790,40 +901,66 @@
                 ],
                 show: false,
                 onEscape: function () {
-                    dialogProducer.modal("hide");
+                    dialog.modal("hide");
                 },
             });
 
-            dialogProducer.modal("show");
+            dialog.modal("show");
         }
 
-        function CreateValuesDialog() {
-            bootbox.dialog({
-                message: $("#values-of-specification").html(),
-                title: "no title",
-
-                buttons: [
-                    {
-                        label: "Add",
-                        className: "btn btn-primary pull-left",
-                        callback: function () {
-                            $.ajax({
-                                success: function () {
-                                    CreateValuesDialog();
-                                },
-                            });
-                        },
-                    },
-                    {
-                        label: "Back",
-                        className: "btn btn-primary pull-left",
-                        callback: function () {
-
+        //------------------Add custom validation
+        jQuery.validator.addMethod("checkUniqueNameOfSpecification", function (value, element) {
+            //every time when the method .Valid() is called, this function would be called too.
+            var isValid = true;
+            $.ajax({
+                url: "/api/Specifications",
+                method: "Get",
+                async: false,
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        if (response[i].name == value) {
+                            isValid = false;
                         }
                     }
-                ],
+                }
             });
-        };
+            return isValid;
+        }, "there're a name like this in our data, please try another name");
+
+        jQuery.validator.addMethod("checkUniqueNameOfProducer", function (value) {
+            var isValid = true;
+            $.ajax({
+                url: "/api/Producers",
+                method: "Get",
+                async: false,
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        if (response[i].name == value) {
+                            isValid = false;
+                        }
+                    }
+                }
+            });
+            return isValid;
+        }, "there're a name like this in our data, please try another name");
+
+        jQuery.validator.addMethod("checkUniqueNameOfCategory", function (value) {
+            var isValid = true;
+            $.ajax({
+                url: "/api/Categories",
+                method: "Get",
+                async: false,
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        if (response[i].name == value) {
+                            isValid = false;
+                        }
+                    }
+                }
+            });
+            return isValid;
+        }, "there're a name like this in our data, please try another name");
+
     </script>
 
 </body>
