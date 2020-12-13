@@ -303,16 +303,27 @@
             //delete a specific row in dataTable
             $("#producers").on("click", ".jsDelete", function () {
                 var button = $(this);
-                bootbox.confirm("Are you sure you want to delete producer " + button.attr("data-producerID"), function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: "/api/Producers?id=" + button.attr("data-producerID"),
-                            method: "Delete",
-                            success: function () {
-                                table.row(button.parents("tr")).remove().draw();
-                            }
-                        });
-                    }
+
+                $.ajax({
+                    url: "/api/Producers?id=" + button.attr("data-producerID"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this producer, because some products base on it.")
+                        } else {
+                            bootbox.confirm("Are you sure you want to delete producer " + button.attr("data-producerID"), function (result) {
+                                if (result) {
+                                    $.ajax({
+                                        url: "/api/Producers?id=" + button.attr("data-producerID"),
+                                        method: "Delete",
+                                        success: function () {
+                                            table.row(button.parents("tr")).remove().draw();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    },
                 });
             });
 
@@ -346,15 +357,26 @@
             //delete a specific row in dataTable
             $("#categories").on("click", ".jsDelete", function () {
                 var button1 = $(this);
-                bootbox.confirm("Are you sure you want to delete category " + button1.attr("data-categoryID"), function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: "/api/Categories?id=" + button1.attr("data-categoryID"),
-                            method: "Delete",
-                            success: function () {
-                                table.row(button1.parents("tr")).remove().draw();
-                            }
-                        });
+
+                $.ajax({
+                    url: "/api/Categories?id=" + button1.attr("data-categoryID"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this category, because some products base on it.");
+                        } else {
+                            bootbox.confirm("Are you sure you want to delete category " + button1.attr("data-categoryID"), function (result) {
+                                if (result) {
+                                    $.ajax({
+                                        url: "/api/Categories?id=" + button1.attr("data-categoryID"),
+                                        method: "Delete",
+                                        success: function () {
+                                            table.row(button1.parents("tr")).remove().draw();
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -383,15 +405,26 @@
             //delete a specific row in dataTable
             $("#specifications").on("click", ".jsDelete", function () {
                 var button = $(this);
-                bootbox.confirm("Are you sure you want to delete specification " + button.attr("data-specificationID"), function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: "/api/Specifications?id=" + button.attr("data-specificationID"),
-                            method: "Delete",
-                            success: function () {
-                                table.row(button.parents("tr")).remove().draw();
-                            }
-                        });
+
+                $.ajax({
+                    url: "/api/Specifications?id=" + button.attr("data-specificationID"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this specification, because some products base on it");
+                        } else {
+                            bootbox.confirm("Are you sure you want to delete specification " + button.attr("data-specificationID"), function (result) {
+                                if (result) {
+                                    $.ajax({
+                                        url: "/api/Specifications?id=" + button.attr("data-specificationID"),
+                                        method: "Delete",
+                                        success: function () {
+                                            table.row(button.parents("tr")).remove().draw();
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -425,15 +458,26 @@
 
             $("#values-of-specification").on("click", ".jsDeleteValue", function () {
                 button = $(this);
+
                 $.ajax({
-                    url: "/api/SpecificationValues",
-                    method: "Delete",
-                    data: {
-                        specificationID: button.attr("data-specificationID"),
-                        value: button.attr("data-value"),
-                    },
-                    success: function () {
-                        button.parents("tr").remove();
+                    url: "/api/SpecificationValues?specificationID=" + button.attr("data-specificationID") + "&value=" + button.attr("data-value"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.isHavingProduct) {
+                            bootbox.alert("You can not delete this value, because some products base on it.");
+                        } else {
+                            $.ajax({
+                                url: "/api/SpecificationValues",
+                                method: "Delete",
+                                data: {
+                                    specificationID: button.attr("data-specificationID"),
+                                    value: button.attr("data-value"),
+                                },
+                                success: function () {
+                                    button.parents("tr").remove();
+                                },
+                            });
+                        }
                     },
                 });
             });
@@ -468,7 +512,6 @@
                         }
                     },
                 });
-
 
             });
 

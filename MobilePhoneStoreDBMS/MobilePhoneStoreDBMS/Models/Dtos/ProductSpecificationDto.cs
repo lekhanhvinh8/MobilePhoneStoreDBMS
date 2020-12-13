@@ -24,12 +24,23 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
                 {
                     this.Values.Add(new SpecificationValueDto(value));
                 }
+
+                this.IsHavingProduct = false;
+                
+                foreach (var specificationValue in productSpecification.SpecificationValues)
+                {
+                    if (specificationValue.Products.Count() != 0)
+                    {
+                        this.IsHavingProduct = true;
+                        break;
+                    }
+                }
             }
         }
         public int SpecificationID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
+        public bool IsHavingProduct { get; set; }
         public ICollection<SpecificationValueDto> Values { get; set; }
         public ProductSpecification ToSpecification()
         {

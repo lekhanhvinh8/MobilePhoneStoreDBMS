@@ -18,11 +18,17 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
             {
                 this.ProducerID = producer.ProducerID;
                 this.Name = producer.Name;
+
+                if (producer.Products.Count() == 0)
+                    IsHavingProduct = false;
+                else
+                    IsHavingProduct = true;
             }
         }
 
         public int ProducerID { get; set; }
         public string Name { get; set; }
+        public bool IsHavingProduct { get; set; }
 
         public Producer ToProducer()
         {
