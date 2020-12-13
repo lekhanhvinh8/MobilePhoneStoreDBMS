@@ -40,6 +40,8 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         public virtual DbSet<SpecificationValue> SpecificationValues { get; set; }
         public virtual DbSet<Specifications_of_all_product> Specifications_of_all_product { get; set; }
         public virtual DbSet<view_Category_List> view_Category_List { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     
         [DbFunction("MobilePhoneStoreDBMSEntities", "GetSpecifications")]
         public virtual IQueryable<GetSpecifications_Result> GetSpecifications(Nullable<int> productID)
@@ -121,6 +123,44 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("producerID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Product_List_Of_Producer_Result>("Sp_Product_List_Of_Producer", producerIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> sp_Account_Login(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("sp_Account_Login", usernameParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<bool>> sp_Account_Register(string name, string phoneNumber, string email, string username, string password)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var phoneNumberParameter = phoneNumber != null ?
+                new ObjectParameter("PhoneNumber", phoneNumber) :
+                new ObjectParameter("PhoneNumber", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("sp_Account_Register", nameParameter, phoneNumberParameter, emailParameter, usernameParameter, passwordParameter);
         }
     }
 }

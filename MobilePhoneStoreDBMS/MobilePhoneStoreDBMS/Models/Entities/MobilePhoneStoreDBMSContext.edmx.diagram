@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2a817e4c930a4fa7943776e265de1867" Name="Diagram1" ZoomLevel="61">
+      <Diagram DiagramId="2a817e4c930a4fa7943776e265de1867" Name="Diagram1" ZoomLevel="80">
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.AvatarOfProduct" Width="1.5" PointX="7.5" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Cart" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Category" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
@@ -31,6 +31,10 @@
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.RatesProductIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.SpecificationValuesSpecificationIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.HasSpecification" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Account" Width="1.5" PointX="3" PointY="13" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Role" Width="1.5" PointX="0.75" PointY="13.125" />
+        <AssociationConnector Association="MobilePhoneStoreDBMSModel.CustomersAccIDFK" />
+        <AssociationConnector Association="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

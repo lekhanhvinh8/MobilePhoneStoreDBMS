@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="AccID" />
+          </Key>
+          <Property Name="AccID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="20" />
+          <Property Name="Password" Type="nvarchar" MaxLength="20" />
+          <Property Name="hasRole" Type="int" />
+        </EntityType>
         <EntityType Name="AvatarOfProduct">
           <Key>
             <PropertyRef Name="productID" />
@@ -47,7 +56,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
-          <Property Name="Password" Type="nvarchar" MaxLength="30" />
+          <Property Name="hasAcc" Type="int" />
         </EntityType>
         <EntityType Name="HasSpecification">
           <Key>
@@ -107,6 +116,14 @@
           <Property Name="ProductID" Type="int" Nullable="false" />
           <Property Name="CustomerID" Type="int" Nullable="false" />
           <Property Name="starts" Type="int" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descriptions" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="SpecificationValues">
           <Key>
@@ -195,6 +212,30 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
             </Principal>
             <Dependent Role="Comments">
               <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CustomersAccIDFK">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="hasAcc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Accounts__hasRol__2E1BDC42">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Accounts">
+              <PropertyRef Name="hasRole" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -325,6 +366,17 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="sp_Account_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Account_Register" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="username" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="Sp_Catagory_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
@@ -343,6 +395,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <Parameter Name="producerID" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AvatarOfProduct" EntityType="Self.AvatarOfProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
@@ -354,6 +407,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rates" EntityType="Self.Rates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValues" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -387,6 +441,14 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <AssociationSet Name="CommentsProductIDFk" Association="Self.CommentsProductIDFk">
             <End Role="Products" EntitySet="Products" />
             <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="CustomersAccIDFK" Association="Self.CustomersAccIDFK">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="Self.FK__Accounts__hasRol__2E1BDC42">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Accounts" EntitySet="Accounts" />
           </AssociationSet>
           <AssociationSet Name="HasSpecidicationSpecificationIDAndValueFK" Association="Self.HasSpecidicationSpecificationIDAndValueFK">
             <End Role="SpecificationValues" EntitySet="SpecificationValues" />
@@ -482,11 +544,12 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Carts" Relationship="Self.CartsCustomerIDFK" FromRole="Customers" ToRole="Carts" />
           <NavigationProperty Name="Comments" Relationship="Self.CommentsCustomerIDFk" FromRole="Customers" ToRole="Comments" />
           <NavigationProperty Name="Orders" Relationship="Self.OrdersCustomerIDFK" FromRole="Customers" ToRole="Orders" />
           <NavigationProperty Name="Rates" Relationship="Self.RatesCustomerIDFK" FromRole="Customers" ToRole="Rates" />
+          <Property Name="hasAcc" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="MobilePhoneStoreDBMSModel.CustomersAccIDFK" FromRole="Customer" ToRole="Account" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -818,6 +881,27 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <FunctionImport Name="Sp_Product_List_Of_Producer" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result)">
           <Parameter Name="producerID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Accounts" EntityType="MobilePhoneStoreDBMSModel.Account" />
+          <EntitySet Name="Roles" EntityType="MobilePhoneStoreDBMSModel.Role" />
+          <AssociationSet Name="CustomersAccIDFK" Association="MobilePhoneStoreDBMSModel.CustomersAccIDFK">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <FunctionImport Name="sp_Account_Login" ReturnType="Collection(Int32)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Account_Register" ReturnType="Collection(Boolean)">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="Sp_Catagory_Details_Result">
           <Property Type="Int32" Name="CategoryID" Nullable="false" />
@@ -875,6 +959,50 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <Property Type="Int32" Name="ProducerID" Nullable="false" />
           <Property Type="Int32" Name="CategoryID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccID" />
+          </Key>
+          <Property Name="AccID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="hasRole" Type="Int32" />
+          <NavigationProperty Name="Customers" Relationship="MobilePhoneStoreDBMSModel.CustomersAccIDFK" FromRole="Account" ToRole="Customer" />
+          <NavigationProperty Name="Role" Relationship="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" FromRole="Account" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Descriptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accounts" Relationship="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" FromRole="Role" ToRole="Account" />
+        </EntityType>
+        <Association Name="CustomersAccIDFK">
+          <End Type="MobilePhoneStoreDBMSModel.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="MobilePhoneStoreDBMSModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="hasAcc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Accounts__hasRol__2E1BDC42">
+          <End Type="MobilePhoneStoreDBMSModel.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="MobilePhoneStoreDBMSModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="hasRole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -919,11 +1047,11 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="hasAcc" ColumnName="hasAcc" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1106,6 +1234,27 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Account">
+              <MappingFragment StoreEntitySet="Accounts">
+                <ScalarProperty Name="hasRole" ColumnName="hasRole" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="AccID" ColumnName="AccID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="Descriptions" ColumnName="Descriptions" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_Account_Login" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Login" />
+          <FunctionImportMapping FunctionImportName="sp_Account_Register" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Register" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

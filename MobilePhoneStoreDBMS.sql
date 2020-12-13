@@ -35,17 +35,31 @@ create table Customers(
 	Name nvarchar(50),
 	PhoneNumber nvarchar(20),
 	Email nvarchar(50),
-	Password nvarchar(30)
 );
 go
 create table AvatarOfProduct(
 	productID int not null,
 	imageFile image not null,
 );
+go
+create table Roles(
+RoleID int identity primary key,
+RoleName nvarchar(50) not null,
+Descriptions nvarchar(100)
+);
+go
+create table Accounts(
+AccID int identity primary key,
+Username nvarchar(20),
+Password nvarchar(20),
+hasRole int references Roles(RoleID)
+);
+
 --create primary key and foreign relationships between initial tables
 go
 alter table Products add ProducerID int not null;
 alter table Products add CategoryID int not null;
+alter table Customers add hasAcc int;
 go
 alter table Producers add constraint ProducersPK primary key(ProducerID);
 alter table Categories add constraint CategoriesPK primary key(CategoryID);
@@ -57,6 +71,8 @@ go
 alter table Products add constraint ProductsProdcerIDFK foreign key(ProducerID) references Producers(ProducerID);
 alter table Products add constraint ProductsCategoryIDFK foreign key(CategoryID) references Categories(CategoryID);
 alter table AvatarOfProduct add constraint AvatarOfProductProductIDFK foreign key(ProductID) references Products(ProductID);
+alter table Customers add constraint CustomersAccIDFK foreign key(hasAcc) references Accounts(AccID);
+
 --create weak entity tables
 go
 create table Comments(
@@ -199,6 +215,51 @@ create proc Sp_Product_Details(@id int)
 as
 select * from Products where Status = 1 and ProductID = @id
 ---
+go
+create proc sp_Account_Login
+	@username nvarchar(20),
+	@password nvarchar(20)
+as
+begin
+	declare @count int
+	declare @role int
+	declare @res int
+	select @count = count(*) from Accounts where Username = @username and Password = @password
+	if @count>0
+		begin
+			select @role = hasRole from Accounts where Username = @username
+			set @res = @role
+		end
+	else
+		set @res = 0
+	select @res
+end;
+
+go
+create proc sp_Account_Register
+	@Name nvarchar(50),
+	@PhoneNumber nvarchar(20),
+	@Email nvarchar(50),
+	@username nvarchar(20),
+	@password nvarchar(20)
+as
+begin
+	declare @count int
+	declare @res bit
+	declare @acc int
+	select @count = count(*) from Accounts where Username = @username
+	if @count>0
+		set @res = 0
+	else
+	begin
+		insert into Accounts values(@username, @password, 2)
+		select @acc = AccID from Accounts where Username = @username
+		insert into Customers values(@name, @PhoneNumber, @Email, @acc)
+		set @res = 1
+	end
+	select @res
+end;
+---
 
 --add Functions
 go
@@ -260,9 +321,10 @@ insert into Customers(Name, PhoneNumber) values('Nghia','01234');
 insert into Carts(CustomerID, ProductID, amount) values(1,1,5);
 insert into Carts(CustomerID, ProductID, amount) values(2,1,1);
 
+insert into Roles(RoleName, Descriptions) values('admin', 'chu cua hang');
+insert into Roles(RoleName, Descriptions) values('user', 'nguoi dung');
 
-
-
+insert into Accounts values('admin','gFuYE2Bpl7A=',1);
 
 
 
