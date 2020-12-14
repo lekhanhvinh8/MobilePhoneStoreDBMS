@@ -1,0 +1,59 @@
+﻿@model MobilePhoneStoreDBMS.Models.Entities.Account
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Register</h2>
+
+@ViewBag.msg
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label for="Name">Name:</label>
+            <input type="text" class="form-control" id="Name" name="Name" />
+        </div>
+
+        <div class="form-group">
+            <label for="PhoneNumber">Phone Number:</label>
+            <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" />
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input type="text" class="form-control" id="Email" name="Email" />
+        </div>
+
+        <div class="form-group">
+            <label for="Username">Username:</label>
+            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="form-group">
+            <label for="Password">Password:</label>
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="confirm">Confirm Password:</label>
+            <input type="password" class="form-control" id="confirm" name="confirm" />
+
+            <br />
+            <input type="submit" value="Register Now!" class="btn btn-warning btn-block" />
+        </div>
+
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Login", "Index", "Login")
+</div>

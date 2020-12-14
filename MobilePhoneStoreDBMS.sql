@@ -323,9 +323,12 @@ insert into Carts(CustomerID, ProductID, amount) values(2,1,1);
 
 insert into Roles(RoleName, Descriptions) values('admin', 'chu cua hang');
 insert into Roles(RoleName, Descriptions) values('user', 'nguoi dung');
+insert into Roles(RoleName, Descriptions) values('emp', 'nguoi ban');
 
 insert into Accounts values('admin','gFuYE2Bpl7A=',1);
 
+
+insert into Accounts values('emp','gFuYE2Bpl7A=', 3);
 
 
 
