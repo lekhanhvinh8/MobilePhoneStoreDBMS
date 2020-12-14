@@ -18,31 +18,30 @@ namespace MobilePhoneStoreDBMS.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(String Name, String PhoneNumber, String Email, string confirm, Account a)
+        public ActionResult Index(RegisterClass a)
         {
             try
             {
-                if (confirm != a.Password)
+                if (a.Confirm != a.Password)
                 {
-                    ViewBag.msg = "Password is not match!";
+                    ViewBag.msg0 = "";
                 }
                 else
                 {
-                    var result = new RegisterModel().Register(Name, PhoneNumber, Email, a.Username, a.Password);
+                    var result = new RegisterModel().Register(a.Name, a.PhoneNumber, a.Email, a.Username, a.Password);
 
                     if (result)
                     {
-                        ViewBag.msg = "Sucess!";
+                        ViewBag.msg1 = "You can back for login!";
                     }
                     else
                     {
-                        ViewBag.msg = "Error!";
+                        ViewBag.msg2 = "Username already exists!";
                     }
                 }
             }
             catch
             {
-                ViewBag.msg = "Register Fail!";
             }
 
             return View();

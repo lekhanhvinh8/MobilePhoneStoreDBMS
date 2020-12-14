@@ -1,13 +1,30 @@
-﻿@model MobilePhoneStoreDBMS.Models.Entities.Account
+﻿@model MobilePhoneStoreDBMS.Models.RegisterClass
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Register</h2>
+<h1>Registration</h1>
 
-@ViewBag.msg
+@if (ViewBag.msg0 != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong>
+    </div>
+}
+else if (ViewBag.msg1 != null)
+{
+    <div class="alert alert-success">
+        <strong>Success! </strong>@ViewBag.msg1
+    </div>
+}
+else if (ViewBag.msg2 != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error! </strong>@ViewBag.msg2
+    </div>
+}
 
 @using (Html.BeginForm())
 {
@@ -16,41 +33,59 @@
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         <div class="form-group">
-            <label for="Name">Name:</label>
-            <input type="text" class="form-control" id="Name" name="Name" />
+            @Html.LabelFor(model => model.Name, "Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="PhoneNumber">Phone Number:</label>
-            <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" />
+            @Html.LabelFor(model => model.PhoneNumber, "Phone", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="Email">Email:</label>
-            <input type="text" class="form-control" id="Email" name="Email" />
+            @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="Username">Username:</label>
-            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.LabelFor(model => model.Username, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="Password">Password:</label>
-            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+            @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="confirm">Confirm Password:</label>
-            <input type="password" class="form-control" id="confirm" name="confirm" />
-
-            <br />
-            <input type="submit" value="Register Now!" class="btn btn-warning btn-block" />
+            @Html.LabelFor(model => model.Confirm, "Confirm Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.Confirm, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Confirm, "", new { @class = "text-danger" })
+            </div>
         </div>
 
-
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Register Now!" class="btn btn-warning" />
+            </div>
+        </div>
     </div>
 }
 

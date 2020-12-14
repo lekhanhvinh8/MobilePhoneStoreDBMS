@@ -47,7 +47,7 @@ namespace MobilePhoneStoreDBMS.Controllers
             }
             catch
             {
-                ViewBag.msg = "Login Fail!";
+                
             }
 
             return View();
