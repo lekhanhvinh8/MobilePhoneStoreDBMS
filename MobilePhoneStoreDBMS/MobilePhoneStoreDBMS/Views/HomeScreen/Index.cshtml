@@ -44,7 +44,7 @@
 				{
 					<div class="grid_1_of_4 images_1_of_4 products-info">
 						<a href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })">
-							<img src="@items.Image" />
+							<img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID= @items.ProductID.ToString()" width="100px" height="100px"/>
 							@items.Name
 						</a>
 						<h3 class="shopp-price">@items.Price &nbsp;đ</h3>

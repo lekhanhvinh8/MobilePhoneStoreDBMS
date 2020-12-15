@@ -10,14 +10,17 @@
 
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link href="~/Content/select2.min.css" rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="~/Content/Seller.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/Seller.css" type="text/css" />
 </head>
 <body>
+    <header class="header">
+        <div class="container">
+            Seller Management
+        </div>
+    </header>
+    
     <br />
     <div class="container">
-        <div>
-            <button id="test">TEST</button>
-        </div>
         <form role="form" id="form-product">
             <div class="form-group">
                 <label for="name" class="control-label">Name of product</label>
@@ -40,14 +43,16 @@
             <div class="form-group">
                 <label for="image" class="control-label">Image</label>
                 <input id="select-image" type="file" accept=".jpg" name="image" />
+
+                <img id="avatar-preview" class="img-thumbnail" width="200px" height="200px" src="#"/>
             </div>
             <div class="form-group">
                 <label for="initialPrice" class="control-label">Initial Price</label>
-                <input type="number" class="form-control" name="initialPrice"/>
+                <input type="number" class="form-control" name="initialPrice" />
             </div>
             <div class="form-group">
                 <label for="initialQuantity" class="control-label">Initial Quantity</label>
-                <input type="number" class="form-control" name="initialQuantity"/>
+                <input type="number" class="form-control" name="initialQuantity" />
             </div>
             <div class="form-group">
                 <label for="specifications" class="control-label">Specifications</label>
@@ -74,11 +79,15 @@
                 </table>
             </div>
 
-            <button type="button" id="btn-cancel" class="btn btn-danger">Cancel</button>
-            <button type="button" id="btn-save-and-hide" class="btn btn-warning">Save and hide</button>
-            <button type="button" id="btn-save-and-show" class="btn btn-success">Save and show</button>
+            <footer>
+                <div>
+                    <button type="button" id="btn-cancel" class="btn btn-danger">Cancel</button>
+                    <button type="button" id="btn-save-and-hide" class="btn btn-warning">Save and hide</button>
+                    <button type="button" id="btn-save-and-show" class="btn btn-success">Save and show</button>
+                </div>
+            </footer>
         </form>
-    <br />
+        <br />
     </div>
 
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
@@ -115,6 +124,20 @@
                     }
                     $("#select-category").select2();
                 },
+            });
+
+            $("#select-image").change(function () {
+                var input = this;
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#avatar-preview').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
             });
 
             $("#table-specifications").on("click", ".js-delete", function () {
@@ -171,7 +194,7 @@
 
                                                 var newLine = "<tr data-specification-id=" + select.val() + ">"
                                                     + "<td>" + response.name + "</td>"
-                                                    + "<td><select class='form-select'>";
+                                                    + "<td><select class='form-control form-select'>";
 
                                                 for (var i = 0; i < response.values.length; i++) {
                                                     newLine += "<option>" + response.values[i].value + "</option>";
@@ -190,11 +213,6 @@
                         });
                     },
                 });
-            });
-
-            $('#test').click(function () {
-                
-
             });
 
             $("#btn-save-and-show").on("click", function () {
@@ -221,7 +239,7 @@
                         value: $(this).find(".form-select").val(),
                     });
                 });
-
+                console.log(specificationValues);
                 $.ajax({
                     url: "/api/ProductForSeller",
                     method: "Post",
@@ -377,5 +395,6 @@
         }, "invalid number, please type a integer number");
 
     </script>
+
 </body>
 </html>

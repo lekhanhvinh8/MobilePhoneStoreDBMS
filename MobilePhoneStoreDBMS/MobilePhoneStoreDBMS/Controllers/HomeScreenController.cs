@@ -85,5 +85,12 @@ namespace MobilePhoneStoreDBMS.Controllers
                 return View(model);
             }
         }
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            Session.RemoveAll();
+
+            return RedirectToAction("Index");
+        }
     }
 }
