@@ -56,7 +56,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         <li><a href="#">Delivery</a></li>
                         <li><a href="#">Checkout</a></li>
                         <li><a href="#"><span>shopping cart&nbsp;&nbsp;: </span></a><label> &nbsp;noitems</label></li>
-                    </ul>
+                        <li>
+                            <a href="@Url.Action("ShowToCart", "ShoppingCart")">
+                                <img src="@Url.Content("~/Assets/images/cart-icon.png")" style="height:50px; width: 50px; padding-top: 10px" />
+                            </a>
+                            @*@Html.Action("BagCart", "ShoppingCart")*@
+                        </li>
+					</ul>
                 </div>
             }
             else
@@ -68,6 +74,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         <li><a href="#">Checkout</a></li>
                         <li><a href="#">My account</a></li>
                         <li><a href="#"><span>shopping cart&nbsp;&nbsp;: </span></a><label> &nbsp;noitems</label></li>
+                        <li>
+                            <a href="@Url.Action("ShowToCart", "ShoppingCart")">
+                                <img src="@Url.Content("~/Assets/images/cart-icon.png")" style="height:50px; width: 50px; padding-top: 10px" />
+                            </a>
+                            @*@Html.Action("BagCart", "ShoppingCart")*@
+                        </li>
                     </ul>
                 </div>
             }

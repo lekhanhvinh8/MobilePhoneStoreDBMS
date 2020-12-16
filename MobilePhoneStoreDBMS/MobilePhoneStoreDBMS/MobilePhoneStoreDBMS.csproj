@@ -200,6 +200,7 @@
     <Compile Include="Controllers\Api\SpecificationValuesController.cs" />
     <Compile Include="Controllers\HomeScreenController.cs" />
     <Compile Include="Controllers\SellerController.cs" />
+    <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -702,6 +703,8 @@
     <Content Include="Views\Seller\AddNewProduct.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\ShoppingCart\ShowToCart.cshtml" />
+    <Content Include="Views\ShoppingCart\BagCart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
