@@ -47,11 +47,10 @@
     <Key>
       <PropertyRef Name="CustomerID" />
     </Key>
-    <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" />
     <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
     <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="hasAcc" Type="int" />
   </EntityType>
   <EntityType Name="HasSpecification">
     <Key>
@@ -211,18 +210,18 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     </ReferentialConstraint>
   </Association>
   <Association Name="CustomersAccIDFK">
-    <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
-    <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="1" />
+    <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
     <ReferentialConstraint>
       <Principal Role="Accounts">
         <PropertyRef Name="AccID" />
       </Principal>
       <Dependent Role="Customers">
-        <PropertyRef Name="hasAcc" />
+        <PropertyRef Name="CustomerID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Accounts__hasRol__412EB0B6">
+  <Association Name="FK__Accounts__hasRol__2E1BDC42">
     <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
     <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
     <ReferentialConstraint>
@@ -441,7 +440,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       <End Role="Accounts" EntitySet="Accounts" />
       <End Role="Customers" EntitySet="Customers" />
     </AssociationSet>
-    <AssociationSet Name="FK__Accounts__hasRol__412EB0B6" Association="Self.FK__Accounts__hasRol__412EB0B6">
+    <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="Self.FK__Accounts__hasRol__2E1BDC42">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Accounts" EntitySet="Accounts" />
     </AssociationSet>

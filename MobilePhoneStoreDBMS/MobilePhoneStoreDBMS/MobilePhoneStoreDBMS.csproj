@@ -188,9 +188,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -200,22 +198,15 @@
     <Compile Include="Controllers\Api\ProductForSellerController.cs" />
     <Compile Include="Controllers\Api\SpecificationsController.cs" />
     <Compile Include="Controllers\Api\SpecificationValuesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomeScreenController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SellerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\cyptop.cs" />
-    <Compile Include="Models\Dtos\CategoryDto.cs" />
-    <Compile Include="Models\Dtos\ProducerDto.cs" />
-    <Compile Include="Models\Dtos\ProductForSellerDto.cs" />
-    <Compile Include="Models\Dtos\ProductSpecificationDto.cs" />
-    <Compile Include="Models\Dtos\SpecificationValueDto.cs" />
+    <Compile Include="Models\Consts\LoginModes.cs" />
+    <Compile Include="Models\CustomValidations\ValidRoleLogin.cs" />
+    <Compile Include="Models\CustomValidations\ValidUserNameRegister.cs" />
+    <Compile Include="Models\Dtos\AccountDto.cs" />
     <Compile Include="Models\Entities\Account.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
@@ -300,16 +291,23 @@
     <Compile Include="Models\Entities\view_Category_List.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\RegisterClass.cs" />
-    <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\Syptop.cs" />
+    <Compile Include="Models\Dtos\CategoryDto.cs" />
+    <Compile Include="Models\Dtos\ProducerDto.cs" />
+    <Compile Include="Models\Dtos\ProductForSellerDto.cs" />
+    <Compile Include="Models\Dtos\ProductSpecificationDto.cs" />
+    <Compile Include="Models\Dtos\SpecificationValueDto.cs" />
+    <Compile Include="Models\Dtos\RegisterDto.cs" />
+    <Compile Include="Models\Consts\RoleIds.cs" />
+    <Compile Include="Models\Consts\SessionNames.cs" />
     <Compile Include="Models\ViewModel.cs" />
+    <Compile Include="Models\ViewModels\Account\LoginViewModel.cs" />
+    <Compile Include="Models\ViewModels\Seller\ProductForSellerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Account.css" />
     <Content Include="Content\Admin.css" />
     <Content Include="Assets\css\flexslider.css" />
     <Content Include="Assets\css\responsiveslides.css" />
@@ -689,31 +687,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\HomeScreen\Index.cshtml" />
     <Content Include="Views\Shared\MainLayout.cshtml" />
@@ -727,9 +700,8 @@
     <Content Include="Views\HomeScreen\ProductSpecifications.cshtml" />
     <Content Include="Views\Seller\Index.cshtml" />
     <Content Include="Views\Seller\AddNewProduct.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
-    <Content Include="Views\Register\Index.cshtml" />
-    <Content Include="Views\Seller\_NavBar.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -8,10 +8,13 @@ using System.Web;
 
 namespace MobilePhoneStoreDBMS.Models
 {
-    public class cyptop
+    public class Syptop
     {
         public static string Encrypt(string toEncrypt, bool useHashing)
         {
+            if (String.IsNullOrEmpty(toEncrypt))
+                throw new Exception("characters to encrypt is not valid");
+
             byte[] keyArray;
             byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(toEncrypt);
 
@@ -39,7 +42,6 @@ namespace MobilePhoneStoreDBMS.Models
             byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
             tdes.Clear();
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-
         }
     }
 }

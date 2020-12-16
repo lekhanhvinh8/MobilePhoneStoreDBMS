@@ -1,4 +1,6 @@
-﻿@{
+﻿@model MobilePhoneStoreDBMS.Models.ViewModels.Seller.ProductForSellerViewModel
+
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -18,7 +20,7 @@
             Seller Management
         </div>
     </header>
-    
+
     <br />
     <div class="container">
         <form role="form" id="form-product">
@@ -44,7 +46,7 @@
                 <label for="image" class="control-label">Image</label>
                 <input id="select-image" type="file" accept=".jpg" name="image" />
 
-                <img id="avatar-preview" class="img-thumbnail" width="200px" height="200px" src="#"/>
+                <img id="avatar-preview" class="img-thumbnail" width="200px" height="200px" src="#" />
             </div>
             <div class="form-group">
                 <label for="initialPrice" class="control-label">Initial Price</label>
