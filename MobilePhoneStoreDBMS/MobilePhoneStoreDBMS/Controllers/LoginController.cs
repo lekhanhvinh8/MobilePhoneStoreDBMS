@@ -11,6 +11,7 @@ namespace MobilePhoneStoreDBMS.Controllers
     public class LoginController : Controller
     {
         // GET: Login
+        MobilePhoneStoreDBMSEntities _db = new MobilePhoneStoreDBMSEntities();
 
         [HttpGet]
         public ActionResult Index()
@@ -27,12 +28,16 @@ namespace MobilePhoneStoreDBMS.Controllers
 
                 if (result == 1)
                 {
+
                     Session["admin_id"] = acc.AccID;
                     return RedirectToAction("Index", "Admin");
                 }
                 else if (result == 2)
                 {
-                    Session["user_id"] = acc.AccID;
+                    int acc_id = _db.Accounts.Where(x => x.Username == acc.Username).SingleOrDefault().AccID;
+                    int user_id = _db.Customers.Where(x => x.hasAcc == acc_id).SingleOrDefault().CustomerID;
+
+                    Session["user_id"] = user_id;
                     return RedirectToAction("Index", "HomeScreen");
                 }
                 else if (result == 3)

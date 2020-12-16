@@ -44,12 +44,12 @@
 				{
 					<div class="grid_1_of_4 images_1_of_4 products-info">
 						<a href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })">
-							<img src="@items.Image" />
+							<img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID=@items.ProductID" />
 							@items.Name
 						</a>
 						<h3 class="shopp-price">@items.Price &nbsp;đ</h3>
 						<ul>
-							<li><a class="cart" href="#"> </a></li>
+							<li><a class="cart" href="/ShoppingCart/AddtoCart/@items.ProductID"> </a></li>
 							<li><a class="i" href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })"> </a></li>
 							<li><a class="Wishlist" href="#"> </a></li>
 						</ul>
