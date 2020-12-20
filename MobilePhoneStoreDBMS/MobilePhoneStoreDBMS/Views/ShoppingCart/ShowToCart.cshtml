@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/MainLayout.cshtml";
 }
 
-<h2>ShowToCart</h2>
 @if (Model != null)
 {
     <table class="table">
@@ -17,17 +16,21 @@
                 <th style="font-size: 25px">Sum</th>
             </tr>
         </thead>
+        @{
+            double t = 0;
+        }
         <tbody>
             @foreach (var item in Model)
             {
                 double total = Convert.ToDouble(Convert.ToDouble(item.Product.Price) * Convert.ToDouble(item.amount));
-                double T = 0;
+                t += total;
+
                 <tr style="font-size:25px; color: black">
                     <td>
                         @Html.DisplayFor(modelItem => item.Product.Name)
                     </td>
                     <td>
-                        <img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID=@item.ProductID"/>
+                        <img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID=@item.ProductID" style="width: 200px; height:200px; object-fit: cover;" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Product.Price)
@@ -52,10 +55,15 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5" style="text-align: right; font-size: 25px"><br />Tổng tiền giỏ hàng: @*@Model.Total_Money()*@</td>
+                <td  colspan="5" style="text-align: right; font-size: 25px"><br />Tổng tiền giỏ hàng: @t</td>
             </tr>
+            <tr>
+                <td colspan="5" style="text-align: right; font-size: 25px"><br /> <a href="@Url.Action("RemoveAllCart", "ShoppingCart")"> Đặt hàng</a> </td>
+            </tr>
+            
         </tfoot>
     </table>
     <a href="@Url.Action("Index", "HomeScreen")"><h1 style="font-size: 25px; color: red">Về trang sản phẩm</h1></a>
+    
 }
 

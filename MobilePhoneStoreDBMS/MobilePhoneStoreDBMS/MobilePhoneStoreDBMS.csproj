@@ -204,6 +204,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cart_.cs" />
     <Compile Include="Models\Consts\LoginModes.cs" />
     <Compile Include="Models\CustomValidations\ValidRoleLogin.cs" />
     <Compile Include="Models\CustomValidations\ValidUserNameRegister.cs" />
