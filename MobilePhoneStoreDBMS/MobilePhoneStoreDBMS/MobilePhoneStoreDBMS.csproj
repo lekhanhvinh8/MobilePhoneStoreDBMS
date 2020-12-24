@@ -204,10 +204,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Consts\LoginModes.cs" />
     <Compile Include="Models\CustomValidations\ValidRoleLogin.cs" />
     <Compile Include="Models\CustomValidations\ValidUserNameRegister.cs" />
     <Compile Include="Models\Dtos\AccountDto.cs" />
+    <Compile Include="Models\Dtos\ProductDto.cs" />
     <Compile Include="Models\Entities\Account.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
@@ -268,6 +268,9 @@
     <Compile Include="Models\Entities\SpecificationValue.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\SplitSpecificationValuesString_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Sp_Catagory_Details_Result.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
@@ -308,6 +311,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\images\0083f9a69c_904.png" />
     <Content Include="Content\Account.css" />
     <Content Include="Content\Admin.css" />
     <Content Include="Assets\css\flexslider.css" />
@@ -560,6 +564,7 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\resources\images\adminIcon.png" />
     <Content Include="Content\select2.min.css" />
     <Content Include="Content\Seller.css" />
     <Content Include="favicon.ico" />
@@ -705,6 +710,7 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\ShoppingCart\ShowToCart.cshtml" />
     <Content Include="Views\ShoppingCart\BagCart.cshtml" />
+    <Content Include="Views\Seller\UpdateProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

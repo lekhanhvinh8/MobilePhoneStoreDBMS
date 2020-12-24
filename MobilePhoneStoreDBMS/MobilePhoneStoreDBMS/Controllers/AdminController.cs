@@ -1,4 +1,6 @@
-﻿using MobilePhoneStoreDBMS.Models.Entities;
+﻿using MobilePhoneStoreDBMS.Models.Consts;
+using MobilePhoneStoreDBMS.Models.Entities;
+using MobilePhoneStoreDBMS.Models.ViewModels.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,18 @@ namespace MobilePhoneStoreDBMS.Controllers
         }
         public ActionResult Index()
         {
+            if (!CheckLoginForAdmin())
+                return RedirectToAction("Login", "Account", new { roleID = RoleIds.Admin });
+
             return View(this._context);
+        }
+
+        private bool CheckLoginForAdmin()
+        {
+            if (Session[SessionNames.AdminID] == null)
+                return false;
+
+            return true;
         }
     }
 }

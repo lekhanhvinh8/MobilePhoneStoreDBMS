@@ -26,8 +26,10 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
             this.Image = product.Image;
             this.Description = product.Description;
             this.CategoryID = product.CategoryID;
+            this.CategoryName = product.Category.Name;
             this.Price = product.Price;
             this.ProducerID = product.ProducerID;
+            this.ProducerName = product.Producer.Name;
             this.Quantity = product.Quantity;
             this.Status = product.Status;
             this.SpecificationValuesDto = new List<SpecificationValueDto>();
@@ -57,9 +59,11 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
 
         [Required]
         public int ProducerID { get; set; }
+        public string ProducerName { get; set; }
 
         [Required]
         public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
         public virtual ICollection<SpecificationValueDto> SpecificationValuesDto { get; set; }
 
         public Product CreateModel()

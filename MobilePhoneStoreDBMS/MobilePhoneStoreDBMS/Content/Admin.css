@@ -32,3 +32,9 @@
 .error {
     color: red;
 }
+
+.logo {
+    height: 50px;
+    width: auto;
+    color: grey;
+}

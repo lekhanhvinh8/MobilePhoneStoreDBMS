@@ -1,4 +1,5 @@
-﻿@model MobilePhoneStoreDBMS.Models.Entities.MobilePhoneStoreDBMSEntities
+﻿@using MobilePhoneStoreDBMS.Models.Consts
+@model MobilePhoneStoreDBMS.Models.Entities.MobilePhoneStoreDBMSEntities
 @{
     //Layout = "~/Views/Shared/MainLayout.cshtml";
     Layout = null;
@@ -9,13 +10,31 @@
     <meta name="viewport" content="width=device-width" />
     <title>Admin</title>
 
-    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css" />
     <link href="https://cdn.jsdelivr.net/npm/jquery-smarttab@3/dist/css/smart_tab_all.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="~/Content/Admin.css" />
 
 </head>
 <body>
+    <header class="header">
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    @Html.ActionLink("Home", "Index", "HomeScreen", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Admin", "Index", "Admin", null, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <div class="nav navbar-nav navbar-right">
+                        <img src="~/Content/resources/images/adminIcon.png" style="height: 50px;"/>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Log out", "Logout", "Account", routeValues: new { sessionName = SessionNames.AdminID}, htmlAttributes: new { id = "logoutLink" })</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
     <div>
         <div id="smarttab">

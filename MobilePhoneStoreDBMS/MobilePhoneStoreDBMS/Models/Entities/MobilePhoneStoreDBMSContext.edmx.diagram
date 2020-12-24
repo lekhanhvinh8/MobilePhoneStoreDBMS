@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a0db5e397c0044a08cdd70c3cd0f51b8" Name="Diagram1">
+      <Diagram DiagramId="865e606141504297b3570cc520fb3ed5" Name="Diagram1">
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Account" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.AvatarOfProduct" Width="1.5" PointX="7.5" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Cart" Width="1.5" PointX="7.5" PointY="5.125" IsExpanded="true" />

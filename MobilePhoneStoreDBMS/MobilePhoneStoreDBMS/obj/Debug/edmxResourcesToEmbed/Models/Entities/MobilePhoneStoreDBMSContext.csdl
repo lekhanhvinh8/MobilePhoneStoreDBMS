@@ -421,6 +421,18 @@
     <FunctionImport Name="GetSpecifications" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.GetSpecifications_Result)">
       <Parameter Name="productID" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="AddNewProduct">
+      <Parameter Name="name" Mode="In" Type="String" />
+      <Parameter Name="description" Mode="In" Type="String" />
+      <Parameter Name="quantity" Mode="In" Type="Int32" />
+      <Parameter Name="status" Mode="In" Type="Boolean" />
+      <Parameter Name="price" Mode="In" Type="Int32" />
+      <Parameter Name="producerID" Mode="In" Type="Int32" />
+      <Parameter Name="categoryID" Mode="In" Type="Int32" />
+      <Parameter Name="imageFile" Mode="In" Type="Binary" />
+      <Parameter Name="specificationValuesString" Mode="In" Type="String" />
+      <Parameter Name="isSuccess" Mode="InOut" Type="Boolean" />
+    </FunctionImport>
     <FunctionImport Name="AddNewSpecificationToAProduct">
       <Parameter Name="ProductID" Mode="In" Type="Int32" />
       <Parameter Name="SpecificationID" Mode="In" Type="Int32" />
@@ -453,6 +465,13 @@
     </FunctionImport>
     <FunctionImport Name="Sp_Product_List_Of_Producer" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result)">
       <Parameter Name="producerID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="SplitSpecificationValuesString" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result)">
+      <Parameter Name="string" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteProduct">
+      <Parameter Name="productID" Mode="In" Type="Int32" />
+      <Parameter Name="isSuccess" Mode="InOut" Type="Boolean" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="Sp_Catagory_Details_Result">
@@ -510,5 +529,9 @@
     <Property Type="String" Name="Image" Nullable="true" />
     <Property Type="Int32" Name="ProducerID" Nullable="false" />
     <Property Type="Int32" Name="CategoryID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="SplitSpecificationValuesString_Result">
+    <Property Type="Int32" Name="specificationID" Nullable="true" />
+    <Property Type="String" Name="value" Nullable="true" MaxLength="50" />
   </ComplexType>
 </Schema>

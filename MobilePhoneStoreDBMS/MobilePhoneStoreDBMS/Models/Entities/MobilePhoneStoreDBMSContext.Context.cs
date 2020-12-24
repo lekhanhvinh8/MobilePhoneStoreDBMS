@@ -53,6 +53,47 @@ namespace MobilePhoneStoreDBMS.Models.Entities
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSpecifications_Result>("[MobilePhoneStoreDBMSEntities].[GetSpecifications](@productID)", productIDParameter);
         }
     
+        public virtual int AddNewProduct(string name, string description, Nullable<int> quantity, Nullable<bool> status, Nullable<int> price, Nullable<int> producerID, Nullable<int> categoryID, byte[] imageFile, string specificationValuesString, ObjectParameter isSuccess)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("description", description) :
+                new ObjectParameter("description", typeof(string));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("quantity", quantity) :
+                new ObjectParameter("quantity", typeof(int));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(bool));
+    
+            var priceParameter = price.HasValue ?
+                new ObjectParameter("price", price) :
+                new ObjectParameter("price", typeof(int));
+    
+            var producerIDParameter = producerID.HasValue ?
+                new ObjectParameter("producerID", producerID) :
+                new ObjectParameter("producerID", typeof(int));
+    
+            var categoryIDParameter = categoryID.HasValue ?
+                new ObjectParameter("categoryID", categoryID) :
+                new ObjectParameter("categoryID", typeof(int));
+    
+            var imageFileParameter = imageFile != null ?
+                new ObjectParameter("imageFile", imageFile) :
+                new ObjectParameter("imageFile", typeof(byte[]));
+    
+            var specificationValuesStringParameter = specificationValuesString != null ?
+                new ObjectParameter("specificationValuesString", specificationValuesString) :
+                new ObjectParameter("specificationValuesString", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddNewProduct", nameParameter, descriptionParameter, quantityParameter, statusParameter, priceParameter, producerIDParameter, categoryIDParameter, imageFileParameter, specificationValuesStringParameter, isSuccess);
+        }
+    
         public virtual int AddNewSpecificationToAProduct(Nullable<int> productID, Nullable<int> specificationID, string value)
         {
             var productIDParameter = productID.HasValue ?
@@ -161,6 +202,25 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("producerID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Product_List_Of_Producer_Result>("Sp_Product_List_Of_Producer", producerIDParameter);
+        }
+    
+        [DbFunction("MobilePhoneStoreDBMSEntities", "SplitSpecificationValuesString")]
+        public virtual IQueryable<SplitSpecificationValuesString_Result> SplitSpecificationValuesString(string @string)
+        {
+            var stringParameter = @string != null ?
+                new ObjectParameter("string", @string) :
+                new ObjectParameter("string", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitSpecificationValuesString_Result>("[MobilePhoneStoreDBMSEntities].[SplitSpecificationValuesString](@string)", stringParameter);
+        }
+    
+        public virtual int DeleteProduct(Nullable<int> productID, ObjectParameter isSuccess)
+        {
+            var productIDParameter = productID.HasValue ?
+                new ObjectParameter("productID", productID) :
+                new ObjectParameter("productID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteProduct", productIDParameter, isSuccess);
         }
     }
 }

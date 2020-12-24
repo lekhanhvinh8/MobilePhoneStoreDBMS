@@ -6,6 +6,7 @@ using MobilePhoneStoreDBMS.Models.ViewModels.Account;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 namespace MobilePhoneStoreDBMS.Controllers
 {
@@ -79,6 +80,16 @@ namespace MobilePhoneStoreDBMS.Controllers
 
             var result = Register(registerDto.Name, registerDto.PhoneNumber, registerDto.Email, registerDto.Username, registerDto.Password);
             return View(registerDto);
+        }
+
+        public ActionResult Logout(string sessionName)
+        {
+            if (Session[sessionName] == null)
+                throw new System.Web.Http.HttpResponseException(HttpStatusCode.NotFound);
+
+            Session[sessionName] = null;
+
+            return RedirectToAction("Index", "HomeScreen");
         }
 
         private int Login(string username, string password)

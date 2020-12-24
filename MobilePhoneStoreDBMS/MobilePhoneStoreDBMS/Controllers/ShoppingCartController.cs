@@ -1,5 +1,8 @@
 ﻿using MobilePhoneStoreDBMS.Models;
+using MobilePhoneStoreDBMS.Models.Consts;
+using MobilePhoneStoreDBMS.Models.Dtos;
 using MobilePhoneStoreDBMS.Models.Entities;
+using MobilePhoneStoreDBMS.Models.ViewModels.Account;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
@@ -16,12 +19,12 @@ namespace MobilePhoneStoreDBMS.Controllers
         // add item vao gio hang
         public ActionResult AddtoCart(int id)
         {
-            if (Session["user_id"] == null)
+            if (Session[SessionNames.CustomerID] == null)
             {
-                return RedirectToAction("Index", "Login");
+                return RedirectToAction("Login", "Account", new LoginViewModel() { AccountDto = new AccountDto(), RoleID = RoleIds.Customer });
             }
 
-            int userid = Convert.ToInt32(Session["user_id"]);
+            int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
             Cart c = _db.Carts.Where(x => x.CustomerID == userid && x.ProductID == id).SingleOrDefault();
 
             if (c == null)
@@ -45,7 +48,7 @@ namespace MobilePhoneStoreDBMS.Controllers
         // trang gio hang
         public ActionResult ShowToCart()
         {
-            int userid = Convert.ToInt32(Session["user_id"]);
+            int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
             List<Cart> cart = _db.Carts.Where(x => x.CustomerID == userid).ToList();
             return View(cart);
         }
