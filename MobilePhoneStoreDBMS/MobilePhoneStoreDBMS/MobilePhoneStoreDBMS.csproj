@@ -204,6 +204,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cart_.cs" />
+    <Compile Include="Models\Consts\LoginModes.cs" />
     <Compile Include="Models\CustomValidations\ValidRoleLogin.cs" />
     <Compile Include="Models\CustomValidations\ValidUserNameRegister.cs" />
     <Compile Include="Models\Dtos\AccountDto.cs" />
@@ -311,7 +313,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\images\0083f9a69c_904.png" />
     <Content Include="Content\Account.css" />
     <Content Include="Content\Admin.css" />
     <Content Include="Assets\css\flexslider.css" />

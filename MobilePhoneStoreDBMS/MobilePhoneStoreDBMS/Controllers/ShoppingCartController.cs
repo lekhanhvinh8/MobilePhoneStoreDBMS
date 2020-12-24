@@ -1,14 +1,12 @@
 ﻿using MobilePhoneStoreDBMS.Models;
-using MobilePhoneStoreDBMS.Models.Consts;
-using MobilePhoneStoreDBMS.Models.Dtos;
 using MobilePhoneStoreDBMS.Models.Entities;
-using MobilePhoneStoreDBMS.Models.ViewModels.Account;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MobilePhoneStoreDBMS.Models.Consts;
 
 namespace MobilePhoneStoreDBMS.Controllers
 {
@@ -21,10 +19,11 @@ namespace MobilePhoneStoreDBMS.Controllers
         {
             if (Session[SessionNames.CustomerID] == null)
             {
-                return RedirectToAction("Login", "Account", new LoginViewModel() { AccountDto = new AccountDto(), RoleID = RoleIds.Customer });
+                return RedirectToAction("Login", "Account", new { RoleId = RoleIds.Customer });
             }
 
             int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
+
             Cart c = _db.Carts.Where(x => x.CustomerID == userid && x.ProductID == id).SingleOrDefault();
 
             if (c == null)
@@ -55,7 +54,7 @@ namespace MobilePhoneStoreDBMS.Controllers
         //
         public ActionResult Update_Quantity_Cart(int ID_Product, int quantity)
         {
-            int userid = Convert.ToInt32(Session["user_id"]);
+            int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
             Cart cart = _db.Carts.Where(x => x.CustomerID == userid && x.ProductID == ID_Product).SingleOrDefault();
             cart.amount = quantity;
             _db.Carts.AddOrUpdate(cart);
@@ -65,25 +64,43 @@ namespace MobilePhoneStoreDBMS.Controllers
         //
         public ActionResult RemoveCart(int id)
         {
-            int userid = Convert.ToInt32(Session["user_id"]);
+            int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
             Cart cart = _db.Carts.Where(x => x.CustomerID == userid && x.ProductID == id).SingleOrDefault();
             _db.Carts.Remove(cart);
             _db.SaveChanges();
             return RedirectToAction("ShowToCart", "ShoppingCart");
         }
+        public ActionResult RemoveAllCart()
+        {
+            int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
+            List<Cart> cart = _db.Carts.Where(x => x.CustomerID == userid).ToList();
+            foreach (var i in cart)
+            {
+                _db.Carts.Remove(i);
+                
+            }
+            _db.SaveChanges();
+
+
+            return RedirectToAction("ShowToCart", "ShoppingCart");
+        }
+       
         //
         public PartialViewResult BagCart()
         {
-            //int _t_item = 0;
-            //Cart_ cart = Session["cart"] as Cart_;
-            //if (cart != null)
-            //{
-            //    _t_item = cart.Total_Quantity();
-            //}
-            //ViewBag.infoCart = _t_item;
+            int _t_item = 0;
+            Cart_ cart = Session["cart"] as Cart_;
+
+            if (Session[SessionNames.CustomerID] != null)
+            {
+                if (cart != null)
+                {
+                    _t_item = cart.Total_Quantity();
+                }
+            }
+            ViewBag.infoCart = _t_item;
             return PartialView("BagCart");
         }
-        //
 
     }
 }
