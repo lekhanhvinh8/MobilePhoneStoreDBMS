@@ -31,7 +31,7 @@ create table ProductSpecifications(
 );
 go
 create table Customers(
-	CustomerID int identity(1,1) not null,
+	CustomerID int not null,
 	Name nvarchar(50),
 	PhoneNumber nvarchar(20),
 	Email nvarchar(50),
@@ -59,7 +59,7 @@ hasRole int references Roles(RoleID)
 go
 alter table Products add ProducerID int not null;
 alter table Products add CategoryID int not null;
-alter table Customers add hasAcc int;
+
 go
 alter table Producers add constraint ProducersPK primary key(ProducerID);
 alter table Categories add constraint CategoriesPK primary key(CategoryID);
@@ -71,7 +71,7 @@ go
 alter table Products add constraint ProductsProdcerIDFK foreign key(ProducerID) references Producers(ProducerID);
 alter table Products add constraint ProductsCategoryIDFK foreign key(CategoryID) references Categories(CategoryID);
 alter table AvatarOfProduct add constraint AvatarOfProductProductIDFK foreign key(ProductID) references Products(ProductID);
-alter table Customers add constraint CustomersAccIDFK foreign key(hasAcc) references Accounts(AccID);
+alter table Customers add constraint CustomersAccIDFK foreign key(CustomerID) references Accounts(AccID);
 
 --create weak entity tables
 go
@@ -254,7 +254,7 @@ begin
 	begin
 		insert into Accounts values(@username, @password, 2)
 		select @acc = AccID from Accounts where Username = @username
-		insert into Customers values(@name, @PhoneNumber, @Email, @acc)
+		insert into Customers values(@acc, @name, @PhoneNumber, @Email)
 		set @res = 1
 	end
 	select @res
@@ -313,19 +313,15 @@ insert into HasSpecification(ProductID, SpecificationID, Value) values(1,2,'32GB
 insert into HasSpecification(ProductID, SpecificationID, Value) values(1,3,'2 Sims');
 insert into HasSpecification(ProductID, SpecificationID, Value) values(1,4,'IOS');
 
-insert into Customers(Name, PhoneNumber) values('Vinh','01234');
-insert into Customers(Name, PhoneNumber) values('Nhan','02234');
-insert into Customers(Name, PhoneNumber) values('Hung','01234');
-insert into Customers(Name, PhoneNumber) values('Nghia','01234');
-
-insert into Carts(CustomerID, ProductID, amount) values(1,1,5);
-insert into Carts(CustomerID, ProductID, amount) values(2,1,1);
-
 insert into Roles(RoleName, Descriptions) values('admin', 'chu cua hang');
 insert into Roles(RoleName, Descriptions) values('user', 'nguoi dung');
+insert into Roles(RoleName, Descriptions) values('emp', 'nguoi ban');
 
-insert into Accounts values('admin','gFuYE2Bpl7A=',1);
+insert into Accounts values('admin','gFuYE2Bpl7A=', 1);
+insert into Accounts values('emp','gFuYE2Bpl7A=', 3);
+insert into Accounts values('customer', 'gFuYE2Bpl7A=', 2); 
 
+insert into Customers(CustomerID, Name) values(3, 'Vinh');
 
-
-
+insert into Carts(CustomerID, ProductID, amount) values(3,1,5);
+insert into Carts(CustomerID, ProductID, amount) values(3,2,1);

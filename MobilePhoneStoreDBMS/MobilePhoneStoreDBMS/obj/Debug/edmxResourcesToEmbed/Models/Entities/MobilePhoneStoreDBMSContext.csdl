@@ -5,6 +5,17 @@
     <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </ComplexType>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="AccID" />
+    </Key>
+    <Property Name="AccID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="hasRole" Type="Int32" />
+    <NavigationProperty Name="Customer" Relationship="Self.CustomersAccIDFK" FromRole="Accounts" ToRole="Customers" />
+    <NavigationProperty Name="Role" Relationship="Self.FK__Accounts__hasRol__2E1BDC42" FromRole="Accounts" ToRole="Roles" />
+  </EntityType>
   <EntityType Name="AvatarOfProduct">
     <Key>
       <PropertyRef Name="productID" />
@@ -49,16 +60,15 @@
     <Key>
       <PropertyRef Name="CustomerID" />
     </Key>
-    <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Account" Relationship="Self.CustomersAccIDFK" FromRole="Customers" ToRole="Accounts" />
     <NavigationProperty Name="Carts" Relationship="Self.CartsCustomerIDFK" FromRole="Customers" ToRole="Carts" />
     <NavigationProperty Name="Comments" Relationship="Self.CommentsCustomerIDFk" FromRole="Customers" ToRole="Comments" />
     <NavigationProperty Name="Orders" Relationship="Self.OrdersCustomerIDFK" FromRole="Customers" ToRole="Orders" />
     <NavigationProperty Name="Rates" Relationship="Self.RatesCustomerIDFK" FromRole="Customers" ToRole="Rates" />
-    <Property Name="hasAcc" Type="Int32" />
-    <NavigationProperty Name="Account" Relationship="MobilePhoneStoreDBMSModel.CustomersAccIDFK" FromRole="Customer" ToRole="Account" />
   </EntityType>
   <EntityType Name="Order">
     <Key>
@@ -123,6 +133,15 @@
     <NavigationProperty Name="Customer" Relationship="Self.RatesCustomerIDFK" FromRole="Rates" ToRole="Customers" />
     <NavigationProperty Name="Product" Relationship="Self.RatesProductIDFK" FromRole="Rates" ToRole="Products" />
   </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Descriptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Accounts" Relationship="Self.FK__Accounts__hasRol__2E1BDC42" FromRole="Roles" ToRole="Accounts" />
+  </EntityType>
   <EntityType Name="SpecificationValue">
     <Key>
       <PropertyRef Name="SpecificationID" />
@@ -151,6 +170,30 @@
     <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
+  <Association Name="CustomersAccIDFK">
+    <End Role="Accounts" Type="Self.Account" Multiplicity="1" />
+    <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccID" />
+      </Principal>
+      <Dependent Role="Customers">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Accounts__hasRol__2E1BDC42">
+    <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
+    <End Role="Accounts" Type="Self.Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="hasRole" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="AvatarOfProductProductIDFK">
     <End Role="Products" Type="Self.Product" Multiplicity="1" />
     <End Role="AvatarOfProduct" Type="Self.AvatarOfProduct" Multiplicity="0..1" />
@@ -300,6 +343,7 @@
     <End Role="Products" Type="Self.Product" Multiplicity="*" />
   </Association>
   <EntityContainer Name="MobilePhoneStoreDBMSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accounts" EntityType="Self.Account" />
     <EntitySet Name="AvatarOfProducts" EntityType="Self.AvatarOfProduct" />
     <EntitySet Name="Carts" EntityType="Self.Cart" />
     <EntitySet Name="Categories" EntityType="Self.Category" />
@@ -310,9 +354,18 @@
     <EntitySet Name="Products" EntityType="Self.Product" />
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecification" />
     <EntitySet Name="Rates" EntityType="Self.Rate" />
+    <EntitySet Name="Roles" EntityType="Self.Role" />
     <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValue" />
     <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" />
     <EntitySet Name="view_Category_List" EntityType="Self.view_Category_List" />
+    <AssociationSet Name="CustomersAccIDFK" Association="Self.CustomersAccIDFK">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Customers" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="Self.FK__Accounts__hasRol__2E1BDC42">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="Accounts" EntitySet="Accounts" />
+    </AssociationSet>
     <AssociationSet Name="AvatarOfProductProductIDFK" Association="Self.AvatarOfProductProductIDFK">
       <End Role="Products" EntitySet="Products" />
       <End Role="AvatarOfProduct" EntitySet="AvatarOfProducts" />
@@ -373,6 +426,17 @@
       <Parameter Name="SpecificationID" Mode="In" Type="Int32" />
       <Parameter Name="Value" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="sp_Account_Login" ReturnType="Collection(Int32)">
+      <Parameter Name="username" Mode="In" Type="String" />
+      <Parameter Name="password" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Account_Register" ReturnType="Collection(Boolean)">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+      <Parameter Name="Email" Mode="In" Type="String" />
+      <Parameter Name="username" Mode="In" Type="String" />
+      <Parameter Name="password" Mode="In" Type="String" />
+    </FunctionImport>
     <FunctionImport Name="Sp_Catagory_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Catagory_Details_Result)">
       <Parameter Name="id" Mode="In" Type="Int32" />
     </FunctionImport>
@@ -389,27 +453,6 @@
     </FunctionImport>
     <FunctionImport Name="Sp_Product_List_Of_Producer" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result)">
       <Parameter Name="producerID" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <EntitySet Name="Accounts" EntityType="MobilePhoneStoreDBMSModel.Account" />
-    <EntitySet Name="Roles" EntityType="MobilePhoneStoreDBMSModel.Role" />
-    <AssociationSet Name="CustomersAccIDFK" Association="MobilePhoneStoreDBMSModel.CustomersAccIDFK">
-      <End Role="Account" EntitySet="Accounts" />
-      <End Role="Customer" EntitySet="Customers" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42">
-      <End Role="Role" EntitySet="Roles" />
-      <End Role="Account" EntitySet="Accounts" />
-    </AssociationSet>
-    <FunctionImport Name="sp_Account_Login" ReturnType="Collection(Int32)">
-      <Parameter Name="username" Mode="In" Type="String" />
-      <Parameter Name="password" Mode="In" Type="String" />
-    </FunctionImport>
-    <FunctionImport Name="sp_Account_Register" ReturnType="Collection(Boolean)">
-      <Parameter Name="Name" Mode="In" Type="String" />
-      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
-      <Parameter Name="Email" Mode="In" Type="String" />
-      <Parameter Name="username" Mode="In" Type="String" />
-      <Parameter Name="password" Mode="In" Type="String" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="Sp_Catagory_Details_Result">
@@ -468,48 +511,4 @@
     <Property Type="Int32" Name="ProducerID" Nullable="false" />
     <Property Type="Int32" Name="CategoryID" Nullable="false" />
   </ComplexType>
-  <EntityType Name="Account">
-    <Key>
-      <PropertyRef Name="AccID" />
-    </Key>
-    <Property Name="AccID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="hasRole" Type="Int32" />
-    <NavigationProperty Name="Customers" Relationship="MobilePhoneStoreDBMSModel.CustomersAccIDFK" FromRole="Account" ToRole="Customer" />
-    <NavigationProperty Name="Role" Relationship="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" FromRole="Account" ToRole="Role" />
-  </EntityType>
-  <EntityType Name="Role">
-    <Key>
-      <PropertyRef Name="RoleID" />
-    </Key>
-    <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Descriptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Accounts" Relationship="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" FromRole="Role" ToRole="Account" />
-  </EntityType>
-  <Association Name="CustomersAccIDFK">
-    <End Type="MobilePhoneStoreDBMSModel.Account" Role="Account" Multiplicity="0..1" />
-    <End Type="MobilePhoneStoreDBMSModel.Customer" Role="Customer" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Account">
-        <PropertyRef Name="AccID" />
-      </Principal>
-      <Dependent Role="Customer">
-        <PropertyRef Name="hasAcc" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Accounts__hasRol__2E1BDC42">
-    <End Type="MobilePhoneStoreDBMSModel.Role" Role="Role" Multiplicity="0..1" />
-    <End Type="MobilePhoneStoreDBMSModel.Account" Role="Account" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Role">
-        <PropertyRef Name="RoleID" />
-      </Principal>
-      <Dependent Role="Account">
-        <PropertyRef Name="hasRole" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema>

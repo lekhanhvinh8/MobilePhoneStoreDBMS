@@ -4,20 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2a817e4c930a4fa7943776e265de1867" Name="Diagram1" ZoomLevel="80">
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.AvatarOfProduct" Width="1.5" PointX="7.5" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Cart" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Category" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Comment" Width="1.5" PointX="7.5" PointY="9.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Customer" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Order" Width="1.5" PointX="10.5" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Producer" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Product" Width="1.5" PointX="5.25" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.ProductSpecification" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Rate" Width="1.5" PointX="10.5" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.SpecificationValue" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Specifications_of_all_product" Width="1.75" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.view_Category_List" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="a0db5e397c0044a08cdd70c3cd0f51b8" Name="Diagram1">
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Account" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.AvatarOfProduct" Width="1.5" PointX="7.5" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Cart" Width="1.5" PointX="7.5" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Category" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Comment" Width="1.5" PointX="7.5" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Customer" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Order" Width="1.5" PointX="10.5" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Producer" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Product" Width="1.5" PointX="5.25" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.ProductSpecification" Width="1.5" PointX="0.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Rate" Width="1.5" PointX="10.5" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Role" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.SpecificationValue" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Specifications_of_all_product" Width="1.75" PointX="7.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.view_Category_List" Width="1.5" PointX="10" PointY="2.125" IsExpanded="true" />
+        <AssociationConnector Association="MobilePhoneStoreDBMSModel.CustomersAccIDFK" ManuallyRouted="false" />
+        <AssociationConnector Association="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.AvatarOfProductProductIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.CartsCustomerIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.CartsProductIDFK" ManuallyRouted="false" />
@@ -31,10 +35,6 @@
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.RatesProductIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.SpecificationValuesSpecificationIDFK" ManuallyRouted="false" />
         <AssociationConnector Association="MobilePhoneStoreDBMSModel.HasSpecification" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Account" Width="1.5" PointX="3" PointY="13" />
-        <EntityTypeShape EntityType="MobilePhoneStoreDBMSModel.Role" Width="1.5" PointX="0.75" PointY="13.125" />
-        <AssociationConnector Association="MobilePhoneStoreDBMSModel.CustomersAccIDFK" />
-        <AssociationConnector Association="MobilePhoneStoreDBMSModel.FK__Accounts__hasRol__2E1BDC42" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

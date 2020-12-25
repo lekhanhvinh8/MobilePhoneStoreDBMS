@@ -1,4 +1,4 @@
-﻿
+﻿c
 @model MobilePhoneStoreDBMS.Models.ViewModel
 @{
 	ViewBag.Title = "Store";
@@ -8,7 +8,7 @@
 <div class="wrap">
 	<div class="content" style="width: 950px; float: left;">
 		<div class="content-grids">
-			<h2 class="for_h2" style="padding-left: 10px;">Sản phẩm hiện bán tại cửa hàng</h2>
+			<h2 class="for_h2" style="padding-left: 10px;">Products are available at the store</h2>
 			@foreach (var items in Model.allProducts)
 			{
 				<div class="grid_1_of_4 images_1_of_4 products-info">
@@ -20,16 +20,15 @@
 					<ul>
 						<li><a class="cart" href="#"> </a></li>
 						<li><a class="i" href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })"> </a></li>
-						<li><a class="Wishlist" href="#"> </a></li>
 					</ul>
 				</div>
 			}
 		</div>
 	</div>
 	<div class="content-sidebar">
-		<h2 class="for_h2">Hãng sản xuất</h2>
+		<h2 class="for_h2">Producer</h2>
 		<ul>
-			<li><a href="@Url.Action("Store", "HomeScreen")">Tất cả</a></li>
+			<li><a href="@Url.Action("Store", "HomeScreen")">All</a></li>
 			@foreach (var items in Model.allProducers)
 			{
 				<li><a href="@Url.Action("Producer", "HomeScreen", new { id = items.ProducerID })">@items.Name</a></li>
