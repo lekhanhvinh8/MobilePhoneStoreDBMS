@@ -18,9 +18,7 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         public Product()
         {
             this.Carts = new HashSet<Cart>();
-            this.Comments = new HashSet<Comment>();
-            this.Orders = new HashSet<Order>();
-            this.Rates = new HashSet<Rate>();
+            this.ProductsOfOrders = new HashSet<ProductsOfOrder>();
             this.SpecificationValues = new HashSet<SpecificationValue>();
         }
     
@@ -38,13 +36,9 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Carts { get; set; }
         public virtual Category Category { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Comment> Comments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
         public virtual Producer Producer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rate> Rates { get; set; }
+        public virtual ICollection<ProductsOfOrder> ProductsOfOrders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SpecificationValue> SpecificationValues { get; set; }
     }

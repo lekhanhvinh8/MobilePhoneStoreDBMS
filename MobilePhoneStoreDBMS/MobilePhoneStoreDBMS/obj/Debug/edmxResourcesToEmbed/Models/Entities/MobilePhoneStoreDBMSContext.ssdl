@@ -32,17 +32,6 @@
     <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
-  <EntityType Name="Comments">
-    <Key>
-      <PropertyRef Name="CustomerID" />
-      <PropertyRef Name="ProductID" />
-      <PropertyRef Name="CommentTime" />
-    </Key>
-    <Property Name="CustomerID" Type="int" Nullable="false" />
-    <Property Name="ProductID" Type="int" Nullable="false" />
-    <Property Name="CommentTime" Type="datetime" Nullable="false" />
-    <Property Name="Content" Type="nvarchar(max)" />
-  </EntityType>
   <EntityType Name="Customers">
     <Key>
       <PropertyRef Name="CustomerID" />
@@ -64,14 +53,12 @@
   </EntityType>
   <EntityType Name="Orders">
     <Key>
-      <PropertyRef Name="CustomerID" />
-      <PropertyRef Name="ProductID" />
-      <PropertyRef Name="OrderTime" />
+      <PropertyRef Name="OrderID" />
     </Key>
-    <Property Name="CustomerID" Type="int" Nullable="false" />
-    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="OrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="OrderTime" Type="datetime" Nullable="false" />
-    <Property Name="amount" Type="int" />
+    <Property Name="status" Type="int" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Producers">
     <Key>
@@ -94,6 +81,15 @@
     <Property Name="ProducerID" Type="int" Nullable="false" />
     <Property Name="CategoryID" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="ProductsOfOrder">
+    <Key>
+      <PropertyRef Name="OrderID" />
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="OrderID" Type="int" Nullable="false" />
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="amount" Type="int" />
+  </EntityType>
   <EntityType Name="ProductSpecifications">
     <Key>
       <PropertyRef Name="SpecificationID" />
@@ -101,15 +97,6 @@
     <Property Name="SpecificationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Description" Type="nvarchar(max)" />
-  </EntityType>
-  <EntityType Name="Rates">
-    <Key>
-      <PropertyRef Name="ProductID" />
-      <PropertyRef Name="CustomerID" />
-    </Key>
-    <Property Name="ProductID" Type="int" Nullable="false" />
-    <Property Name="CustomerID" Type="int" Nullable="false" />
-    <Property Name="starts" Type="int" />
   </EntityType>
   <EntityType Name="Roles">
     <Key>
@@ -185,30 +172,6 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="CommentsCustomerIDFk">
-    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
-    <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Customers">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="Comments">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="CommentsProductIDFk">
-    <End Role="Products" Type="Self.Products" Multiplicity="1" />
-    <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="Comments">
-        <PropertyRef Name="ProductID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="CustomersAccIDFK">
     <End Role="Accounts" Type="Self.Accounts" Multiplicity="1" />
     <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
@@ -221,7 +184,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Accounts__hasRol__2E1BDC42">
+  <Association Name="FK__Accounts__hasRol__2F10007B">
     <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
     <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
     <ReferentialConstraint>
@@ -259,7 +222,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="OrdersCustomerIDFK">
+  <Association Name="OrderCustomerIDFK">
     <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
     <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
     <ReferentialConstraint>
@@ -268,18 +231,6 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Principal>
       <Dependent Role="Orders">
         <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="OrdersProductIDFK">
-    <End Role="Products" Type="Self.Products" Multiplicity="1" />
-    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="Orders">
-        <PropertyRef Name="ProductID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -295,6 +246,30 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="ProductsOfOrderOrderIDFK">
+    <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+    <End Role="ProductsOfOrder" Type="Self.ProductsOfOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="ProductsOfOrder">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductsOfOrderProductIDFK">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="ProductsOfOrder" Type="Self.ProductsOfOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="ProductsOfOrder">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="ProductsProdcerIDFK">
     <End Role="Producers" Type="Self.Producers" Multiplicity="1" />
     <End Role="Products" Type="Self.Products" Multiplicity="*" />
@@ -304,30 +279,6 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Principal>
       <Dependent Role="Products">
         <PropertyRef Name="ProducerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="RatesCustomerIDFK">
-    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
-    <End Role="Rates" Type="Self.Rates" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Customers">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="Rates">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="RatesProductIDFK">
-    <End Role="Products" Type="Self.Products" Multiplicity="1" />
-    <End Role="Rates" Type="Self.Rates" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="Rates">
-        <PropertyRef Name="ProductID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -363,9 +314,6 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
   <Function Name="DeleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="productID" Type="int" Mode="In" />
     <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
-  </Function>
-  <Function Name="GetRoleId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
-    <Parameter Name="roleName" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="GetSpecifications" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="productID" Type="int" Mode="In" />
@@ -423,14 +371,13 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     <EntitySet Name="AvatarOfProduct" EntityType="Self.AvatarOfProduct" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HasSpecification" EntityType="Self.HasSpecification" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Producers" EntityType="Self.Producers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductsOfOrder" EntityType="Self.ProductsOfOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Rates" EntityType="Self.Rates" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValues" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" store:Type="Views" store:Schema="dbo">
@@ -458,19 +405,11 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       <End Role="Products" EntitySet="Products" />
       <End Role="Carts" EntitySet="Carts" />
     </AssociationSet>
-    <AssociationSet Name="CommentsCustomerIDFk" Association="Self.CommentsCustomerIDFk">
-      <End Role="Customers" EntitySet="Customers" />
-      <End Role="Comments" EntitySet="Comments" />
-    </AssociationSet>
-    <AssociationSet Name="CommentsProductIDFk" Association="Self.CommentsProductIDFk">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="Comments" EntitySet="Comments" />
-    </AssociationSet>
     <AssociationSet Name="CustomersAccIDFK" Association="Self.CustomersAccIDFK">
       <End Role="Accounts" EntitySet="Accounts" />
       <End Role="Customers" EntitySet="Customers" />
     </AssociationSet>
-    <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="Self.FK__Accounts__hasRol__2E1BDC42">
+    <AssociationSet Name="FK__Accounts__hasRol__2F10007B" Association="Self.FK__Accounts__hasRol__2F10007B">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Accounts" EntitySet="Accounts" />
     </AssociationSet>
@@ -482,29 +421,25 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       <End Role="Products" EntitySet="Products" />
       <End Role="HasSpecification" EntitySet="HasSpecification" />
     </AssociationSet>
-    <AssociationSet Name="OrdersCustomerIDFK" Association="Self.OrdersCustomerIDFK">
+    <AssociationSet Name="OrderCustomerIDFK" Association="Self.OrderCustomerIDFK">
       <End Role="Customers" EntitySet="Customers" />
-      <End Role="Orders" EntitySet="Orders" />
-    </AssociationSet>
-    <AssociationSet Name="OrdersProductIDFK" Association="Self.OrdersProductIDFK">
-      <End Role="Products" EntitySet="Products" />
       <End Role="Orders" EntitySet="Orders" />
     </AssociationSet>
     <AssociationSet Name="ProductsCategoryIDFK" Association="Self.ProductsCategoryIDFK">
       <End Role="Categories" EntitySet="Categories" />
       <End Role="Products" EntitySet="Products" />
     </AssociationSet>
+    <AssociationSet Name="ProductsOfOrderOrderIDFK" Association="Self.ProductsOfOrderOrderIDFK">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="ProductsOfOrder" EntitySet="ProductsOfOrder" />
+    </AssociationSet>
+    <AssociationSet Name="ProductsOfOrderProductIDFK" Association="Self.ProductsOfOrderProductIDFK">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="ProductsOfOrder" EntitySet="ProductsOfOrder" />
+    </AssociationSet>
     <AssociationSet Name="ProductsProdcerIDFK" Association="Self.ProductsProdcerIDFK">
       <End Role="Producers" EntitySet="Producers" />
       <End Role="Products" EntitySet="Products" />
-    </AssociationSet>
-    <AssociationSet Name="RatesCustomerIDFK" Association="Self.RatesCustomerIDFK">
-      <End Role="Customers" EntitySet="Customers" />
-      <End Role="Rates" EntitySet="Rates" />
-    </AssociationSet>
-    <AssociationSet Name="RatesProductIDFK" Association="Self.RatesProductIDFK">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="Rates" EntitySet="Rates" />
     </AssociationSet>
     <AssociationSet Name="SpecificationValuesSpecificationIDFK" Association="Self.SpecificationValuesSpecificationIDFK">
       <End Role="ProductSpecifications" EntitySet="ProductSpecifications" />

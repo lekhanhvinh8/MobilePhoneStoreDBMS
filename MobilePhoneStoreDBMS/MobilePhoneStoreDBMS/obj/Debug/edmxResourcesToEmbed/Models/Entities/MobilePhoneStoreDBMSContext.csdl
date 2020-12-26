@@ -5,6 +5,10 @@
     <Property Name="specification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </ComplexType>
+  <ComplexType Name="SplitSpecificationValuesString_Result">
+    <Property Name="specificationID" Type="Int32" />
+    <Property Name="value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </ComplexType>
   <EntityType Name="Account">
     <Key>
       <PropertyRef Name="AccID" />
@@ -14,7 +18,7 @@
     <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="hasRole" Type="Int32" />
     <NavigationProperty Name="Customer" Relationship="Self.CustomersAccIDFK" FromRole="Accounts" ToRole="Customers" />
-    <NavigationProperty Name="Role" Relationship="Self.FK__Accounts__hasRol__2E1BDC42" FromRole="Accounts" ToRole="Roles" />
+    <NavigationProperty Name="Role" Relationship="Self.FK__Accounts__hasRol__2F10007B" FromRole="Accounts" ToRole="Roles" />
   </EntityType>
   <EntityType Name="AvatarOfProduct">
     <Key>
@@ -43,19 +47,6 @@
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Products" Relationship="Self.ProductsCategoryIDFK" FromRole="Categories" ToRole="Products" />
   </EntityType>
-  <EntityType Name="Comment">
-    <Key>
-      <PropertyRef Name="CustomerID" />
-      <PropertyRef Name="ProductID" />
-      <PropertyRef Name="CommentTime" />
-    </Key>
-    <Property Name="CustomerID" Type="Int32" Nullable="false" />
-    <Property Name="ProductID" Type="Int32" Nullable="false" />
-    <Property Name="CommentTime" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Customer" Relationship="Self.CommentsCustomerIDFk" FromRole="Comments" ToRole="Customers" />
-    <NavigationProperty Name="Product" Relationship="Self.CommentsProductIDFk" FromRole="Comments" ToRole="Products" />
-  </EntityType>
   <EntityType Name="Customer">
     <Key>
       <PropertyRef Name="CustomerID" />
@@ -66,22 +57,18 @@
     <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Account" Relationship="Self.CustomersAccIDFK" FromRole="Customers" ToRole="Accounts" />
     <NavigationProperty Name="Carts" Relationship="Self.CartsCustomerIDFK" FromRole="Customers" ToRole="Carts" />
-    <NavigationProperty Name="Comments" Relationship="Self.CommentsCustomerIDFk" FromRole="Customers" ToRole="Comments" />
-    <NavigationProperty Name="Orders" Relationship="Self.OrdersCustomerIDFK" FromRole="Customers" ToRole="Orders" />
-    <NavigationProperty Name="Rates" Relationship="Self.RatesCustomerIDFK" FromRole="Customers" ToRole="Rates" />
+    <NavigationProperty Name="Orders" Relationship="Self.OrderCustomerIDFK" FromRole="Customers" ToRole="Orders" />
   </EntityType>
   <EntityType Name="Order">
     <Key>
-      <PropertyRef Name="CustomerID" />
-      <PropertyRef Name="ProductID" />
-      <PropertyRef Name="OrderTime" />
+      <PropertyRef Name="OrderID" />
     </Key>
-    <Property Name="CustomerID" Type="Int32" Nullable="false" />
-    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="OrderTime" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="amount" Type="Int32" />
-    <NavigationProperty Name="Customer" Relationship="Self.OrdersCustomerIDFK" FromRole="Orders" ToRole="Customers" />
-    <NavigationProperty Name="Product" Relationship="Self.OrdersProductIDFK" FromRole="Orders" ToRole="Products" />
+    <Property Name="status" Type="Int32" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Customer" Relationship="Self.OrderCustomerIDFK" FromRole="Orders" ToRole="Customers" />
+    <NavigationProperty Name="ProductsOfOrders" Relationship="Self.ProductsOfOrderOrderIDFK" FromRole="Orders" ToRole="ProductsOfOrder" />
   </EntityType>
   <EntityType Name="Producer">
     <Key>
@@ -107,11 +94,20 @@
     <NavigationProperty Name="AvatarOfProduct" Relationship="Self.AvatarOfProductProductIDFK" FromRole="Products" ToRole="AvatarOfProduct" />
     <NavigationProperty Name="Carts" Relationship="Self.CartsProductIDFK" FromRole="Products" ToRole="Carts" />
     <NavigationProperty Name="Category" Relationship="Self.ProductsCategoryIDFK" FromRole="Products" ToRole="Categories" />
-    <NavigationProperty Name="Comments" Relationship="Self.CommentsProductIDFk" FromRole="Products" ToRole="Comments" />
-    <NavigationProperty Name="Orders" Relationship="Self.OrdersProductIDFK" FromRole="Products" ToRole="Orders" />
     <NavigationProperty Name="Producer" Relationship="Self.ProductsProdcerIDFK" FromRole="Products" ToRole="Producers" />
-    <NavigationProperty Name="Rates" Relationship="Self.RatesProductIDFK" FromRole="Products" ToRole="Rates" />
+    <NavigationProperty Name="ProductsOfOrders" Relationship="Self.ProductsOfOrderProductIDFK" FromRole="Products" ToRole="ProductsOfOrder" />
     <NavigationProperty Name="SpecificationValues" Relationship="Self.HasSpecification" FromRole="Products" ToRole="SpecificationValues" />
+  </EntityType>
+  <EntityType Name="ProductsOfOrder">
+    <Key>
+      <PropertyRef Name="OrderID" />
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="OrderID" Type="Int32" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="amount" Type="Int32" />
+    <NavigationProperty Name="Order" Relationship="Self.ProductsOfOrderOrderIDFK" FromRole="ProductsOfOrder" ToRole="Orders" />
+    <NavigationProperty Name="Product" Relationship="Self.ProductsOfOrderProductIDFK" FromRole="ProductsOfOrder" ToRole="Products" />
   </EntityType>
   <EntityType Name="ProductSpecification">
     <Key>
@@ -122,17 +118,6 @@
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="SpecificationValues" Relationship="Self.SpecificationValuesSpecificationIDFK" FromRole="ProductSpecifications" ToRole="SpecificationValues" />
   </EntityType>
-  <EntityType Name="Rate">
-    <Key>
-      <PropertyRef Name="ProductID" />
-      <PropertyRef Name="CustomerID" />
-    </Key>
-    <Property Name="ProductID" Type="Int32" Nullable="false" />
-    <Property Name="CustomerID" Type="Int32" Nullable="false" />
-    <Property Name="starts" Type="Int32" />
-    <NavigationProperty Name="Customer" Relationship="Self.RatesCustomerIDFK" FromRole="Rates" ToRole="Customers" />
-    <NavigationProperty Name="Product" Relationship="Self.RatesProductIDFK" FromRole="Rates" ToRole="Products" />
-  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="RoleID" />
@@ -140,7 +125,7 @@
     <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Descriptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Accounts" Relationship="Self.FK__Accounts__hasRol__2E1BDC42" FromRole="Roles" ToRole="Accounts" />
+    <NavigationProperty Name="Accounts" Relationship="Self.FK__Accounts__hasRol__2F10007B" FromRole="Roles" ToRole="Accounts" />
   </EntityType>
   <EntityType Name="SpecificationValue">
     <Key>
@@ -182,7 +167,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Accounts__hasRol__2E1BDC42">
+  <Association Name="FK__Accounts__hasRol__2F10007B">
     <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
     <End Role="Accounts" Type="Self.Account" Multiplicity="*" />
     <ReferentialConstraint>
@@ -242,31 +227,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="CommentsCustomerIDFk">
-    <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
-    <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Customers">
-        <PropertyRef Name="CustomerID" />
-      </Principal>
-      <Dependent Role="Comments">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="CommentsProductIDFk">
-    <End Role="Products" Type="Self.Product" Multiplicity="1" />
-    <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="Comments">
-        <PropertyRef Name="ProductID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="OrdersCustomerIDFK">
+  <Association Name="OrderCustomerIDFK">
     <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
     <End Role="Orders" Type="Self.Order" Multiplicity="*" />
     <ReferentialConstraint>
@@ -278,27 +239,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="RatesCustomerIDFK">
-    <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
-    <End Role="Rates" Type="Self.Rate" Multiplicity="*" />
+  <Association Name="ProductsOfOrderOrderIDFK">
+    <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+    <End Role="ProductsOfOrder" Type="Self.ProductsOfOrder" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Customers">
-        <PropertyRef Name="CustomerID" />
+      <Principal Role="Orders">
+        <PropertyRef Name="OrderID" />
       </Principal>
-      <Dependent Role="Rates">
-        <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="OrdersProductIDFK">
-    <End Role="Products" Type="Self.Product" Multiplicity="1" />
-    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Products">
-        <PropertyRef Name="ProductID" />
-      </Principal>
-      <Dependent Role="Orders">
-        <PropertyRef Name="ProductID" />
+      <Dependent Role="ProductsOfOrder">
+        <PropertyRef Name="OrderID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -314,14 +263,14 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="RatesProductIDFK">
+  <Association Name="ProductsOfOrderProductIDFK">
     <End Role="Products" Type="Self.Product" Multiplicity="1" />
-    <End Role="Rates" Type="Self.Rate" Multiplicity="*" />
+    <End Role="ProductsOfOrder" Type="Self.ProductsOfOrder" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Products">
         <PropertyRef Name="ProductID" />
       </Principal>
-      <Dependent Role="Rates">
+      <Dependent Role="ProductsOfOrder">
         <PropertyRef Name="ProductID" />
       </Dependent>
     </ReferentialConstraint>
@@ -347,13 +296,12 @@
     <EntitySet Name="AvatarOfProducts" EntityType="Self.AvatarOfProduct" />
     <EntitySet Name="Carts" EntityType="Self.Cart" />
     <EntitySet Name="Categories" EntityType="Self.Category" />
-    <EntitySet Name="Comments" EntityType="Self.Comment" />
     <EntitySet Name="Customers" EntityType="Self.Customer" />
     <EntitySet Name="Orders" EntityType="Self.Order" />
     <EntitySet Name="Producers" EntityType="Self.Producer" />
     <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="ProductsOfOrders" EntityType="Self.ProductsOfOrder" />
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecification" />
-    <EntitySet Name="Rates" EntityType="Self.Rate" />
     <EntitySet Name="Roles" EntityType="Self.Role" />
     <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValue" />
     <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" />
@@ -362,7 +310,7 @@
       <End Role="Accounts" EntitySet="Accounts" />
       <End Role="Customers" EntitySet="Customers" />
     </AssociationSet>
-    <AssociationSet Name="FK__Accounts__hasRol__2E1BDC42" Association="Self.FK__Accounts__hasRol__2E1BDC42">
+    <AssociationSet Name="FK__Accounts__hasRol__2F10007B" Association="Self.FK__Accounts__hasRol__2F10007B">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Accounts" EntitySet="Accounts" />
     </AssociationSet>
@@ -382,33 +330,21 @@
       <End Role="Categories" EntitySet="Categories" />
       <End Role="Products" EntitySet="Products" />
     </AssociationSet>
-    <AssociationSet Name="CommentsCustomerIDFk" Association="Self.CommentsCustomerIDFk">
-      <End Role="Customers" EntitySet="Customers" />
-      <End Role="Comments" EntitySet="Comments" />
-    </AssociationSet>
-    <AssociationSet Name="CommentsProductIDFk" Association="Self.CommentsProductIDFk">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="Comments" EntitySet="Comments" />
-    </AssociationSet>
-    <AssociationSet Name="OrdersCustomerIDFK" Association="Self.OrdersCustomerIDFK">
+    <AssociationSet Name="OrderCustomerIDFK" Association="Self.OrderCustomerIDFK">
       <End Role="Customers" EntitySet="Customers" />
       <End Role="Orders" EntitySet="Orders" />
     </AssociationSet>
-    <AssociationSet Name="RatesCustomerIDFK" Association="Self.RatesCustomerIDFK">
-      <End Role="Customers" EntitySet="Customers" />
-      <End Role="Rates" EntitySet="Rates" />
-    </AssociationSet>
-    <AssociationSet Name="OrdersProductIDFK" Association="Self.OrdersProductIDFK">
-      <End Role="Products" EntitySet="Products" />
+    <AssociationSet Name="ProductsOfOrderOrderIDFK" Association="Self.ProductsOfOrderOrderIDFK">
       <End Role="Orders" EntitySet="Orders" />
+      <End Role="ProductsOfOrder" EntitySet="ProductsOfOrders" />
     </AssociationSet>
     <AssociationSet Name="ProductsProdcerIDFK" Association="Self.ProductsProdcerIDFK">
       <End Role="Producers" EntitySet="Producers" />
       <End Role="Products" EntitySet="Products" />
     </AssociationSet>
-    <AssociationSet Name="RatesProductIDFK" Association="Self.RatesProductIDFK">
+    <AssociationSet Name="ProductsOfOrderProductIDFK" Association="Self.ProductsOfOrderProductIDFK">
       <End Role="Products" EntitySet="Products" />
-      <End Role="Rates" EntitySet="Rates" />
+      <End Role="ProductsOfOrder" EntitySet="ProductsOfOrders" />
     </AssociationSet>
     <AssociationSet Name="SpecificationValuesSpecificationIDFK" Association="Self.SpecificationValuesSpecificationIDFK">
       <End Role="ProductSpecifications" EntitySet="ProductSpecifications" />
@@ -420,6 +356,9 @@
     </AssociationSet>
     <FunctionImport Name="GetSpecifications" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.GetSpecifications_Result)">
       <Parameter Name="productID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="SplitSpecificationValuesString" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result)">
+      <Parameter Name="string" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="AddNewProduct">
       <Parameter Name="name" Mode="In" Type="String" />
@@ -437,6 +376,10 @@
       <Parameter Name="ProductID" Mode="In" Type="Int32" />
       <Parameter Name="SpecificationID" Mode="In" Type="Int32" />
       <Parameter Name="Value" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteProduct">
+      <Parameter Name="productID" Mode="In" Type="Int32" />
+      <Parameter Name="isSuccess" Mode="InOut" Type="Boolean" />
     </FunctionImport>
     <FunctionImport Name="sp_Account_Login" ReturnType="Collection(Int32)">
       <Parameter Name="username" Mode="In" Type="String" />
@@ -465,13 +408,6 @@
     </FunctionImport>
     <FunctionImport Name="Sp_Product_List_Of_Producer" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result)">
       <Parameter Name="producerID" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="SplitSpecificationValuesString" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result)">
-      <Parameter Name="string" Mode="In" Type="String" />
-    </FunctionImport>
-    <FunctionImport Name="DeleteProduct">
-      <Parameter Name="productID" Mode="In" Type="Int32" />
-      <Parameter Name="isSuccess" Mode="InOut" Type="Boolean" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="Sp_Catagory_Details_Result">
@@ -529,9 +465,5 @@
     <Property Type="String" Name="Image" Nullable="true" />
     <Property Type="Int32" Name="ProducerID" Nullable="false" />
     <Property Type="Int32" Name="CategoryID" Nullable="false" />
-  </ComplexType>
-  <ComplexType Name="SplitSpecificationValuesString_Result">
-    <Property Type="Int32" Name="specificationID" Nullable="true" />
-    <Property Type="String" Name="value" Nullable="true" MaxLength="50" />
   </ComplexType>
 </Schema>

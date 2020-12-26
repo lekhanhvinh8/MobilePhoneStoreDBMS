@@ -42,6 +42,12 @@ create table AvatarOfProduct(
 	imageFile image not null,
 );
 go
+create table Orders(
+	OrderID int identity(1,1) not null,
+	OrderTime datetime not null,
+	status int,
+);
+go
 create table Roles(
 RoleID int identity primary key,
 RoleName nvarchar(50) not null,
@@ -59,7 +65,7 @@ hasRole int references Roles(RoleID)
 go
 alter table Products add ProducerID int not null;
 alter table Products add CategoryID int not null;
-
+alter table Orders add CustomerID int not null;
 go
 alter table Producers add constraint ProducersPK primary key(ProducerID);
 alter table Categories add constraint CategoriesPK primary key(CategoryID);
@@ -67,35 +73,14 @@ alter table Products add constraint ProductsPK primary key(ProductID);
 alter table Customers add constraint CustomerPK primary key(CustomerID);
 alter table ProductSpecifications add constraint ProductSpecificationsPK primary key(SpecificationID);
 alter table AvatarOfProduct add constraint AvatarOfProductPK primary key(ProductID);
+alter table Orders add constraint OrderPK primary key(OrderID);
 go
 alter table Products add constraint ProductsProdcerIDFK foreign key(ProducerID) references Producers(ProducerID);
 alter table Products add constraint ProductsCategoryIDFK foreign key(CategoryID) references Categories(CategoryID);
 alter table AvatarOfProduct add constraint AvatarOfProductProductIDFK foreign key(ProductID) references Products(ProductID);
 alter table Customers add constraint CustomersAccIDFK foreign key(CustomerID) references Accounts(AccID);
-
+alter table Orders add constraint OrderCustomerIDFK foreign key(CustomerID) references Customers(CustomerID);
 --create weak entity tables
-go
-create table Comments(
-	CustomerID int not null,
-	ProductID int not null,
-	CommentTime datetime not null,
-	Content nvarchar(max),
-
-	constraint CommentsPK primary key(CustomerID, ProductID, CommentTime),
-	constraint CommentsCustomerIDFk foreign key (CustomerID) references Customers (CustomerID),
-	constraint CommentsProductIDFk foreign key (ProductID) references Products (ProductID), 
-);
-go
-create table Orders(
-	CustomerID int not null,
-	ProductID int not null,
-	OrderTime datetime not null,
-	amount int,
-
-	constraint OrdersPK primary key (ProductID, CustomerID, OrderTime),
-	constraint OrdersCustomerIDFK foreign key(CustomerID) references Customers(CustomerID),
-	constraint OrdersProductIDFK foreign key(ProductID) references Products(ProductID),
-);
 go
 create table SpecificationValues(
 	SpecificationID int not null,
@@ -119,21 +104,22 @@ go
 create table Carts(
 	ProductID int not null,
 	CustomerID int not null,
-	amount int
+	amount int,
 	
 	constraint CartsPK primary key(ProductID, CustomerID),
 	constraint CartsProductIDFK foreign key(ProductID) references Products(ProductID),
 	constraint CartsCustomerIDFK foreign key(CustomerID) references Customers(CustomerID),
 );
 go
-create table Rates(
+create table ProductsOfOrder(
+	OrderID int not null,
 	ProductID int not null,
-	CustomerID int not null,
-	starts int,
-	constraint RatesPK primary key(ProductID, CustomerID),
-	constraint RatesCustomerIDFK foreign key(CustomerID) references Customers(CustomerID),
-	constraint RatesProductIDFK foreign key(ProductID) references Products(ProductID),
-);
+	amount int,
+
+	constraint ProductOfOrderPK primary key(OrderID, ProductID),
+	constraint ProductsOfOrderOrderIDFK foreign key(OrderID) references Orders(OrderID),
+	constraint ProductsOfOrderProductIDFK foreign key(ProductID) references Products(ProductID),
+)
 go
 --add constraints
 	--Products table
@@ -141,8 +127,13 @@ go
 	alter table Products add constraint products_quantity_greater_than_0 check(Quantity >= 0);
 	alter table Products add constraint products_status_default_value default 0 for Status;
 	alter table Products add constraint products_price_greater_than_0 check(Price >= 0);
-	alter table Products add constraint Products_name_unique unique(Name);
+	alter table Products add constraint products_name_unique unique(Name);
 
+	alter table Orders add constraint orders_customerID_orderTime_unique unique(CustomerID, OrderTime);
+	alter table Orders add constraint orders_orderTime_default_value default CAST(getdate() AS datetime) for orderTime;
+
+	alter table Carts add constraint Carts_amount_default_value default 1 for amount;
+	alter table ProductsOfOrder add constraint ProductsOfOrder_amount_default_value default 1 for amount;
 	--ProductSpecifications table
 	alter table ProductSpecifications add constraint productSpecifications_name_unique unique(Name)
 
@@ -159,23 +150,167 @@ from Products p inner join HasSpecification h on p.ProductID = h.ProductID
 					inner join SpecificationValues s on h.SpecificationID = s.SpecificationID and h.Value = s.Value
 					inner join ProductSpecifications ps on s.SpecificationID = ps.SpecificationID;
 					
-					
 ---
 go
 create view view_Category_List
 as
 select * from Categories
----
+--- 
 --add triggers
+go 
+create trigger Carts_After_Insert_CheckConstrainAmountOfProduct on Carts after insert as
+begin 
+	--Preventing adding invalid number of products to cart
+
+	declare @productId int;
+	declare @amount int;
+
+	select @productId = inserted.ProductID, @amount = inserted.amount from inserted;
+
+	if(@amount > (
+					select Products.Quantity
+					from Products
+					where Products.ProductID = @productId
+				 ))
+	begin
+		rollback;
+	end
+end
+
 go
-create trigger Orders_After_Insert_DeleteCart on Carts after delete as
+create trigger Carts_After_Update_CheckContraintAmountOfProduct on Carts after update as
 begin
-	if(exists (select * from deleted))
-	insert into Orders(CustomerID, ProductID, OrderTime, amount) values ((select CustomerID from deleted), 
-																		 (select ProductID from deleted),
-																		 (select GETDATE()),
-																		 (select amount from deleted));
+	--Preventing updating invalid number of products to cart
+
+	declare @productID int;
+	declare @amountIncreased int;
+	declare @quantityOfProduct int;
+
+	select @productID = inserted.ProductID
+	from inserted;
+
+	select @amountIncreased = inserted.amount - deleted.amount
+	from inserted, deleted;
+
+	select @quantityOfProduct = Products.Quantity 
+	from Products 
+	where Products.ProductID = @productID;
+	
+	if(( @quantityOfProduct - @amountIncreased) <= 0)
+	begin
+		rollback;
+	end
 end;
+
+go
+create trigger Orders_After_Insert_DeleteCart on Orders after insert as
+begin
+	--Trigger fires when inserting an order(customerID) values(value)
+
+	--Preventing creating an invalid order(do not have any product in cart of specific customer)
+	--After inserting an order --> Adding products to order, delete all products in cart
+
+	--begin transaction; --no need, because All DML statements are executed within a transaction. 
+						 --The DML within the trigger will use the transaction context of the statement 
+						 --that fired the trigger so all modifications, inside the trigger and out, are a single atomic operation.
+						 --Any change that a trigger does is committed with the transaction that fired the trigger.
+	declare @orderID int;
+	declare @customerID int;
+
+	select @orderID = inserted.OrderID, @customerID = inserted.CustomerID 
+	from inserted;
+
+	if(not exists(select * from Carts where Carts.CustomerID = @customerID))
+	begin
+		rollback; --@@trancount here = 1, rollback the entire transaction.
+		return;
+	end
+
+	--insert all products in carts to ProductsOfOrder
+		--insert into ProductsOfOrder(OrderID, ProductID, amount) select @orderID, Carts.ProductID, Carts.amount from Carts where Carts.CustomerID = @customerID;
+		--the statement above fire trigger on just 1 time in ProductsOfOrder tables
+
+	declare @tableToLoop table(id int identity(0,1), productID int, amount int);
+	insert into @tableToLoop(productID, amount) select Carts.ProductID, Carts.amount from Carts where Carts.CustomerID = @customerID;
+
+	declare @i int;
+	declare @n int;
+	set @i = 0;
+	set @n = ( select count(id) from @tableToLoop); 
+
+	while (@i < @n)
+	begin
+		insert into ProductsOfOrder(OrderID, ProductID, amount) values (@orderID
+																		, (
+																			select t.productID
+																			from @tableToLoop t
+																			where t.id = @i
+																		  )
+																		, (
+																			select t.amount
+																			from @tableToLoop t
+																			where t.id = @i
+																		  )
+																	   );
+		
+		set @i = @i + 1;
+	end
+
+	delete from Carts where Carts.CustomerID = @customerID;
+	--commit; can't commit
+end;
+
+go
+create trigger OrdersOfProduct_After_Insert_CheckConstraintAmountOfProduct on ProductsOfOrder after insert as
+begin
+	--Trigger fires when inserting a product to a specific order
+
+	--Preventing inserting an invalid amount of products to an order
+	--After inserting a product to a specific order --> Update quantity of this product
+
+	declare @productID int;
+	declare @amount int;
+	declare @productQuantity int;
+	
+	select @productID = inserted.ProductID, @amount = inserted.amount
+	from inserted;
+
+	--print ' ' + convert(varchar(4), @productID) + ' ' + convert(varchar(4), @amount) + ' ';
+
+	select @productQuantity = Products.Quantity
+	from Products
+	where Products.ProductID = @productID;
+
+	if(@amount > @productQuantity)
+	begin
+		rollback;
+		return;
+	end
+
+	update Products
+	set Products.Quantity = Products.Quantity - @amount
+	where Products.ProductID = @productID;
+	
+end;
+
+go
+create trigger Products_After_Insert_Update_DisableIfQuantityEqualZero on Products after insert, update  as
+begin
+	if(Update(Quantity))
+	begin
+		declare @productID int;
+
+		select @productID = inserted.ProductID from inserted;
+
+		if((select inserted.Quantity from inserted) = 0)
+		begin
+			update Products
+			set Status = 0
+			where ProductID = @productID;
+		end
+	end
+end
+
 --add Functions
 go
 create function GetSpecifications(@productID int)
@@ -432,7 +567,7 @@ begin
 		set @res = 0
 	else
 	begin
-		insert into Accounts values(@username, @password, 2)
+		insert into Accounts values(@username, @password, dbo.GetRoleId('customer'))
 		select @acc = AccID from Accounts where Username = @username
 		insert into Customers values(@acc, @name, @PhoneNumber, @Email)
 		set @res = 1
@@ -440,8 +575,6 @@ begin
 	select @res
 end;
 ---
-
-
 
 go
 --inserting some initial values
@@ -481,4 +614,6 @@ insert into Roles(RoleName, Descriptions) values('customer', 'nguoi dung');
 
 insert into Accounts values('admin','gFuYE2Bpl7A=', dbo.GetRoleId('admin'));
 insert into Accounts values('seller','gFuYE2Bpl7A=', dbo.GetRoleId('seller'));
-insert into Accounts values('customer', 'gFuYE2Bpl7A=', dbo.GetRoleId('customer')); 
+
+exec sp_Account_Register 'Vinh', '0789612482', 'abc@gmail.com', 'customer', 'gFuYE2Bpl7A=';
+exec sp_Account_Register 'Vinh', '0789612482', 'abc@gmail.com', 'customer1', 'gFuYE2Bpl7A=';

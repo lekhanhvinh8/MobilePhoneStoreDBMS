@@ -18,9 +18,7 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         public Customer()
         {
             this.Carts = new HashSet<Cart>();
-            this.Comments = new HashSet<Comment>();
             this.Orders = new HashSet<Order>();
-            this.Rates = new HashSet<Rate>();
         }
     
         public int CustomerID { get; set; }
@@ -32,10 +30,6 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Carts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Comment> Comments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rate> Rates { get; set; }
     }
 }

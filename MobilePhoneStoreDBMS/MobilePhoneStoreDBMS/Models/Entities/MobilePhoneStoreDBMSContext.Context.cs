@@ -31,13 +31,12 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         public virtual DbSet<AvatarOfProduct> AvatarOfProducts { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Producer> Producers { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductsOfOrder> ProductsOfOrders { get; set; }
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
-        public virtual DbSet<Rate> Rates { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SpecificationValue> SpecificationValues { get; set; }
         public virtual DbSet<Specifications_of_all_product> Specifications_of_all_product { get; set; }
@@ -51,6 +50,16 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("productID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSpecifications_Result>("[MobilePhoneStoreDBMSEntities].[GetSpecifications](@productID)", productIDParameter);
+        }
+    
+        [DbFunction("MobilePhoneStoreDBMSEntities", "SplitSpecificationValuesString")]
+        public virtual IQueryable<SplitSpecificationValuesString_Result> SplitSpecificationValuesString(string @string)
+        {
+            var stringParameter = @string != null ?
+                new ObjectParameter("string", @string) :
+                new ObjectParameter("string", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitSpecificationValuesString_Result>("[MobilePhoneStoreDBMSEntities].[SplitSpecificationValuesString](@string)", stringParameter);
         }
     
         public virtual int AddNewProduct(string name, string description, Nullable<int> quantity, Nullable<bool> status, Nullable<int> price, Nullable<int> producerID, Nullable<int> categoryID, byte[] imageFile, string specificationValuesString, ObjectParameter isSuccess)
@@ -109,6 +118,15 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("Value", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddNewSpecificationToAProduct", productIDParameter, specificationIDParameter, valueParameter);
+        }
+    
+        public virtual int DeleteProduct(Nullable<int> productID, ObjectParameter isSuccess)
+        {
+            var productIDParameter = productID.HasValue ?
+                new ObjectParameter("productID", productID) :
+                new ObjectParameter("productID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteProduct", productIDParameter, isSuccess);
         }
     
         public virtual ObjectResult<Nullable<int>> sp_Account_Login(string username, string password)
@@ -202,25 +220,6 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("producerID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Product_List_Of_Producer_Result>("Sp_Product_List_Of_Producer", producerIDParameter);
-        }
-    
-        [DbFunction("MobilePhoneStoreDBMSEntities", "SplitSpecificationValuesString")]
-        public virtual IQueryable<SplitSpecificationValuesString_Result> SplitSpecificationValuesString(string @string)
-        {
-            var stringParameter = @string != null ?
-                new ObjectParameter("string", @string) :
-                new ObjectParameter("string", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitSpecificationValuesString_Result>("[MobilePhoneStoreDBMSEntities].[SplitSpecificationValuesString](@string)", stringParameter);
-        }
-    
-        public virtual int DeleteProduct(Nullable<int> productID, ObjectParameter isSuccess)
-        {
-            var productIDParameter = productID.HasValue ?
-                new ObjectParameter("productID", productID) :
-                new ObjectParameter("productID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteProduct", productIDParameter, isSuccess);
         }
     }
 }

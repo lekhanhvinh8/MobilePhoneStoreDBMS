@@ -12,13 +12,13 @@ namespace MobilePhoneStoreDBMS.Models.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class Rate
+    public partial class ProductsOfOrder
     {
+        public int OrderID { get; set; }
         public int ProductID { get; set; }
-        public int CustomerID { get; set; }
-        public Nullable<int> starts { get; set; }
+        public Nullable<int> amount { get; set; }
     
-        public virtual Customer Customer { get; set; }
+        public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
     }
 }

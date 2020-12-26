@@ -36,16 +36,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Comments">
-      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Comment">
-        <MappingFragment StoreEntitySet="Comments">
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-          <ScalarProperty Name="CommentTime" ColumnName="CommentTime" />
-          <ScalarProperty Name="Content" ColumnName="Content" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Customers">
       <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Customer">
         <MappingFragment StoreEntitySet="Customers">
@@ -59,10 +49,10 @@
     <EntitySetMapping Name="Orders">
       <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Order">
         <MappingFragment StoreEntitySet="Orders">
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
           <ScalarProperty Name="OrderTime" ColumnName="OrderTime" />
-          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -89,21 +79,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ProductsOfOrders">
+      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.ProductsOfOrder">
+        <MappingFragment StoreEntitySet="ProductsOfOrder">
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="ProductSpecifications">
       <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.ProductSpecification">
         <MappingFragment StoreEntitySet="ProductSpecifications">
           <ScalarProperty Name="SpecificationID" ColumnName="SpecificationID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Rates">
-      <EntityTypeMapping TypeName="MobilePhoneStoreDBMSModel.Rate">
-        <MappingFragment StoreEntitySet="Rates">
-          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="starts" ColumnName="starts" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -159,8 +149,17 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionName="MobilePhoneStoreDBMSModel.Store.SplitSpecificationValuesString" FunctionImportName="SplitSpecificationValuesString">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result">
+          <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+          <ScalarProperty Name="value" ColumnName="value" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="AddNewProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewProduct" />
     <FunctionImportMapping FunctionImportName="AddNewSpecificationToAProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewSpecificationToAProduct" />
+    <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.DeleteProduct" />
     <FunctionImportMapping FunctionImportName="sp_Account_Login" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Login" />
     <FunctionImportMapping FunctionImportName="sp_Account_Register" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Register" />
     <FunctionImportMapping FunctionImportName="Sp_Catagory_Details" FunctionName="MobilePhoneStoreDBMSModel.Store.Sp_Catagory_Details">
@@ -247,14 +246,5 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="SplitSpecificationValuesString" FunctionName="MobilePhoneStoreDBMSModel.Store.SplitSpecificationValuesString">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result">
-          <ScalarProperty Name="specificationID" ColumnName="specificationID" />
-          <ScalarProperty Name="value" ColumnName="value" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.DeleteProduct" />
   </EntityContainerMapping>
 </Mapping>

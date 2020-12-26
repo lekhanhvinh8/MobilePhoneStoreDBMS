@@ -1,0 +1,98 @@
+﻿@model MobilePhoneStoreDBMS.Models.ViewModels.Customer.CustomerViewModel 
+@using MobilePhoneStoreDBMS.Models.Consts
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"/>
+    <link rel="stylesheet"/ type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css">
+</head>
+<body>
+    <header>
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    @Html.ActionLink("Home", "Index", "HomeScreen", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <div class="nav navbar-nav navbar-right">
+                        <img src="~/Content/resources/images/adminIcon.png" style="height: 50px;" />
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>@Html.ActionLink("Log out", "Logout", "Account", routeValues: new { sessionName = SessionNames.CustomerID }, htmlAttributes: new { id = "logoutLink" })</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>@Model.customerID</h1>
+
+        <table id="table-orders" class="table table-bordered">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            var customerID = @Model.customerID;
+
+            $.ajax({
+                url: "/api/Orders/GetList?customerID=" + customerID,
+                method: "Get",
+                success: function (response) {
+                    console.log(response[0].orderTime);
+
+                    $.ajax({
+                        url: "/api/Orders/GetList?customerID=" + customerID + "&orderTime=" + response[0].orderTime,
+                        method: "Get",
+                        success: function (response) {
+                            console.log(response);
+                        },
+                    })
+                },
+
+            });
+
+
+            var table = $("#table-orders").dataTable({
+                ajax: {
+                    url: "/api/Orders?customerID=" + customerID,
+                    dataSrc: "",
+                },
+                columns: [
+                    {
+                        title: "Product's ID",
+                        data: "orderTime",
+                        width: "10%",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                ],
+
+
+            });
+
+        });
+
+    </script>
+</body>
+</html>

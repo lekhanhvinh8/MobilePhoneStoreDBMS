@@ -14,12 +14,19 @@ namespace MobilePhoneStoreDBMS.Models.Entities
     
     public partial class Order
     {
-        public int CustomerID { get; set; }
-        public int ProductID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Order()
+        {
+            this.ProductsOfOrders = new HashSet<ProductsOfOrder>();
+        }
+    
+        public int OrderID { get; set; }
         public System.DateTime OrderTime { get; set; }
-        public Nullable<int> amount { get; set; }
+        public Nullable<int> status { get; set; }
+        public int CustomerID { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual Product Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductsOfOrder> ProductsOfOrders { get; set; }
     }
 }

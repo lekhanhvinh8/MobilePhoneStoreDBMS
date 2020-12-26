@@ -7,7 +7,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MobilePhoneStoreDBMS.Models.Consts;
-
+using System.Web.Http;
+using System.Net;
 namespace MobilePhoneStoreDBMS.Controllers
 {
     public class ShoppingCartController : Controller
@@ -81,10 +82,24 @@ namespace MobilePhoneStoreDBMS.Controllers
             }
             _db.SaveChanges();
 
-
             return RedirectToAction("ShowToCart", "ShoppingCart");
         }
-       
+
+        public ActionResult CreateAnOrder()
+        {
+            int customerID = Convert.ToInt32(Session[SessionNames.CustomerID]);
+
+            var cart = this._db.Carts.Where(c => c.CustomerID == customerID).ToList();
+
+            if (cart.Count() == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            int noOfRowEffected = this._db.Database.ExecuteSqlCommand("Insert into Orders(CustomerID) Values(" + customerID + ")");
+
+            return RedirectToAction("ShowToCart", "ShoppingCart");
+
+        }
+
         //
         public PartialViewResult BagCart()
         {
