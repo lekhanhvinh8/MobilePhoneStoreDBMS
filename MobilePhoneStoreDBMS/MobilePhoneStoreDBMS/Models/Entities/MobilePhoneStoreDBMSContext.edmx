@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MobilePhoneStoreDBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Accounts">
           <Key>
             <PropertyRef Name="AccID" />
@@ -348,10 +348,29 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="AddNewProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+          <Parameter Name="status" Type="bit" Mode="In" />
+          <Parameter Name="price" Type="int" Mode="In" />
+          <Parameter Name="producerID" Type="int" Mode="In" />
+          <Parameter Name="categoryID" Type="int" Mode="In" />
+          <Parameter Name="imageFile" Type="image" Mode="In" />
+          <Parameter Name="specificationValuesString" Type="nvarchar" Mode="In" />
+          <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
+        </Function>
         <Function Name="AddNewSpecificationToAProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProductID" Type="int" Mode="In" />
           <Parameter Name="SpecificationID" Type="int" Mode="In" />
           <Parameter Name="Value" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="DeleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="productID" Type="int" Mode="In" />
+          <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
+        </Function>
+        <Function Name="GetRoleId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="roleName" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetSpecifications" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="productID" Type="int" Mode="In" />
@@ -392,6 +411,17 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
         </Function>
         <Function Name="Sp_Product_List_Of_Producer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="producerID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SplitSpecificationValuesString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="string" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="specificationID" Type="int" />
+                <Property Name="value" Type="nvarchar" MaxLength="50" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
         </Function>
         <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
           <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
@@ -486,8 +516,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
             <End Role="SpecificationValues" EntitySet="SpecificationValues" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MobilePhoneStoreDBMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -910,7 +939,19 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <FunctionImport Name="GetSpecifications" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.GetSpecifications_Result)">
-            <Parameter Name="productID" Mode="In" Type="Int32" />
+          <Parameter Name="productID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddNewProduct">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="description" Mode="In" Type="String" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+            <Parameter Name="status" Mode="In" Type="Boolean" />
+            <Parameter Name="price" Mode="In" Type="Int32" />
+            <Parameter Name="producerID" Mode="In" Type="Int32" />
+            <Parameter Name="categoryID" Mode="In" Type="Int32" />
+            <Parameter Name="imageFile" Mode="In" Type="Binary" />
+            <Parameter Name="specificationValuesString" Mode="In" Type="String" />
+            <Parameter Name="isSuccess" Mode="InOut" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="AddNewSpecificationToAProduct">
             <Parameter Name="ProductID" Mode="In" Type="Int32" />
@@ -929,21 +970,28 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
             <Parameter Name="password" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Sp_Catagory_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Catagory_Details_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sp_Producer_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Producer_Details_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sp_Producer_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Producer_List_Result)" />
           <FunctionImport Name="Sp_Product_Details" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_Details_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sp_Product_List" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Result)" />
           <FunctionImport Name="Sp_Product_List_Of_Category" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Category_Result)">
-            <Parameter Name="categoryID" Mode="In" Type="Int32" />
+          <Parameter Name="categoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sp_Product_List_Of_Producer" ReturnType="Collection(MobilePhoneStoreDBMSModel.Sp_Product_List_Of_Producer_Result)">
-            <Parameter Name="producerID" Mode="In" Type="Int32" />
+          <Parameter Name="producerID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SplitSpecificationValuesString" IsComposable="true" ReturnType="Collection(MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result)">
+          <Parameter Name="string" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteProduct">
+            <Parameter Name="productID" Mode="In" Type="Int32" />
+            <Parameter Name="isSuccess" Mode="InOut" Type="Boolean" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="Sp_Catagory_Details_Result">
@@ -1001,6 +1049,10 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
           <Property Type="String" Name="Image" Nullable="true" />
           <Property Type="Int32" Name="ProducerID" Nullable="false" />
           <Property Type="Int32" Name="CategoryID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SplitSpecificationValuesString_Result">
+          <Property Type="Int32" Name="specificationID" Nullable="true" />
+          <Property Type="String" Name="value" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1166,6 +1218,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AddNewProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewProduct" />
           <FunctionImportMapping FunctionImportName="AddNewSpecificationToAProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewSpecificationToAProduct" />
           <FunctionImportMapping FunctionImportName="sp_Account_Login" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Login" />
           <FunctionImportMapping FunctionImportName="sp_Account_Register" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Register" />
@@ -1253,6 +1306,15 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SplitSpecificationValuesString" FunctionName="MobilePhoneStoreDBMSModel.Store.SplitSpecificationValuesString">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result">
+                <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+                <ScalarProperty Name="value" ColumnName="value" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.DeleteProduct" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

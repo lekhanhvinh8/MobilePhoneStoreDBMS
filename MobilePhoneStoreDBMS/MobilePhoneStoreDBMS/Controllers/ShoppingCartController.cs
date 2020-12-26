@@ -19,7 +19,7 @@ namespace MobilePhoneStoreDBMS.Controllers
         {
             if (Session[SessionNames.CustomerID] == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { RoleId = RoleIds.Customer });
             }
 
             int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
@@ -70,19 +70,34 @@ namespace MobilePhoneStoreDBMS.Controllers
             _db.SaveChanges();
             return RedirectToAction("ShowToCart", "ShoppingCart");
         }
+        public ActionResult RemoveAllCart()
+        {
+            int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
+            List<Cart> cart = _db.Carts.Where(x => x.CustomerID == userid).ToList();
+            foreach (var i in cart)
+            {
+                _db.Carts.Remove(i);
+                
+            }
+            _db.SaveChanges();
+
+
+            return RedirectToAction("ShowToCart", "ShoppingCart");
+        }
+       
         //
         public PartialViewResult BagCart()
         {
-            //int _t_item = 0;
-            //Cart_ cart = Session["cart"] as Cart_;
-            //if (cart != null)
-            //{
-            //    _t_item = cart.Total_Quantity();
-            //}
-            //ViewBag.infoCart = _t_item;
+            if (Session[SessionNames.CustomerID] != null)
+            {
+                int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
+                var amount = (from i in _db.Carts
+                              where i.CustomerID == userid
+                              select (int?)i.amount).Sum() ?? 0;
+                ViewBag.infoCart = amount;
+            }
             return PartialView("BagCart");
         }
-        //
 
     }
 }

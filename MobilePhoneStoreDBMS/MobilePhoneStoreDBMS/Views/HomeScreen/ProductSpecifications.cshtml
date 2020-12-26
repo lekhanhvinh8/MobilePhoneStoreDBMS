@@ -1,12 +1,30 @@
 ﻿@{
-	var specification = new MobilePhoneStoreDBMS.Models.Entities.MobilePhoneStoreDBMSEntities().GetSpecifications(ViewBag.ProID);
+	var specifications = new MobilePhoneStoreDBMS.Models.Entities.MobilePhoneStoreDBMSEntities().GetSpecifications(ViewBag.ProID);
 }
 
 <div class="menu_body2">
-	@foreach (var item in specification)
-	{
-		<ul>
-			<li> @item.specification  @item.Value</li>
-		</ul>
-	}
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>Value</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			@foreach (var specification in specifications)
+			{
+				<tr>
+					<td>
+						@specification.specification
+					</td>
+					<td>
+						@specification.Value
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
 </div>

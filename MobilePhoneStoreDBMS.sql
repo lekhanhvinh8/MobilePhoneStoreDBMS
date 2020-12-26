@@ -141,8 +141,16 @@ go
 	alter table Products add constraint products_quantity_greater_than_0 check(Quantity >= 0);
 	alter table Products add constraint products_status_default_value default 0 for Status;
 	alter table Products add constraint products_price_greater_than_0 check(Price >= 0);
+	alter table Products add constraint Products_name_unique unique(Name);
 
-	--
+	--ProductSpecifications table
+	alter table ProductSpecifications add constraint productSpecifications_name_unique unique(Name)
+
+	--roles table
+	alter table Roles add constraint roles_roleName_unique unique(RoleName);
+
+	--Accounts table
+	alter table Accounts add constraint accounts_Username_unique unique(Username);
 --add views
 go
 create view Specifications_of_all_product as
@@ -168,12 +176,184 @@ begin
 																		 (select GETDATE()),
 																		 (select amount from deleted));
 end;
+--add Functions
+go
+create function GetSpecifications(@productID int)
+returns table as
+return
+	select p.Name as name, ps.Name as specification, s.Value as Value
+	from Products p inner join HasSpecification h on p.ProductID = h.ProductID
+					inner join SpecificationValues s on h.SpecificationID = s.SpecificationID and h.Value = s.Value
+					inner join ProductSpecifications ps on s.SpecificationID = ps.SpecificationID
+	where p.ProductID = @productID;
+
+go
+create function GetRoleId(@roleName nvarchar(50)) returns int as
+begin
+	declare @id int;
+
+	select @id = r.RoleID
+	from Roles r
+	where r.RoleName = @roleName
+
+	return @id;
+end;
+go 
+create function SplitSpecificationValuesString(@string nvarchar(2000)) 
+returns @table table(specificationID int, value nvarchar(50)) as
+begin
+	-- string input must be in format: "1,4GB|2,128GB|3,1 Sims..."
+	if(len(@string) = 0)
+	begin
+		return
+	end
+
+	Declare @Cnt int;
+	Set @Cnt = 1;
+
+	While (Charindex('|',@string)>0)
+	Begin
+		declare @substringleft nvarchar(max);
+		set @substringleft = Substring(@string,1,Charindex('|',@string)-1);
+		
+		declare @specificationID int;
+		declare @value nvarchar(max);
+
+		set @specificationID = cast(Substring(@substringleft,1,Charindex(',',@substringleft)-1) AS int);
+		set @value = Substring(@substringleft,Charindex(',',@substringleft) + 1, len(@substringleft));
+
+		Insert Into @table (specificationID, value) values (@specificationID, @value);
+
+		Set @string = Substring(@string, Charindex('|',@string) + 1, len(@string));
+
+		Set @Cnt = @Cnt + 1
+	End
+
+	set @specificationID = cast(Substring(@string,1,Charindex(',',@string)-1) AS int);
+	set @value = Substring(@string,Charindex(',',@string) + 1, len(@string));
+
+	Insert Into @table (specificationID, value) values (@specificationID, @value);
+
+	Return
+end;
 --add stored procedures
 go
 create procedure AddNewSpecificationToAProduct @ProductID int, @SpecificationID int, @Value nvarchar(max) as
 begin
 	Insert into HasSpecification Values (@ProductID, @SpecificationID, @Value);
 end;
+go
+create procedure AddNewProduct @name nvarchar(50)
+							   , @description nvarchar(max) = ''
+							   , @quantity int
+							   , @status bit
+							   , @price int
+							   , @producerID int
+							   , @categoryID int
+							   , @imageFile image
+							   , @specificationValuesString nvarchar(2000)
+							   , @isSuccess bit output as
+begin
+	set @isSuccess = 0;
+
+	set nocount on;
+    declare @trancount int;
+    set @trancount = @@trancount;
+    begin try
+        if @trancount = 0
+            begin transaction
+        else
+            save transaction usp_my_procedure_name;
+
+        -- Do the actual work here
+
+		insert into Products(Name, Description, Quantity, Status, Price, ProducerID, CategoryID) values(@name, @description, @quantity, @status, @price, @producerID, @categoryID);
+
+		declare @productID int;
+
+		select @productID = Products.ProductID
+		from Products
+		where Products.Name = @name
+
+		insert into AvatarOfProduct(productID, imageFile) values(@productID, @imageFile);
+
+		insert into HasSpecification(ProductID, SpecificationID, Value) select @productID, specificationID, value from dbo.SplitSpecificationValuesString(@specificationValuesString);
+
+		lbexit:
+        if @trancount = 0
+            commit;
+			set @isSuccess = 1;
+    end try
+    begin catch
+        declare @error int, @message varchar(4000), @xstate int;
+        select @error = ERROR_NUMBER(), @message = ERROR_MESSAGE(), @xstate = XACT_STATE();
+        if @xstate = -1
+            rollback;
+        if @xstate = 1 and @trancount = 0
+            rollback
+        if @xstate = 1 and @trancount > 0
+            rollback transaction usp_my_procedure_name;
+
+        --raiserror ('usp_my_procedure_name: %d: %s', 16, 1, @error, @message) ;
+    end catch
+end;
+go 
+create procedure DeleteProduct @productID int, @isSuccess bit output as
+begin
+	set @isSuccess = 0;
+
+	set nocount on;
+    declare @trancount int;
+    set @trancount = @@trancount;
+    begin try
+        if @trancount = 0
+            begin transaction
+        else
+            save transaction DeleteProduct;
+        -- Do the actual work here
+
+		--Check if the product and it's avatar is exist
+		if (not exists (
+						select *
+						from Products
+						where Products.ProductID = @productID
+						) or not exists (
+										select *
+										from AvatarOfProduct
+										where AvatarOfProduct.productID = @productID
+										))
+		begin
+			rollback; -- avoid return statment in try..catch and begin trans...commit... rollback
+			return; --return when @@trancout == 0, rollback statement decrements @@trancout to 0 (clear, ex: trancout 3: --> 0)
+		end
+
+		--Delete avatar
+		delete from AvatarOfProduct where AvatarOfProduct.productID = @productID;
+
+		--Delete all specification values of this product
+		delete from HasSpecification where HasSpecification.ProductID = @productID;
+
+		--Delete the product
+		delete from Products where products.ProductID = @productID;
+		
+		lbexit: --lbexit is a lable to jump
+        if @trancount = 0
+            commit;
+			set @isSuccess = 1;
+    end try
+    begin catch
+        declare @error int, @message varchar(4000), @xstate int;
+        select @error = ERROR_NUMBER(), @message = ERROR_MESSAGE(), @xstate = XACT_STATE();
+        if @xstate = -1 --xstate = -1 mean the transaction is uncommittable and should be rolled back.
+            rollback;
+        if @xstate = 1 and @trancount = 0 --xsate = 1, the transaction is committable.
+            rollback;
+        if @xstate = 1 and @trancount > 0
+            rollback transaction DeleteProduct;
+
+        --raiserror ('usp_my_procedure_name: %d: %s', 16, 1, @error, @message) ;
+    end catch
+end
 
 ---
 go
@@ -261,16 +441,7 @@ begin
 end;
 ---
 
---add Functions
-go
-create function GetSpecifications(@productID int)
-returns table as
-return
-	select p.Name as name, ps.Name as specification, s.Value as Value
-	from Products p inner join HasSpecification h on p.ProductID = h.ProductID
-					inner join SpecificationValues s on h.SpecificationID = s.SpecificationID and h.Value = s.Value
-					inner join ProductSpecifications ps on s.SpecificationID = ps.SpecificationID
-	where p.ProductID = @productID;
+
 
 go
 --inserting some initial values
@@ -304,24 +475,10 @@ insert into SpecificationValues(SpecificationID, Value) values (3,'1 Sims');
 insert into SpecificationValues(SpecificationID, Value) values (4,'Android');
 insert into SpecificationValues(SpecificationID, Value) values (4,'IOS');
 
-insert into Products(Name,Price,Description,ProducerID,CategoryID) values ('j3 Pro',4,'ProVip',1,2);
-insert into Products(Name,Price,Description,ProducerID,CategoryID) values ('j7 Pro',7,'Max Pro',2,1);
-insert into Products(Name,Price,Description,ProducerID,CategoryID) values ('iphone 7',10,'IOSPro',3,3);
-
-insert into HasSpecification(ProductID, SpecificationID, Value) values(1,1,'4GB');
-insert into HasSpecification(ProductID, SpecificationID, Value) values(1,2,'32GB');
-insert into HasSpecification(ProductID, SpecificationID, Value) values(1,3,'2 Sims');
-insert into HasSpecification(ProductID, SpecificationID, Value) values(1,4,'IOS');
-
 insert into Roles(RoleName, Descriptions) values('admin', 'chu cua hang');
-insert into Roles(RoleName, Descriptions) values('user', 'nguoi dung');
-insert into Roles(RoleName, Descriptions) values('emp', 'nguoi ban');
+insert into Roles(RoleName, Descriptions) values('seller', 'nguoi ban');
+insert into Roles(RoleName, Descriptions) values('customer', 'nguoi dung');
 
-insert into Accounts values('admin','gFuYE2Bpl7A=', 1);
-insert into Accounts values('emp','gFuYE2Bpl7A=', 3);
-insert into Accounts values('customer', 'gFuYE2Bpl7A=', 2); 
-
-insert into Customers(CustomerID, Name) values(3, 'Vinh');
-
-insert into Carts(CustomerID, ProductID, amount) values(3,1,5);
-insert into Carts(CustomerID, ProductID, amount) values(3,2,1);
+insert into Accounts values('admin','gFuYE2Bpl7A=', dbo.GetRoleId('admin'));
+insert into Accounts values('seller','gFuYE2Bpl7A=', dbo.GetRoleId('seller'));
+insert into Accounts values('customer', 'gFuYE2Bpl7A=', dbo.GetRoleId('customer')); 

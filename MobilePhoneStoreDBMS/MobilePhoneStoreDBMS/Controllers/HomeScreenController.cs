@@ -38,7 +38,7 @@ namespace MobilePhoneStoreDBMS.Controllers
         {
             var product = _context.Database.SqlQuery<Product>("Sp_Product_Details @id = {0}", id).Single();
 
-            //ViewBag.ProId = id;
+            ViewBag.ProId = id;
             return View(product);
         }
 

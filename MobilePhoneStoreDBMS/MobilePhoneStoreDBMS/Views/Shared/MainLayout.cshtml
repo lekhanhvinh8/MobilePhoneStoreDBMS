@@ -1,4 +1,5 @@
 ﻿@using MobilePhoneStoreDBMS.Models.Consts
+@using MobilePhoneStoreDBMS.Models.Consts
 
 <!--
 Author: W3layouts
@@ -40,8 +41,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <body>
 	<div class="wrap">
 		<!----start-Header---->
-		<div class="header">
-			<!--Search-->
+        <div class="header">
+            <!--Search-->
 			<div class="search-bar">
 				<form action="/HomeScreen/ProductsOfSearch">
 					<input type="text" value="@ViewBag.search" name="search"><input type="submit" value="Search" />
@@ -54,19 +55,20 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					{
 						<li><a href="@Url.Action("Register", "Account")">Register</a></li>
 						<li><a href="@Url.Action("Login", "Account")">Login</a></li>
+
 					}
 					else
 					{
+						<li><a href="#">MyAccount</a></li>
+						<li><a href="#">Order</a></li>
 						<li><a href="@Url.Action("Logout", "HomeScreen")">Logout</a></li>
 
 					}
-
-					<li><a href="#">Order</a></li>
 					<li>
 						<a href="@Url.Action("ShowToCart", "ShoppingCart")">
 							<img src="@Url.Content("~/Assets/images/cart-icon.png")" style="height:50px; width: 50px; padding-top: 10px" />
 						</a>
-						@*@Html.Action("BagCart", "ShoppingCart")*@
+						@Html.Action("BagCart", "ShoppingCart")
 					</li>
 				</ul>
 			</div>

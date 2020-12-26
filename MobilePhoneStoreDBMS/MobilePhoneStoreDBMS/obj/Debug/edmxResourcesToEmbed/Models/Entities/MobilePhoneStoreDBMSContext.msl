@@ -159,6 +159,7 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="AddNewProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewProduct" />
     <FunctionImportMapping FunctionImportName="AddNewSpecificationToAProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.AddNewSpecificationToAProduct" />
     <FunctionImportMapping FunctionImportName="sp_Account_Login" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Login" />
     <FunctionImportMapping FunctionImportName="sp_Account_Register" FunctionName="MobilePhoneStoreDBMSModel.Store.sp_Account_Register" />
@@ -246,5 +247,14 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SplitSpecificationValuesString" FunctionName="MobilePhoneStoreDBMSModel.Store.SplitSpecificationValuesString">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MobilePhoneStoreDBMSModel.SplitSpecificationValuesString_Result">
+          <ScalarProperty Name="specificationID" ColumnName="specificationID" />
+          <ScalarProperty Name="value" ColumnName="value" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="MobilePhoneStoreDBMSModel.Store.DeleteProduct" />
   </EntityContainerMapping>
 </Mapping>

@@ -1,61 +1,76 @@
 ﻿@model IEnumerable<MobilePhoneStoreDBMS.Models.Entities.Cart>
 @{
-    ViewBag.Title = "ShowToCart";
-    Layout = "~/Views/Shared/MainLayout.cshtml";
+	ViewBag.Title = "ShowToCart";
+	Layout = "~/Views/Shared/MainLayout.cshtml";
 }
 
-<h2>Trang giỏ hàng</h2>
-@if (Model != null)
+@if (Model.Count() == 0 || Model == null)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th style="font-size: 25px">Product Name </th>
-                <th style="font-size: 25px">Image</th>
-                <th style="font-size: 25px">Price</th>
-                <th style="font-size: 25px">Quantity</th>
-                <th style="font-size: 25px">Sum</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                double total = Convert.ToDouble(Convert.ToDouble(item.Product.Price) * Convert.ToDouble(item.amount));
-                double T = 0;
-                <tr style="font-size:25px; color: black">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Product.Name)
-                    </td>
-                    <td>
-                        <img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID=@item.ProductID"/>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Product.Price)
-                    </td>
-                    <td>
-                        @using (Html.BeginForm("Update_Quantity_Cart", "ShoppingCart"))
-                        {
-                            <input type="hidden" value="@item.ProductID" name="ID_Product" />
-                            <input type="number" value="@item.amount" min="1" name="quantity" style="font-size: 25px" />
-                            <input type="submit" value="Cập nhật số lượng" style="font-size: 25px" />
-                        }
-                    </td>
-                    <td style="font-size:25px">
-                        &nbsp;&nbsp;&nbsp;&nbsp;Total: @total
+	<h2 class="for_h2" style="margin: 2rem 0 18rem 2rem;">No products in the shopping cart</h2>
+}
+else
+{
+	<div style="margin: 1rem 5rem 2rem;">
+		<table class="table">
+			<thead>
+				<tr>
+					<th >Product Name </th>
+					<th >Image</th>
+					<th >Price</th>
+					<th >Quantity</th>
+					<th >Sum</th>
+				</tr>
+			</thead>
+			@{
+				double t = 0;
+			}
+			<tbody>
+				@foreach (var item in Model)
+				{
+					double total = Convert.ToDouble(Convert.ToDouble(item.Product.Price) * Convert.ToDouble(item.amount));
+					t += total;
 
-                    </td>
-                    <td>
-                        <a href="/ShoppingCart/RemoveCart/@item.ProductID" style="font-size: 25px;color: red">&nbsp; &nbsp;&nbsp;Xóa khỏi giỏ hàng</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5" style="text-align: right; font-size: 25px"><br />Tổng tiền giỏ hàng: @*@Model.Total_Money()*@</td>
-            </tr>
-        </tfoot>
-    </table>
-    <a href="@Url.Action("Index", "HomeScreen")"><h1 style="font-size: 25px; color: red">Về trang sản phẩm</h1></a>
+					<tr sstyle="color: black">
+						<td>
+							@Html.DisplayFor(modelItem => item.Product.Name)
+						</td>
+						<td>
+							<img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID=@item.ProductID" style="width: 150px; height:150px; object-fit: cover;" />
+						</td>
+						<td>
+							@item.Product.Price &nbsp;VNĐ
+						</td>
+						<td>
+							@using (Html.BeginForm("Update_Quantity_Cart", "ShoppingCart"))
+							{
+								<input type="hidden" value="@item.ProductID" name="ID_Product" />
+								<input type="number" value="@item.amount" min="1" name="quantity" style="width: 3rem;" />
+								<input type="submit" value="Update" class="btn btn-success"  />
+							}
+						</td>
+						<td>
+							 @total &nbsp;VNĐ
+						</td>
+						<td>
+							<a href="/ShoppingCart/RemoveCart/@item.ProductID" color: red">Remove from cart</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="5" style="text-align: right; font-size: 25px;"><br />Total: @t &nbsp;VNĐ</td>
+				</tr>
+				<tr>
+					<td colspan="5" style="text-align: right;">
+						<br /> <a href="@Url.Action("RemoveAllCart", "ShoppingCart")"
+					  style="background: green; color:white; padding:13px 14px;border:none; margin:1px; border-radius:6px"> Order</a>
+					</td>
+				</tr>
+
+			</tfoot>
+		</table>
+		<a href="@Url.Action("Store", "HomeScreen")"><h1 style="font-size: 25px;">Go to store</h1></a>
+	</div>
 }
 

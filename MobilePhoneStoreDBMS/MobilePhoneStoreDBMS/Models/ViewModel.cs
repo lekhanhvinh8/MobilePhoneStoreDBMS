@@ -20,6 +20,7 @@ namespace MobilePhoneStoreDBMS.Models
         public List<Product> allProductsOfProducer { get; set; }
         public List<Product> allProductsOfCategory { get; set; }
         public List<Producer> allProducers { get; set; }
+        public int countCarts { get; set; }
         public List<Category> allCategories() { 
             var res = _context.Database.SqlQuery<Category>("select * from view_Category_List").ToList();
             return res;

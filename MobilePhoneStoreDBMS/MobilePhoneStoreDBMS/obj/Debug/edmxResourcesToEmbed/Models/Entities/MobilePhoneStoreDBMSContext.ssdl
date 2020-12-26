@@ -343,10 +343,29 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="AddNewProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="name" Type="nvarchar" Mode="In" />
+    <Parameter Name="description" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="quantity" Type="int" Mode="In" />
+    <Parameter Name="status" Type="bit" Mode="In" />
+    <Parameter Name="price" Type="int" Mode="In" />
+    <Parameter Name="producerID" Type="int" Mode="In" />
+    <Parameter Name="categoryID" Type="int" Mode="In" />
+    <Parameter Name="imageFile" Type="image" Mode="In" />
+    <Parameter Name="specificationValuesString" Type="nvarchar" Mode="In" />
+    <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
+  </Function>
   <Function Name="AddNewSpecificationToAProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ProductID" Type="int" Mode="In" />
     <Parameter Name="SpecificationID" Type="int" Mode="In" />
     <Parameter Name="Value" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="DeleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="productID" Type="int" Mode="In" />
+    <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
+  </Function>
+  <Function Name="GetRoleId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+    <Parameter Name="roleName" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="GetSpecifications" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="productID" Type="int" Mode="In" />
@@ -387,6 +406,17 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
   </Function>
   <Function Name="Sp_Product_List_Of_Producer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="producerID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SplitSpecificationValuesString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="string" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="specificationID" Type="int" />
+          <Property Name="value" Type="nvarchar" MaxLength="50" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
   </Function>
   <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
     <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
