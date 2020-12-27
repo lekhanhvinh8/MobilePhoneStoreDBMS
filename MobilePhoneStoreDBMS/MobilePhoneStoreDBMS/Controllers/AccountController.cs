@@ -79,6 +79,7 @@ namespace MobilePhoneStoreDBMS.Controllers
                 return View(registerDto);
 
             var result = Register(registerDto.Name, registerDto.PhoneNumber, registerDto.Email, registerDto.Username, registerDto.Password);
+
             return View(registerDto);
         }
 
