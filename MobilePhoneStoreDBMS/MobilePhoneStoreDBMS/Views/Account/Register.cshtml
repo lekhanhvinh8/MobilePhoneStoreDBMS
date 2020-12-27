@@ -13,62 +13,63 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 
-<body>
-    <div class="container">
-        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
+<body style="background-color: #48d84f">
+	<div class="login-page">
+		<div class="form">
+			@using (Html.BeginForm("Register", "Account", FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
 
-            <div class="form-group">
-                @Html.LabelFor(m => m.Name, "Name", htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(m => m.Name)
-            </div>
+				<div class="form-group">
+					@Html.LabelFor(m => m.Name, "Name", htmlAttributes: new { @class = "control-label" })
+					@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(m => m.Name)
+				</div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.PhoneNumber, "Phone", htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(m => m.PhoneNumber)
-            </div>
+				<div class="form-group">
+					@Html.LabelFor(model => model.PhoneNumber, "Phone", htmlAttributes: new { @class = "control-label" })
+					@Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(m => m.PhoneNumber)
+				</div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(m => m.Email)
-            </div>
+				<div class="form-group">
+					@Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "control-label" })
+					@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(m => m.Email)
+				</div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Username, "Username", htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(m => m.Username)
-            </div>
+				<div class="form-group">
+					@Html.LabelFor(model => model.Username, "Username", htmlAttributes: new { @class = "control-label" })
+					@Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(m => m.Username)
+				</div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label" })
-                @Html.PasswordFor(model => model.Password, new { @class = "form-control", value = Model.Password })
-                @Html.ValidationMessageFor(m => m.Password)
-            </div>
+				<div class="form-group">
+					@Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label" })
+					@Html.PasswordFor(model => model.Password, new { @class = "form-control", value = Model.Password })
+					@Html.ValidationMessageFor(m => m.Password)
+				</div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Confirm, "Confirm Password", htmlAttributes: new { @class = "control-label" })
-                @Html.PasswordFor(model => model.Confirm, new { @class = "form-control", value = Model.Confirm })
-                @Html.ValidationMessageFor(m => m.Confirm)
-            </div>
+				<div class="form-group">
+					@Html.LabelFor(model => model.Confirm, "Confirm Password", htmlAttributes: new { @class = "control-label" })
+					@Html.PasswordFor(model => model.Confirm, new { @class = "form-control", value = Model.Confirm })
+					@Html.ValidationMessageFor(m => m.Confirm)
+				</div>
 
-            <div class="form-group">
-                <input type="submit" value="Register Now!" class="btn btn-warning" />
-            </div>
-        }
+				<div class="form-group">
+					<input type="submit" value="Register Now!" class="btn btn-warning" style="background-color: #4cae4c" />
+				</div>
+			}
 
-        <div>
-            @Html.ActionLink("Back to Login", "Login", "Account")
-        </div>
+			<div>
+				@Html.ActionLink("Back to Login", "Login", "Account")
+			</div>
 
-        <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>
-        @Scripts.Render("~/bundles/jqueryval")
-    </div>
-    
+			<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+			<script src="~/Scripts/bootstrap.min.js"></script>
+			@Scripts.Render("~/bundles/jqueryval")
+		</div>
+	</div>
 </body>
 
 

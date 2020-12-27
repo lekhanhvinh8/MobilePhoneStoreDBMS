@@ -11,9 +11,9 @@ namespace MobilePhoneStoreDBMS.Models.Entities
 {
     using System;
     
-    public partial class SplitSpecificationValuesString_Result
+    public partial class sp_helpdiagramdefinition_Result
     {
-        public Nullable<int> specificationID { get; set; }
-        public string value { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

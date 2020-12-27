@@ -19,7 +19,6 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         public string Description { get; set; }
         public bool Status { get; set; }
         public int Price { get; set; }
-        public string Image { get; set; }
         public int ProducerID { get; set; }
         public int CategoryID { get; set; }
     }

@@ -45,36 +45,31 @@
 			<div class="details-page">
 				<div class="back-links">
 					<ul>
-						<li><a href="@Url.Action("Index", "HomeScreen")">Trang chủ</a><img src="~/Assets/images/arrow.png" alt=""></li>
-						<li><a href="@Url.Action("Store", "HomeScreen")">Sản phẩm</a><img src="~/Assets/images/arrow.png" alt=""></li>
-						<li><a href="#">Chi tiết</a><img src="~/Assets/images/arrow.png" alt=""></li>
+						<li><a href="@Url.Action("Index", "HomeScreen")">Home</a><img src="~/Assets/images/arrow.png" alt=""></li>
+						<li><a href="@Url.Action("Store", "HomeScreen")">Product</a><img src="~/Assets/images/arrow.png" alt=""></li>
+						<li><a href="">Detail</a><img src="~/Assets/images/arrow.png" alt=""></li>
 					</ul>
 				</div>
 			</div>
 			<div class="detalis-image">
 				<div class="flexslider">
 					<ul class="slides">
-						<li data-thumb="@Model.Image">
-							<div class="thumb-image"> <img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID= @Model.ProductID" data-imagezoom="true" class="img-responsive" alt="" /> </div>
+						<li data-thumb="/api/AvatarOfProduct/GetAvatarOfProduct?ProductId= @Model.ProductID">
+							<div class="thumb-image"> <img src="/api/AvatarOfProduct/GetAvatarOfProduct?ProductId= @Model.ProductID" data-imagezoom="true" class="img-responsive" alt="" object-fit: cover; /> </div>
 						</li>
 					</ul>
 				</div>
 			</div>
 			<div class="detalis-image-details">
 				<div class="details-categories">
-					<ul>
-						<li><h3>Category:</h3></li>
-						<li class="active1"><a href="#"><span>Nokia Mobiles</span></a></li>
-					</ul>
 				</div><br />
 				<div class="brand-value">
-					<h3>@Model.Name</h3>
+					<h3>Name: @Model.Name</h3>
 					<div class="left-value-details">
 						<ul>
 							<li>Price:</li>
 							<li><h5>@Model.Price &nbsp;VNĐ</h5></li>
 							<br />
-							<li><p>Not rated</p></li>
 						</ul>
 					</div>
 					<div class="right-value-details">
@@ -91,11 +86,11 @@
 			</div>
 			<div class="clear"> </div>
 			<div class="menu_container">
-				<p class="menu_head">Thông tin sản phẩm<span class="plusminus">+</span></p>
+				<p class="menu_head">Infomation of product<span class="plusminus">+</span></p>
 				<div class="menu_body" style="display: none;">
 					<p>@Model.Description</p>
 				</div>
-				<p class="menu_head">Thông số kỹ thuật<span class="plusminus">+</span></p>
+				<p class="menu_head">Specification<span class="plusminus">+</span></p>
 				<div class="menu_body" style="display: none;">
 					@Html.Partial("ProductSpecifications")
 				</div>

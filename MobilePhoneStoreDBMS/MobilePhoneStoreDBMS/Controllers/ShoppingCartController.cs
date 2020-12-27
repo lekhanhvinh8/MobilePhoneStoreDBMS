@@ -25,6 +25,14 @@ namespace MobilePhoneStoreDBMS.Controllers
 
             int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
 
+            var product = this._db.Products.Find(id);
+
+            if (product == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            if (product.Quantity == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             Cart c = _db.Carts.Where(x => x.CustomerID == userid && x.ProductID == id).SingleOrDefault();
 
             if (c == null)
@@ -57,6 +65,14 @@ namespace MobilePhoneStoreDBMS.Controllers
         {
             int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
             Cart cart = _db.Carts.Where(x => x.CustomerID == userid && x.ProductID == ID_Product).SingleOrDefault();
+
+            var product = this._db.Products.Find(ID_Product);
+            if (product == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            if (product.Quantity < quantity - cart.amount)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             cart.amount = quantity;
             _db.Carts.AddOrUpdate(cart);
             _db.SaveChanges();
@@ -89,31 +105,32 @@ namespace MobilePhoneStoreDBMS.Controllers
         {
             int customerID = Convert.ToInt32(Session[SessionNames.CustomerID]);
 
-            var cart = this._db.Carts.Where(c => c.CustomerID == customerID).ToList();
+            var carts = this._db.Carts.Where(c => c.CustomerID == customerID).ToList();
 
-            if (cart.Count() == 0)
+            if (carts.Count() == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            foreach (var cart in carts)
+            {
+                if (cart.amount > cart.Product.Quantity)
+                    throw new Exception("Invalid amount of products inserting to orders");
+            }
 
             int noOfRowEffected = this._db.Database.ExecuteSqlCommand("Insert into Orders(CustomerID) Values(" + customerID + ")");
 
             return RedirectToAction("ShowToCart", "ShoppingCart");
-
         }
-
         //
         public PartialViewResult BagCart()
         {
-            int _t_item = 0;
-            Cart_ cart = Session["cart"] as Cart_;
-
             if (Session[SessionNames.CustomerID] != null)
             {
-                if (cart != null)
-                {
-                    _t_item = cart.Total_Quantity();
-                }
+                int userid = Convert.ToInt32(Session[SessionNames.CustomerID]);
+                var amount = (from i in _db.Carts
+                              where i.CustomerID == userid
+                              select (int?)i.amount).Sum() ?? 0;
+                ViewBag.infoCart = amount;
             }
-            ViewBag.infoCart = _t_item;
             return PartialView("BagCart");
         }
 

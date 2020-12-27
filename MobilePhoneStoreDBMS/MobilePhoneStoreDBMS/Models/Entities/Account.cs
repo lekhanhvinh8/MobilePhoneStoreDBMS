@@ -17,9 +17,9 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         public int AccID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public Nullable<int> hasRole { get; set; }
+        public int hasRole { get; set; }
     
-        public virtual Customer Customer { get; set; }
         public virtual Role Role { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

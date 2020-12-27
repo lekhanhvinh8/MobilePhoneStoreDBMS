@@ -14,49 +14,52 @@
 		</ul>
 	</div>
 	<!--End-image-slider---->
-	<div class="content">
-		<div class="content-grids">
-			<div class="h4">
-				<h4>Sản phẩm nổi bật</h4>
-				<div class="section group">
-					<div class="grid_1_of_3 images_1_of_3">
-						<a href="/HomeScreen/Details/10"><img src="~/Assets/images/noi_bat_1.png"></a>
-						<h3>Iphone 11 Pro Max</h3>
-					</div>
-					<div class="grid_1_of_3 images_1_of_3 second">
-						<a href="/HomeScreen/Details/11"><img src="~/Assets/images/noi_bat_2.jpg"></a>
-						<h3>Samsung Galaxy 20 Ultra</h3>
-					</div>
-					<div class="grid_1_of_3 images_1_of_3 theree">
-						<a href="/HomeScreen/Details/12"><img src="~/Assets/images/noi_bat_3.jpg"></a>
-						<h3>Xiaomi Mi 10T Pro 5G</h3>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="content-grids" style="width: 1380px;">
-			<div class="h4">
-				<h4>Sản phẩm đang có tại cửa hàng</h4>
-			</div>
-			<div class="section group">
-				@foreach (var items in Model)
-				{
-					<div class="grid_1_of_4 images_1_of_4 products-info">
-						<a href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })">
-							<img src="/api/AvatarOfProduct/GetAvatarOfProduct?productID=@items.ProductID" />
-							@items.Name
-						</a>
-						<h3 class="shopp-price">@items.Price &nbsp;đ</h3>
-						<ul>
-							<li><a class="cart" href="/ShoppingCart/AddtoCart/@items.ProductID"> </a></li>
-							<li><a class="i" href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })"> </a></li>
-							<li><a class="Wishlist" href="#"> </a></li>
-						</ul>
-					</div>
-				}
-			</div>
-		</div>
-	</div>
+    <div class="content">
+        @*<div class="content-grids">
+            <div class="h4">
+                <h4>Hot products</h4>
+                <div class="section group">
+                    <div class="grid_1_of_3 images_1_of_3">
+                        <a href="/HomeScreen/Details/3"><img src="~/Assets/images/noi_bat_1.png"></a>
+                        <h3>Iphone 11 Pro Max</h3>
+                    </div>
+                    <div class="grid_1_of_3 images_1_of_3 second">
+                        <a href="/HomeScreen/Details/4"><img src="~/Assets/images/noi_bat_2.jpg"></a>
+                        <h3>Samsung Galaxy 20 Ultra</h3>
+                    </div>
+                    <div class="grid_1_of_3 images_1_of_3 theree">
+                        <a href="/HomeScreen/Details/5"><img src="~/Assets/images/noi_bat_3.jpg"></a>
+                        <h3>Xiaomi Mi 10T Pro 5G</h3>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="content-grids" style="width: 1380px;">
+            <div class="h4">
+                <h4>Products are available at the store</h4>
+            </div>
+            <div class="section group">
+                @foreach (var items in Model)
+                {
+                    <div class="grid_1_of_4 images_1_of_4 products-info">
+                        <a href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })">
+                            <img src="/api/AvatarOfProduct/GetAvatarOfProduct?ProductId= @items.ProductID" style="height: 282px; object-fit: cover;" />
+                            @items.Name
+                        </a>
+                        <h3 class="shopp-price">@items.Price &nbsp;đ</h3>
+                        <ul>
+                            <li><a class="cart" href="/ShoppingCart/AddtoCart/@items.ProductID"> </a></li>
+                            <li><a class="i" href="@Url.Action("Details", "HomeScreen", new { id = items.ProductID })"> </a></li>
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    
+</script>
 

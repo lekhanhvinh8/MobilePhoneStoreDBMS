@@ -12,7 +12,7 @@
     <title>Index</title>
 
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"/>
-    <link rel="stylesheet"/ type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.min.css">
 </head>
 <body>
     <header>
@@ -32,10 +32,7 @@
             </div>
         </div>
     </header>
-
     <div class="container">
-        <h1>@Model.customerID</h1>
-
         <table id="table-orders" class="table table-bordered">
             <thead></thead>
             <tbody></tbody>
@@ -46,8 +43,8 @@
     <script src="~/Scripts/jquery-3.4.1.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootbox.js"></script>
-    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
     <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -58,40 +55,121 @@
                 url: "/api/Orders/GetList?customerID=" + customerID,
                 method: "Get",
                 success: function (response) {
-                    console.log(response[0].orderTime);
-
                     $.ajax({
                         url: "/api/Orders/GetList?customerID=" + customerID + "&orderTime=" + response[0].orderTime,
                         method: "Get",
                         success: function (response) {
-                            console.log(response);
                         },
                     })
                 },
 
             });
 
-
-            var table = $("#table-orders").dataTable({
+            var table = $("#table-orders").DataTable({
                 ajax: {
                     url: "/api/Orders?customerID=" + customerID,
                     dataSrc: "",
                 },
                 columns: [
                     {
-                        title: "Product's ID",
-                        data: "orderTime",
+                        title: "Order ID",
+                        data: "orderID",
                         width: "10%",
                         render: function (data) {
                             return data;
                         },
                     },
+                    {
+                        title: "Order's Time",
+                        data: "orderTime",
+                        render: function (data) {
+                            return data;
+                        }
+                    },
+                    {
+                        title: "Status",
+                        data: "status",
+                        render: function (data) {
+                            if (data == @OrderStates.Pending)
+                                return "<span>Pending</span>";
+                            else if (data == @OrderStates.Confirmed)
+                                return "<span>waiting for delivery</span>";
+                            else
+                                return "<span>the order was canceled</span>"
+                        }
+                    },
+                    {
+                        title: "Total Cost",
+                        data: "totalOrderCost",
+                        render: function (data) {
+                            return "<span>" + data + " VND</span>";
+                        },
+                    },
+                    {
+                        title: "See details",
+                        data: "orderID",
+                        render: function (data) {
+                            return "<button class='btn-link' data-orderID=" + data + ">Details</button>";
+                        },
+                    },
+                    {
+                        title: "Cancel order",
+                        data: "orderID",
+                        render: function (data, type, order) {
+                            if (order.status == @OrderStates.Pending)
+                                return "<button class='btn btn-danger jsCancel' data-orderID=" + order.orderID + ">Cancel</button>";
+
+                            return "<button disabled class='btn btn-primary' data-orderID=" + data + ">Canceled</button>";
+                        }
+                    },
+                    {
+                        title: "Delete",
+                        data: "orderID",
+                        render: function (data, type, order) {
+                            if (order.status == @OrderStates.Canceled)
+                                return "<button class='btn btn-danger jsDelete' data-orderID=" + order.orderID + ">Delete</button>";
+
+                            if (order.status == @OrderStates.Confirmed)
+                                return "<span>Confirmed</span>";
+
+                            return "<span>Pending</span>";
+                        }
+                    }
+
                 ],
-
-
             });
 
+            table.on("click", ".jsCancel", function () {
+                var buttonCancel = $(this);
+
+                $.ajax({
+                    url: "/api/Orders/CancelOrder?orderID=" + buttonCancel.attr("data-orderID"),
+                    method: "get",
+                    success: function () {
+                        var indexes = table.rows().eq(0).filter(function (rowIdx) {
+                            return table.cell(rowIdx, 0).data() == buttonCancel.attr("data-orderID");
+                        });
+                        var newData = table.row(indexes[0]).data();
+                        newData.status = @OrderStates.Canceled;
+                        table.row(indexes[0]).data(newData).draw();
+                    },
+                });
+            });
+
+            table.on("click", ".jsDelete", function () {
+                var buttonDelete = $(this);
+
+                $.ajax({
+                    url: "/api/Orders/DeleteOrder?orderID=" + buttonDelete.attr("data-orderID"),
+                    method: "get",
+                    success: function () {
+                        table.row(buttonDelete.parents("tr")).remove().draw();
+                    },
+                });
+            })
         });
+
+
 
     </script>
 </body>

@@ -23,7 +23,6 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
 
             this.ProductID = product.ProductID;
             this.Name = product.Name;
-            this.Image = product.Image;
             this.Description = product.Description;
             this.CategoryID = product.CategoryID;
             this.CategoryName = product.Category.Name;
@@ -71,7 +70,6 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
             Product product = new Product();
 
             product.Name = this.Name;
-            product.Image = this.Image;
             product.Description = this.Description;
             product.CategoryID = this.CategoryID;
             product.Price = this.Price;
@@ -98,7 +96,6 @@ namespace MobilePhoneStoreDBMS.Models.Dtos
         public void UpdateModel(Product product)
         {
             product.Name = this.Name;
-            product.Image = this.Image;
             product.Description = this.Description;
             product.CategoryID = this.CategoryID;
             product.Price = this.Price;

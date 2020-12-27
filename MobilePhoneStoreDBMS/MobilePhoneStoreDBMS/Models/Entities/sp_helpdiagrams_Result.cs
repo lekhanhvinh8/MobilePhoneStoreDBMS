@@ -11,15 +11,12 @@ namespace MobilePhoneStoreDBMS.Models.Entities
 {
     using System;
     
-    public partial class Sp_Product_List_Of_Producer_Result
+    public partial class sp_helpdiagrams_Result
     {
-        public int ProductID { get; set; }
+        public string Database { get; set; }
         public string Name { get; set; }
-        public int Quantity { get; set; }
-        public string Description { get; set; }
-        public bool Status { get; set; }
-        public int Price { get; set; }
-        public int ProducerID { get; set; }
-        public int CategoryID { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

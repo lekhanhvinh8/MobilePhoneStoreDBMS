@@ -206,7 +206,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Cart_.cs" />
+    <Compile Include="Models\Consts\OrderStates.cs" />
     <Compile Include="Models\CustomValidations\ValidRoleLogin.cs" />
     <Compile Include="Models\CustomValidations\ValidUserNameRegister.cs" />
     <Compile Include="Models\Dtos\AccountDto.cs" />
@@ -270,10 +270,13 @@
     <Compile Include="Models\Entities\SpecificationValue.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\SplitSpecificationValuesString_Result.cs">
+    <Compile Include="Models\Entities\Sp_Catagory_Details_Result.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\Sp_Catagory_Details_Result.cs">
+    <Compile Include="Models\Entities\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\sp_helpdiagrams_Result.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Sp_Producer_Details_Result.cs">
@@ -292,6 +295,9 @@
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Sp_Product_List_Result.cs">
+      <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\sysdiagram.cs">
       <DependentUpon>MobilePhoneStoreDBMSContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\view_Category_List.cs">
@@ -335,8 +341,6 @@
     <Content Include="Assets\images\grid-img1.jpg" />
     <Content Include="Assets\images\grid-img2.jpg" />
     <Content Include="Assets\images\grid-img3.jpg" />
-    <Content Include="Assets\images\iphone8Plus.jpg" />
-    <Content Include="Assets\images\iphoneXS64Gb.jpg" />
     <Content Include="Assets\images\link-compare.png" />
     <Content Include="Assets\images\link-wishlist.png" />
     <Content Include="Assets\images\logo.png" />
@@ -348,63 +352,13 @@
     <Content Include="Assets\images\quotes_alt.png" />
     <Content Include="Assets\images\remove.png" />
     <Content Include="Assets\images\rss.png" />
-    <Content Include="Assets\images\samsungGalaxyA21s.jpg" />
-    <Content Include="Assets\images\samsungGalaxyS20FE.jpg" />
     <Content Include="Assets\images\sepHor.png" />
     <Content Include="Assets\images\twitter.png" />
-    <Content Include="Assets\images\vsmartArisPro.jpg" />
-    <Content Include="Assets\images\vsmartStart3.jpg" />
-    <Content Include="Assets\images\xiaomiMi10TPro5G.jpg" />
-    <Content Include="Assets\images\xiaomiRedmi9C.jpg" />
     <Content Include="Assets\js\imagezoom.js" />
     <Content Include="Assets\js\jquery.flexslider.js" />
     <Content Include="Assets\js\jquery.livequery.js" />
     <Content Include="Assets\js\jquery.min.js" />
     <Content Include="Assets\js\responsiveslides.min.js" />
-    <Content Include="Content\Assets\css\flexslider.css" />
-    <Content Include="Content\Assets\css\responsiveslides.css" />
-    <Content Include="Content\Assets\css\style.css" />
-    <Content Include="Content\Assets\css\style1.css" />
-    <Content Include="Content\Assets\images\012.png" />
-    <Content Include="Content\Assets\images\1.png" />
-    <Content Include="Content\Assets\images\2.png" />
-    <Content Include="Content\Assets\images\3.jpg" />
-    <Content Include="Content\Assets\images\admin.png" />
-    <Content Include="Content\Assets\images\admin1.png" />
-    <Content Include="Content\Assets\images\arrow.png" />
-    <Content Include="Content\Assets\images\arrow1.png" />
-    <Content Include="Content\Assets\images\btn-cart.png" />
-    <Content Include="Content\Assets\images\btn-details.png" />
-    <Content Include="Content\Assets\images\cal.png" />
-    <Content Include="Content\Assets\images\cal1.png" />
-    <Content Include="Content\Assets\images\facebook.png" />
-    <Content Include="Content\Assets\images\grid-img1.jpg" />
-    <Content Include="Content\Assets\images\grid-img2.jpg" />
-    <Content Include="Content\Assets\images\grid-img3.jpg" />
-    <Content Include="Content\Assets\images\link-compare.png" />
-    <Content Include="Content\Assets\images\link-wishlist.png" />
-    <Content Include="Content\Assets\images\logo.png" />
-    <Content Include="Content\Assets\images\m1.jpg" />
-    <Content Include="Content\Assets\images\m10.jpg" />
-    <Content Include="Content\Assets\images\m11.jpg" />
-    <Content Include="Content\Assets\images\m2.jpg" />
-    <Content Include="Content\Assets\images\m4.jpg" />
-    <Content Include="Content\Assets\images\m6.jpg" />
-    <Content Include="Content\Assets\images\m7.jpg" />
-    <Content Include="Content\Assets\images\noi_bat_1.png" />
-    <Content Include="Content\Assets\images\noi_bat_2.jpg" />
-    <Content Include="Content\Assets\images\noi_bat_3.jpg" />
-    <Content Include="Content\Assets\images\post-in.png" />
-    <Content Include="Content\Assets\images\quotes_alt.png" />
-    <Content Include="Content\Assets\images\remove.png" />
-    <Content Include="Content\Assets\images\rss.png" />
-    <Content Include="Content\Assets\images\sepHor.png" />
-    <Content Include="Content\Assets\images\twitter.png" />
-    <Content Include="Content\Assets\js\imagezoom.js" />
-    <Content Include="Content\Assets\js\jquery.flexslider.js" />
-    <Content Include="Content\Assets\js\jquery.livequery.js" />
-    <Content Include="Content\Assets\js\jquery.min.js" />
-    <Content Include="Content\Assets\js\responsiveslides.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -703,7 +657,6 @@
     <Content Include="Views\HomeScreen\Producer.cshtml" />
     <Content Include="Views\HomeScreen\ListOfCategory.cshtml" />
     <Content Include="Views\HomeScreen\Category.cshtml" />
-    <Content Include="Views\HomeScreen\Search.cshtml" />
     <Content Include="Views\HomeScreen\ProductsOfSearch.cshtml" />
     <Content Include="Views\HomeScreen\ProductSpecifications.cshtml" />
     <Content Include="Views\Seller\Index.cshtml" />

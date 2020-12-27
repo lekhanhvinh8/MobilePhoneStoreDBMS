@@ -39,6 +39,7 @@ namespace MobilePhoneStoreDBMS.Models.Entities
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SpecificationValue> SpecificationValues { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Specifications_of_all_product> Specifications_of_all_product { get; set; }
         public virtual DbSet<view_Category_List> view_Category_List { get; set; }
     
@@ -50,16 +51,6 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("productID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSpecifications_Result>("[MobilePhoneStoreDBMSEntities].[GetSpecifications](@productID)", productIDParameter);
-        }
-    
-        [DbFunction("MobilePhoneStoreDBMSEntities", "SplitSpecificationValuesString")]
-        public virtual IQueryable<SplitSpecificationValuesString_Result> SplitSpecificationValuesString(string @string)
-        {
-            var stringParameter = @string != null ?
-                new ObjectParameter("string", @string) :
-                new ObjectParameter("string", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitSpecificationValuesString_Result>("[MobilePhoneStoreDBMSEntities].[SplitSpecificationValuesString](@string)", stringParameter);
         }
     
         public virtual int AddNewProduct(string name, string description, Nullable<int> quantity, Nullable<bool> status, Nullable<int> price, Nullable<int> producerID, Nullable<int> categoryID, byte[] imageFile, string specificationValuesString, ObjectParameter isSuccess)
@@ -120,6 +111,32 @@ namespace MobilePhoneStoreDBMS.Models.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddNewSpecificationToAProduct", productIDParameter, specificationIDParameter, valueParameter);
         }
     
+        public virtual int CancelAnOrder(Nullable<int> orderID, Nullable<int> stateCanceled, ObjectParameter isSuccess)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("orderID", orderID) :
+                new ObjectParameter("orderID", typeof(int));
+    
+            var stateCanceledParameter = stateCanceled.HasValue ?
+                new ObjectParameter("stateCanceled", stateCanceled) :
+                new ObjectParameter("stateCanceled", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CancelAnOrder", orderIDParameter, stateCanceledParameter, isSuccess);
+        }
+    
+        public virtual int DeleteAnOrder(Nullable<int> orderID, Nullable<int> stateCanceled, ObjectParameter isSuccess)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("orderID", orderID) :
+                new ObjectParameter("orderID", typeof(int));
+    
+            var stateCanceledParameter = stateCanceled.HasValue ?
+                new ObjectParameter("stateCanceled", stateCanceled) :
+                new ObjectParameter("stateCanceled", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteAnOrder", orderIDParameter, stateCanceledParameter, isSuccess);
+        }
+    
         public virtual int DeleteProduct(Nullable<int> productID, ObjectParameter isSuccess)
         {
             var productIDParameter = productID.HasValue ?
@@ -167,6 +184,27 @@ namespace MobilePhoneStoreDBMS.Models.Entities
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("sp_Account_Register", nameParameter, phoneNumberParameter, emailParameter, usernameParameter, passwordParameter);
         }
     
+        public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_alterdiagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
         public virtual ObjectResult<Sp_Catagory_Details_Result> Sp_Catagory_Details(Nullable<int> id)
         {
             var idParameter = id.HasValue ?
@@ -174,6 +212,66 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("id", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Catagory_Details_Result>("Sp_Catagory_Details", idParameter);
+        }
+    
+        public virtual int sp_creatediagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_creatediagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int sp_dropdiagram(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_dropdiagram", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagramdefinition_Result> sp_helpdiagramdefinition(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagramdefinition_Result>("sp_helpdiagramdefinition", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagrams_Result> sp_helpdiagrams(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
         }
     
         public virtual ObjectResult<Sp_Producer_Details_Result> Sp_Producer_Details(Nullable<int> id)
@@ -220,6 +318,37 @@ namespace MobilePhoneStoreDBMS.Models.Entities
                 new ObjectParameter("producerID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Product_List_Of_Producer_Result>("Sp_Product_List_Of_Producer", producerIDParameter);
+        }
+    
+        public virtual int sp_renamediagram(string diagramname, Nullable<int> owner_id, string new_diagramname)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var new_diagramnameParameter = new_diagramname != null ?
+                new ObjectParameter("new_diagramname", new_diagramname) :
+                new ObjectParameter("new_diagramname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_renamediagram", diagramnameParameter, owner_idParameter, new_diagramnameParameter);
+        }
+    
+        public virtual int sp_upgraddiagrams()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SPGetTotalOrderCost(Nullable<int> orderID)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("orderID", orderID) :
+                new ObjectParameter("orderID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SPGetTotalOrderCost", orderIDParameter);
         }
     }
 }

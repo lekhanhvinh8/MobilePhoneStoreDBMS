@@ -7,13 +7,13 @@
 <div class="wrap">
 	<div class="content" style="width: 950px; float: left;">
 		<div class="content-grids">
-			<h2 class="for_h2">Loại sản phẩm: @Model.category.Name</h2>
-			<h2 class="for_h2" style="padding-left: 10px;">Sản phẩm hiện bán tại cửa hàng</h2>
+			<h2 class="for_h2">Category: @Model.category.Name</h2>
+			<h2 class="for_h2" style="padding-left: 10px;">Products are currently sold in stores</h2>
 			@foreach (var items in Model.allProductsOfCategory)
 			{
 				<div class="grid_1_of_4 images_1_of_4 products-info">
 					<a href="@Url.Action("Details" , "HomeScreen", new { id = items.ProductID })">
-						<img src="@items.Image" />
+						<img src="/api/AvatarOfProduct/GetAvatarOfProduct?ProductId= @items.ProductID" style="height: 196px; object-fit: cover; " />
 						@items.Name
 					</a>
 					<h3>@items.Price &nbsp; VNĐ</h3>
@@ -27,9 +27,9 @@
 		</div>
 	</div>
 	<div class="content-sidebar">
-		<h2 class="for_h2">Hãng sản xuất</h2>
+		<h2 class="for_h2">Producer</h2>
 		<ul>
-			<li><a href="@Url.Action("Store", "HomeScreen")">Tất cả</a></li>
+			<li><a href="@Url.Action("Store", "HomeScreen")">All</a></li>
 			@foreach (var items in Model.allProducers)
 			{
 				<li><a href="@Url.Action("Producer", "HomeScreen", new { id = items.ProducerID })">@items.Name</a></li>

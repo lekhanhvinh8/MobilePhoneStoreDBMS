@@ -7,7 +7,7 @@
     <Property Name="AccID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Username" Type="nvarchar" MaxLength="20" />
     <Property Name="Password" Type="nvarchar" MaxLength="20" />
-    <Property Name="hasRole" Type="int" />
+    <Property Name="hasRole" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="AvatarOfProduct">
     <Key>
@@ -77,7 +77,6 @@
     <Property Name="Description" Type="nvarchar(max)" />
     <Property Name="Status" Type="bit" Nullable="false" />
     <Property Name="Price" Type="int" Nullable="false" />
-    <Property Name="Image" Type="nvarchar(max)" />
     <Property Name="ProducerID" Type="int" Nullable="false" />
     <Property Name="CategoryID" Type="int" Nullable="false" />
   </EntityType>
@@ -114,6 +113,16 @@
     <Property Name="SpecificationID" Type="int" Nullable="false" />
     <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.Specifications_of_all_product' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Specifications_of_all_product">
@@ -136,6 +145,18 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <Association Name="AccountsHasRoleFK">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="hasRole" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="AvatarOfProductProductIDFK">
     <End Role="Products" Type="Self.Products" Multiplicity="1" />
     <End Role="AvatarOfProduct" Type="Self.AvatarOfProduct" Multiplicity="0..1" />
@@ -181,18 +202,6 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
       </Principal>
       <Dependent Role="Customers">
         <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Accounts__hasRol__2F10007B">
-    <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
-    <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Roles">
-        <PropertyRef Name="RoleID" />
-      </Principal>
-      <Dependent Role="Accounts">
-        <PropertyRef Name="hasRole" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -311,10 +320,21 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     <Parameter Name="SpecificationID" Type="int" Mode="In" />
     <Parameter Name="Value" Type="nvarchar(max)" Mode="In" />
   </Function>
+  <Function Name="CancelAnOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="orderID" Type="int" Mode="In" />
+    <Parameter Name="stateCanceled" Type="int" Mode="In" />
+    <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
+  </Function>
+  <Function Name="DeleteAnOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="orderID" Type="int" Mode="In" />
+    <Parameter Name="stateCanceled" Type="int" Mode="In" />
+    <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
+  </Function>
   <Function Name="DeleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="productID" Type="int" Mode="In" />
     <Parameter Name="isSuccess" Type="bit" Mode="InOut" />
   </Function>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
   <Function Name="GetSpecifications" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="productID" Type="int" Mode="In" />
     <ReturnType>
@@ -338,8 +358,32 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     <Parameter Name="username" Type="nvarchar" Mode="In" />
     <Parameter Name="password" Type="nvarchar" Mode="In" />
   </Function>
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
   <Function Name="Sp_Catagory_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
   </Function>
   <Function Name="Sp_Producer_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="id" Type="int" Mode="In" />
@@ -355,16 +399,14 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
   <Function Name="Sp_Product_List_Of_Producer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="producerID" Type="int" Mode="In" />
   </Function>
-  <Function Name="SplitSpecificationValuesString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="string" Type="nvarchar" Mode="In" />
-    <ReturnType>
-      <CollectionType>
-        <RowType>
-          <Property Name="specificationID" Type="int" />
-          <Property Name="value" Type="nvarchar" MaxLength="50" />
-        </RowType>
-      </CollectionType>
-    </ReturnType>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SPGetTotalOrderCost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="orderID" Type="int" Mode="In" />
   </Function>
   <EntityContainer Name="MobilePhoneStoreDBMSModelStoreContainer">
     <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
@@ -380,6 +422,7 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SpecificationValues" EntityType="Self.SpecificationValues" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specifications_of_all_product" EntityType="Self.Specifications_of_all_product" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [Specifications_of_all_product].[name] AS [name], 
@@ -393,6 +436,10 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     [view_Category_List].[Name] AS [Name]
     FROM [dbo].[view_Category_List] AS [view_Category_List]</DefiningQuery>
     </EntitySet>
+    <AssociationSet Name="AccountsHasRoleFK" Association="Self.AccountsHasRoleFK">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="Accounts" EntitySet="Accounts" />
+    </AssociationSet>
     <AssociationSet Name="AvatarOfProductProductIDFK" Association="Self.AvatarOfProductProductIDFK">
       <End Role="Products" EntitySet="Products" />
       <End Role="AvatarOfProduct" EntitySet="AvatarOfProduct" />
@@ -408,10 +455,6 @@ warning 6002: The table/view 'MobilePhoneStoreDBMS.dbo.view_Category_List' does 
     <AssociationSet Name="CustomersAccIDFK" Association="Self.CustomersAccIDFK">
       <End Role="Accounts" EntitySet="Accounts" />
       <End Role="Customers" EntitySet="Customers" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Accounts__hasRol__2F10007B" Association="Self.FK__Accounts__hasRol__2F10007B">
-      <End Role="Roles" EntitySet="Roles" />
-      <End Role="Accounts" EntitySet="Accounts" />
     </AssociationSet>
     <AssociationSet Name="HasSpecidicationSpecificationIDAndValueFK" Association="Self.HasSpecidicationSpecificationIDAndValueFK">
       <End Role="SpecificationValues" EntitySet="SpecificationValues" />

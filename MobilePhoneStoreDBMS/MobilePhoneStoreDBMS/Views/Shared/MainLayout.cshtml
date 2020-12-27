@@ -1,4 +1,6 @@
 ﻿@using MobilePhoneStoreDBMS.Models.Consts
+@using MobilePhoneStoreDBMS.Models.Consts
+
 <!--
 Author: W3layouts
 Author URL: http://w3layouts.com
@@ -41,58 +43,42 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<!----start-Header---->
         <div class="header">
             <!--Search-->
-            @*@RenderPage("/Views/HomeScreen/Search.cshtml")*@
-            <div class="search-bar">
-                <form action="/HomeScreen/ProductsOfSearch">
-                    <input type="text" value="@ViewBag.search" name="search"><input type="submit" value="Tìm kiếm" />
-                </form>
-            </div>
-            <div class="clear"> </div>
-            @if (Session[SessionNames.CustomerID] == null)
-            {
-                <div class="header-top-nav">
-                    <ul>
-                        <li><a href="@Url.Action("Register", "Account")">Register</a></li>
-                        <li><a href="@Url.Action("Login", "Account")">Login</a></li>
-                        <li><a href="#">Delivery</a></li>
-                        <li><a href="#">Checkout</a></li>
-                        <li><a href="#"><span>shopping cart&nbsp;&nbsp;: </span></a><label> &nbsp;0 </label></li>
-                        <li>
-                            <a href="@Url.Action("Login", "Account")">
-                                <img src="@Url.Content("~/Assets/images/cart-icon.png")" style="height:50px; width: 50px; padding-top: 10px" />
-                            </a>
-                            @Html.Action("BagCart", "ShoppingCart")
-                        </li>
-					</ul>
-                </div>
-            }
-            else
-            {
-                <div class="header-top-nav">
-                    <ul>
-                        <li><a href="@Url.Action("Logout", "HomeScreen")">Logout</a></li>
-                        <li><a href="#">Delivery</a></li>
-                        <li><a href="#">Checkout</a></li>
-                        <li><a href="@Url.Action("Index", "Customer", new { customerID = Session[SessionNames.CustomerID]})">My account</a></li>
-                        <li><a href="#"><span>shopping cart&nbsp;&nbsp;: </span></a><label> &nbsp;noitems</label></li>
-                        <li>
-                            <a href="@Url.Action("ShowToCart", "ShoppingCart")">
-                                <img src="@Url.Content("~/Assets/images/cart-icon.png")" style="height:50px; width: 50px; padding-top: 10px" />
-                            </a>
-                            @Html.Action("BagCart", "ShoppingCart")
-                        </li>
-                    </ul>
-                </div>
-            }
-            <div class="clear"> </div>
-        </div>
+			<div class="search-bar">
+				<form action="/HomeScreen/ProductsOfSearch">
+					<input type="text" value="@ViewBag.search" name="search"><input type="submit" value="Search" />
+				</form>
+			</div>
+			<div class="clear"> </div>
+			<div class="header-top-nav">
+				<ul>
+					@if (Session[SessionNames.CustomerID] == null)
+					{
+						<li><a href="@Url.Action("Register", "Account")">Register</a></li>
+						<li><a href="@Url.Action("Login", "Account")">Login</a></li>
+
+					}
+					else
+					{
+						<li><a href="@Url.Action("Index", "Customer", new { customerID = Session[SessionNames.CustomerID]})">MyAccount</a></li>
+						<li><a href="@Url.Action("Logout", "HomeScreen")">Logout</a></li>
+
+					}
+					<li>
+						<a href="@Url.Action("ShowToCart", "ShoppingCart")">
+							<img src="@Url.Content("~/Assets/images/cart-icon.png")" style="height:50px; width: 50px; padding-top: 10px" />
+						</a>
+						@Html.Action("BagCart", "ShoppingCart")
+					</li>
+				</ul>
+			</div>
+			<div class="clear"> </div>
+		</div>
 	</div>
 	<div class="clear"> </div>
 	<div class="top-header">
 		<div class="wrap">
 			@RenderPage("/Views/HomeScreen/ListOfCategory.cshtml")
 			<!--Dropdown list-->
-			
 			<!----start-logo---->
 			<div class="logo">
 				<a href="@Url.Action("Index", "HomeScreen")"><img src="~/Assets/images/logo.png" title="logo" /></a>
@@ -101,10 +87,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<!----start-top-nav---->
 			<div class="top-nav">
 				<ul>
-					<li><a href="@Url.Action("Index", "HomeScreen")">Trang chủ</a></li>
-					<li><a href="@Url.Action("Store", "HomeScreen")">Cửa hàng</a></li>
-					<li><a href="#">Thông tin</a></li>
-					<li><a href="#">Liên lạc</a></li>
+					<li><a href="@Url.Action("Index", "HomeScreen")">Home</a></li>
+					<li><a href="@Url.Action("Store", "HomeScreen")">Store</a></li>
 				</ul>
 			</div>
 			<div class="clear"> </div>
@@ -119,19 +103,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<div class="wrap">
 			<div class="section group">
 				<div class="col_1_of_4 span_1_of_4">
-					<h3>Thông tin của chúng tôi</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+					<h3>About us</h3>
+					<p>Sản phẩm của nhóm 16 khoa CNTT trường ĐH SPKT</p>
 				</div>
 				<div class="col_1_of_4 span_1_of_4">
-					<h3>Latest-News</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					<h3>News</h3>
+
 				</div>
 				<div class="col_1_of_4 span_1_of_4">
-					<h3>Store Location</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-					<h3>Order-online</h3>
+					<h3>Location</h3>
+					<p>Số 1, Võ Văn Ngân, Thủ Đức, thành phố Hồ Chí Minh</p>
+					<h3>Phone number</h3>
 					<p>080-1234-56789</p>
 					<p>080-1234-56780</p>
 				</div>

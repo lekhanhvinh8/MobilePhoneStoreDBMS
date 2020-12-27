@@ -30,36 +30,46 @@
         </div>
     </header>
     <div class="container">
-        <div>
-            <form id="search-for-product">
-                <div class="form-group">
-                    <input type="text" name="name"/>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="product-management-tab" data-toggle="tab" href="#product-management-area" role="tab" >Product Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="order-management-tab" data-toggle="tab" href="#order-management-area" role="tab">Order Management</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane" id="product-management-area" role="tabpanel">
+                <br />
+                <a href="/Seller/AddNewProduct" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                    Add New Product
+                </a>
+                <br />
+                <br />
 
+                <div>
+                    <table id="table-products" class="table table-bordered">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
-            </form>
-
-        </div>
-
-        <a href="/Seller/AddNewProduct" class="btn btn-danger">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-            Add New Product
-        </a>
-        <br />
-        <br />
-
-        <div>
-            <table id="table-products" class="table table-bordered">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            </div>
+            <div class="tab-pane" id="order-management-area" role="tabpanel">
+                <br />
+                <div>
+                    <table id="table-orders" class="table table-bordered">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
-    
-
-
 
     <script src="~/Scripts/jquery-3.4.1.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
@@ -69,7 +79,10 @@
 
     <script>
         $(document).ready(function () {
-            var table = $("#table-products").DataTable({
+
+            $('#myTab a[href="#product-management-area"]').tab('show')
+
+            var tableProducts = $("#table-products").DataTable({
                 ajax: {
                     url: "/api/ProductForSeller",
                     dataSrc: "",
@@ -162,6 +175,68 @@
 
             });
 
+            var tableOrders = $("#table-orders").DataTable({
+                ajax: {
+                    url: "/api/Orders/GetListByStatus?status=" + @OrderStates.Pending,
+                    dataSrc: "",
+                },
+                "sScrollY": "355",
+                "bScrollCollapse": true,
+                columns: [
+                    {
+                        title: "Order's ID",
+                        data: "orderID",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Customer's ID",
+                        data: "customerID",
+                        render: function (data) {
+                            return data;
+                        }
+                    },
+                    {
+                        title: "Order's Time",
+                        data: "orderTime",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Total Cost",
+                        data: "totalOrderCost",
+                        render: function (data) {
+                            return "<span>" + data + " VND</span>";
+                        },
+                    },
+                    {
+                        title: "Confirm",
+                        data: "orderID",
+                        render: function (data) {
+                            return "<button class='btn btn-success jsConfirm' data-orderID=" +  data + ">Confirm</button>";
+                        }
+                    },
+                    {
+                        title: "Cancel",
+                        data: "orderID",
+                        render: function (data) {
+                            return "<button class='btn btn-danger jsCancel' data-orderID=" + data + ">Cancel</button>";
+                        }
+                    }
+                ],
+
+            });
+
+            $("#myTab a[href='#order-management-area']").on('click', function (e) {
+                tableOrders.ajax.reload();
+            })
+            $("#myTab a[href='#product-management-area']").on('click', function (e) {
+                tableProducts.ajax.reload();
+            })
+
+
             $("#table-products").on("click", ".check-status", function () {
                 var checkbox = $(this);
 
@@ -175,13 +250,62 @@
                     url: "/api/ProductForSeller/ModifyStatus?productID=" + checkbox.attr("data-product-id") + "&status=" + status,
                     method: "Get",
                 });
-                    
+
             });
 
             $("#table-products").on("click", ".js-modify", function () {
                 window.location.href = '/Seller/UpdateProduct?productID=' + $(this).attr("data-product-id");
             });
-            
+
+            $("#table-orders").on("click", ".jsConfirm", function () {
+                var buttonConfirm = $(this);
+
+                $.ajax({
+                    url: "/api/Orders/Get?orderID=" + buttonConfirm.attr("data-orderid"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.status != @OrderStates.Pending) {
+                            bootbox.alert("This order has been canceled");
+                            tableOrders.row(buttonConfirm.parents("tr")).remove().draw();
+                        }
+                        else {
+                            $.ajax({
+                                url: "/api/Orders/ConfirmOrder?orderID=" + buttonConfirm.attr("data-orderid"),
+                                method: "Get",
+                                success: function () {
+                                    tableOrders.row(buttonConfirm.parents("tr")).remove().draw();
+                                },
+                            });
+                        }
+                    }
+                })
+
+            });
+
+            $("#table-orders").on("click", ".jsCancel", function () {
+                var buttonConfirm = $(this);
+
+                $.ajax({
+                    url: "/api/Orders/Get?orderID=" + buttonConfirm.attr("data-orderid"),
+                    method: "Get",
+                    success: function (response) {
+                        if (response.status != @OrderStates.Pending) {
+                            bootbox.alert("This order has been canceled");
+                            tableOrders.row(buttonConfirm.parents("tr")).remove().draw();
+                        }
+                        else {
+                            $.ajax({
+                                url: "/api/Orders/CancelOrder?orderID=" + buttonConfirm.attr("data-orderid"),
+                                method: "Get",
+                                success: function () {
+                                    tableOrders.row(buttonConfirm.parents("tr")).remove().draw();
+                                },
+                            });
+                        }
+                    }
+                })
+
+            });
         });
 
     </script>
